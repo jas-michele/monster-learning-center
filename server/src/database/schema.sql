@@ -7,6 +7,20 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS settings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER,
     soundEnabled INTEGER DEFAULT 1,
-    musicEnabled INTEGER DEFAULT 1
+    musicEnabled INTEGER DEFAULT 1,
+
+    FOREIGN KEY(userId) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS progress (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER,
+    completedLessons INTEGER DEFAULT 0,
+    completedStories INTEGER DEFAULT 0,
+    completedRaces INTEGER DEFAULT 0,
+    completedPuzzles INTEGER DEFAULT 0,
+
+    FOREIGN KEY(userId) REFERENCES users(id)
 );

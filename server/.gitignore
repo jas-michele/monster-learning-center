@@ -1,12 +1,12 @@
 .env
 
-node_modules
+node_modules/
 
 dist/
 build/
 
-server/data/*.db
-server/data/*.db-journal
+data/*.db
+data/*.db-journal
 
 .DS_Store
 

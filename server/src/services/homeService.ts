@@ -3,10 +3,13 @@ import { connectDB } from "../database/db.js";
 export async function getHomeData() {
     const db = await connectDB();
 
-    let user = await db.get("SELECT * FROM users LIMIT 1");
+    let user = await db.get(`
+        SELECT *
+        FROM users LIMIT 1`);
 
     if (!user) {
-        await db.run(
+       
+        const result = await db.run(
             `
             INSERT INTO users(firstName)
             VALUES(?)
@@ -14,7 +17,32 @@ export async function getHomeData() {
             ["DERRICK"]
         );
 
-        user = await db.get("SELECT * FROM users LIMIT 1");
+       const userId = result.lastID;
+
+       await db.run(
+        `
+        INSERT INTO settings(userId)
+        VALUES(?)
+        `,
+        [userId]
+       );
+
+       await db.run(
+        `
+        INSERT INTO progress(userId)
+        VALUES(?)
+        `,
+        [userId]
+       );
+
+       user = await db.get(`
+        SELECT * 
+        FROM users
+        WHERE id = ?
+        `, 
+        [userId]
+       );
+
     }
 
     return user;
