@@ -1,125 +1,107 @@
 /* Home.css
    Responsive, mobile-first Home screen layout.
-   - Background fills viewport (cover, top-centered, fixed)
+   - Background scales inside the viewport without cropping
    - Avatar stands front-center on the playhouse rug
    - Uses CSS variables, rem, and clamp() for responsive sizing
 */
 
 :root {
-  --gutter: 1.25rem;
+  --scene-width: min(100vw, 150dvh);
+  --scene-height: min(100dvh, 66.6667vw);
 }
 
 .home {
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   display: flex;
   position: relative;
   overflow: hidden;
+}
+
+.home__scene {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--scene-width);
+  height: var(--scene-height);
+  transform: translate(-50%, -50%);
 }
 
 .home__bg {
   position: absolute;
   inset: 0;
   background-repeat: no-repeat;
-  background-position: center -8%;
-  background-size: 90%;
+  background-position: center;
+  background-size: 100% 100%;
   background-attachment: scroll;
   z-index: 0;
 }
 
-.home__inner {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  flex: 1 1 auto;
-  padding: var(--gutter);
-  position: relative;
-  z-index: 1;
-}
-
-.home__stage {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding-bottom: 0;
-}
-
-.home__nav-layer {
+.home__nav-hotspots {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: clamp(2.75rem, 7vh, 4rem);
-  display: flex;
-  justify-content: center;
-  pointer-events: auto;
-  z-index: 2;
+  inset: 0;
+  z-index: 3;
 }
 
-.home__nav-groups {
-  width: min(90vw, 76rem);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  padding: 0 var(--gutter);
-}
-
-.home__nav-group {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(0.75rem, 1.8vw, 1rem);
-}
-
-.home__nav-group--left {
-  align-items: flex-start;
-}
-
-.home__nav-group--right {
-  align-items: flex-end;
-}
-
-.home__nav-button {
-  width: 100%;
-  max-width: 100%;
-  height: clamp(11rem, 28vw, 14rem);
-  min-width: 9rem;
-  min-height: 10rem;
+.home__nav-hotspot {
+  position: absolute;
   border: none;
-  border-radius: 1rem;
   background: transparent;
-  box-shadow: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
-  transition: transform 180ms ease;
+  padding: 0;
 }
 
-.home__nav-button:hover,
-.home__nav-button:focus-visible {
-  transform: translateY(-0.1rem);
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.18);
+.home__nav-hotspot:focus-visible {
+  outline: 0.25rem solid rgba(255, 255, 255, 0.9);
+  outline-offset: -0.25rem;
+  border-radius: 1.25rem;
 }
 
-.home__nav-icon {
-  width: 80%;
-  height: 80%;
-  object-fit: contain;
+.home__nav-hotspot--storytime {
+  left: 7.6%;
+  top: 82.8%;
+  width: 20.7%;
+  height: 14.6%;
 }
 
+.home__nav-hotspot--mechanic {
+  left: 29%;
+  top: 82.8%;
+  width: 20.1%;
+  height: 14.6%;
+}
+
+.home__nav-hotspot--racetrack {
+  left: 50.1%;
+  top: 82.8%;
+  width: 19.2%;
+  height: 14.6%;
+}
+
+.home__nav-hotspot--dino {
+  left: 70.2%;
+  top: 82.8%;
+  width: 18.7%;
+  height: 14.6%;
+}
 
 .home__avatar-wrap {
-  width: clamp(14rem, 40vw, 48vw);
-  height: clamp(24rem, 52vh, 62vh);
+  position: absolute;
+  left: 50%;
+  top: 22%;
+  width: 30%;
+  height: 62%;
+  transform: translateX(-50%);
   overflow: hidden;
   display: block;
   border-radius: 0.75rem;
   z-index: 2;
-  margin-bottom: 1rem;
   pointer-events: none;
+}
+
+.home__avatar-wrap--storytime {
+  top: 20%;
 }
 
 .home__avatar {
@@ -130,33 +112,6 @@
   object-position: center bottom;
   pointer-events: none;
 }
-
-.home__avatar--landscape {
-  width: auto;
-  height: 100%;
-  object-position: 0% bottom;
-  position: relative;
-  z-index: 4;
-  pointer-events: none;
-  transform: translateX(-6%);
-}
-
-@media (min-width: 48rem) {
-  .home__avatar-wrap {
-    width: clamp(16rem, 44vw, 48vw);
-    height: clamp(28rem, 68vh, 78vh);
-  }
-}
-
-@media (min-width: 64rem) {
-  .home__avatar-wrap {
-    width: clamp(18rem, 38vw, 42vw);
-    height: clamp(28rem, 64vh, 74vh);
-  }
-}
-
-
-
 
 .home__avatar:focus {
   outline: 3px solid rgba(255,255,255,0.85);
