@@ -6,7 +6,7 @@ import safariAvatar from '../assets/avatars/safari.png'
 import storytimeAvatar from '../assets/avatars/storytime.png'
 
 export type AvatarOutfit = 'casual' | 'mechanic' | 'race' | 'safari' | 'storytime'
-export type AvatarAnimation = 'idle' | 'wave' | 'jump' | 'celebrate' | 'walk'
+export type AvatarAnimation = 'idle' | 'stand' | 'wave' | 'jump' | 'celebrate' | 'walk'
 
 type AvatarProps = {
   outfit: AvatarOutfit
@@ -35,6 +35,17 @@ const animationByName: Record<AvatarAnimation, { animate: Record<string, number 
       duration: 3.2,
       repeat: Infinity,
       ease: 'easeInOut',
+    },
+  },
+  stand: {
+    animate: {
+      y: 0,
+      scale: 1,
+      rotate: 0,
+      x: 0,
+    },
+    transition: {
+      duration: 0.2,
     },
   },
   wave: {
