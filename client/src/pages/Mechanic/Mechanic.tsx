@@ -1,32 +1,59 @@
 import '../Home/Home.css'
+import './Mechanic.css'
 import { useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import garageBg from '../../assets/garagBG.png'
-import monsterTruck from '../../assets/monsterTruck.png'
-import Avatar from '../../components/Avatar'
-import PlayAreaNav from '../../components/PlayAreaNav'
+import CustomizationPanel from './CustomizationPanel'
+import GarageActionBar from './GarageActionBar'
+import MechanicAvatar from './MechanicAvatar'
+import TruckPreview from './TruckPreview'
+import { defaultTruckCustomization, type TruckCustomization } from './truckCustomization'
 
 export default function Mechanic() {
-  const [hasEntered, setHasEntered] = useState(false)
-  const prefersReducedMotion = useReducedMotion()
+  const navigate = useNavigate()
+  const [customization, setCustomization] = useState<TruckCustomization>(defaultTruckCustomization)
+  const [guideMessage, setGuideMessage] = useState("Let's build your truck!")
+
+  const resetTruck = () => {
+    setCustomization(defaultTruckCustomization)
+    setGuideMessage("Let's try another look!")
+  }
+
+  const saveAndRace = (nextCustomization: TruckCustomization) => {
+    setGuideMessage("Let's hit the track!")
+    window.localStorage.setItem('monsterTruckCustomization', JSON.stringify(nextCustomization))
+    navigate('/race')
+  }
 
   return (
     <div className="home" role="main" aria-label="Mechanic shop">
       <div className="home__scene-frame">
         <div className="home__scene">
           <div className="home__bg mechanic__bg" style={{ backgroundImage: `url(${garageBg})` }} aria-hidden />
-          <img src={monsterTruck} alt="" className="mechanic__monster-truck" aria-hidden />
-          <motion.div
-            className="mechanic__avatar-wrap"
-            aria-hidden
-            initial={prefersReducedMotion ? false : { x: '240%' }}
-            animate={{ x: 0 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 3.2, ease: 'easeInOut' }}
-            onAnimationComplete={() => setHasEntered(true)}
-          >
-            <Avatar outfit="mechanic" animation={hasEntered || prefersReducedMotion ? 'stand' : 'walk'} className="mechanic__avatar" />
-          </motion.div>
-          <PlayAreaNav mechanicAsHome />
+          <div className="mechanic-shop">
+            <CustomizationPanel
+              customization={customization}
+              onColorChange={(bodyColor) => {
+                setCustomization((current) => ({ ...current, bodyColor }))
+                setGuideMessage('Awesome color!')
+              }}
+              onDecalChange={(decal) => {
+                setCustomization((current) => ({ ...current, decal }))
+                setGuideMessage('That looks cool!')
+              }}
+              onWheelColorChange={(wheelColor) => {
+                setCustomization((current) => ({ ...current, wheelColor }))
+                setGuideMessage('Great wheels!')
+              }}
+              onLightChange={(roofLights) => {
+                setCustomization((current) => ({ ...current, roofLights }))
+                setGuideMessage('Those lights look great!')
+              }}
+            />
+            <TruckPreview customization={customization} />
+            <MechanicAvatar message={guideMessage} />
+            <GarageActionBar customization={customization} onReset={resetTruck} onSaveAndRace={saveAndRace} />
+          </div>
         </div>
       </div>
     </div>
