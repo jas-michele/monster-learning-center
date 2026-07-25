@@ -31,11 +31,13 @@ function LightLayer({ roofLights }: { roofLights: RoofLightOption }) {
   )
 }
 
-export default function TruckPreview({ customization }: { customization: TruckCustomization }) {
+export default function TruckPreview({ customization, isGrayed }: { customization: TruckCustomization; isGrayed: boolean }) {
   return (
     <section className="truck-preview" aria-label="Truck preview">
       <div
-        className={`truck-preview__truck truck-preview__truck--body-${customization.bodyColor} truck-preview__truck--wheels-${customization.wheelColor}`}
+        className={`truck-preview__truck truck-preview__truck--body-${customization.bodyColor} truck-preview__truck--wheels-${customization.wheelColor}${
+          isGrayed ? ' truck-preview__truck--grayed' : ''
+        }`}
       >
         <img src={bodyAssets[customization.bodyColor]} alt="Customized monster truck preview" />
         <DecalLayer decal={customization.decal} />

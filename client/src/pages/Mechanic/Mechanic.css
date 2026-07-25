@@ -22,8 +22,9 @@
 
 .mechanic-guide__message {
   position: absolute;
-  right: 28%;
+  right: 42%;
   top: 14%;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,15 +47,51 @@
   animation: mechanic-message-pop 190ms ease-out;
 }
 
+.mechanic-guide__message::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -1.24rem;
+  z-index: 2;
+  width: 0;
+  height: 0;
+  border-left: 0.78rem solid transparent;
+  border-right: 0.78rem solid transparent;
+  border-top: 1.32rem solid rgba(245, 229, 200, 0.98);
+  filter: drop-shadow(0.1rem 0.14rem 0.12rem rgba(0, 0, 0, 0.18));
+  transform: translateX(-50%) rotate(-14deg);
+  transform-origin: center top;
+}
+
 .mechanic-guide__message::after {
   content: "";
   position: absolute;
-  right: 1.2rem;
-  bottom: -0.34rem;
-  width: 0.75rem;
-  height: 0.75rem;
-  background: inherit;
-  transform: rotate(45deg);
+  left: 50%;
+  bottom: -1.38rem;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  border-left: 0.88rem solid transparent;
+  border-right: 0.88rem solid transparent;
+  border-top: 1.48rem solid rgba(86, 69, 50, 0.24);
+  transform: translateX(-50%) rotate(-14deg);
+  transform-origin: center top;
+}
+
+.mechanic-guide__message-text {
+  position: relative;
+  z-index: 1;
+}
+
+.mechanic-guide__message-text::after {
+  content: "";
+  display: inline-block;
+  width: 0.08em;
+  height: 0.92em;
+  margin-left: 0.08em;
+  background: currentColor;
+  vertical-align: -0.1em;
+  animation: mechanic-type-caret 760ms steps(2, start) infinite;
 }
 
 @keyframes mechanic-message-pop {
@@ -69,10 +106,17 @@
   }
 }
 
+@keyframes mechanic-type-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
 .mechanic-guide__avatar {
   position: absolute;
   left: 12%;
   bottom: -17%;
+  z-index: 3;
   width: 70%;
   height: 88%;
   pointer-events: none;
@@ -105,6 +149,10 @@
   width: min(86%, 39.5rem);
   aspect-ratio: 1382 / 1044;
   transform: translateX(-50%);
+}
+
+.truck-preview__truck--grayed {
+  filter: grayscale(1) saturate(0) brightness(0.78) contrast(0.92);
 }
 
 .truck-preview__truck--body-orange {
@@ -219,7 +267,7 @@
   justify-self: start;
   min-width: 0;
   max-height: 100%;
-  padding: clamp(0.62rem, 1.15vw, 0.88rem);
+  padding: clamp(0.72rem, 1.35vw, 1rem);
   border: 0.1rem solid rgba(210, 225, 232, 0.3);
   border-radius: 0.95rem;
   background:
@@ -235,10 +283,10 @@
 }
 
 .mechanic-panel h2 {
-  margin: -0.08rem -0.18rem 0.42rem;
-  padding: 0.12rem 0 0.44rem;
+  margin: 0;
+  padding: 0 0 0.52rem;
   border-bottom: 0.08rem solid rgba(255, 255, 255, 0.13);
-  font-size: clamp(0.86rem, 1.18vw, 1.04rem);
+  font-size: clamp(0.86rem, 1.18vw, 1.06rem);
   line-height: 1.05;
   text-align: center;
   text-transform: uppercase;
@@ -248,6 +296,7 @@
 .mechanic-panel__swatch,
 .mechanic-panel__option,
 .mechanic-panel__wheel-choice,
+.mechanic-panel__tab,
 .garage-actions__link {
   transition:
     transform 160ms ease,
@@ -256,9 +305,76 @@
     background-color 160ms ease;
 }
 
+.mechanic-panel__top {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(0.52rem, 1.05vw, 0.78rem);
+}
+
+.mechanic-panel__tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.42rem;
+}
+
+.mechanic-panel__tab {
+  min-height: clamp(2.18rem, 5.2vh, 2.8rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18rem;
+  border: 0.08rem solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.62rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.05);
+  color: #fff;
+  cursor: pointer;
+  font-size: clamp(0.58rem, 0.82vw, 0.76rem);
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow: 0 0.09rem 0 rgba(0, 0, 0, 0.6);
+  box-shadow:
+    inset 0 0.08rem 0 rgba(255, 255, 255, 0.08),
+    0 0.12rem 0.24rem rgba(0, 0, 0, 0.24);
+}
+
+.mechanic-panel__tab svg {
+  width: clamp(1rem, 2vw, 1.38rem);
+  height: clamp(1rem, 2vw, 1.38rem);
+  color: #ffbf28;
+  filter: drop-shadow(0 0.08rem 0 rgba(0, 0, 0, 0.62));
+}
+
+.mechanic-panel__tab[aria-selected="true"] {
+  border-color: #ffc22d;
+  background:
+    linear-gradient(180deg, rgba(255, 212, 72, 0.18), rgba(255, 255, 255, 0.03)),
+    rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 0 0 0.1rem rgba(255, 194, 45, 0.66),
+    0 0.16rem 0.34rem rgba(0, 0, 0, 0.35);
+}
+
 .mechanic-panel__section {
-  padding: 0.34rem 0 0.38rem;
-  border-top: 0.08rem solid rgba(255, 255, 255, 0.08);
+  margin-top: clamp(0.7rem, 1.3vw, 0.95rem);
+  padding: clamp(0.6rem, 1.08vw, 0.78rem);
+  border: 0.08rem solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.72rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)),
+    rgba(0, 0, 0, 0.16);
+  box-shadow:
+    inset 0 0.08rem 0 rgba(255, 255, 255, 0.07),
+    0 0.22rem 0.5rem rgba(0, 0, 0, 0.22);
+}
+
+.mechanic-panel__section--active {
+  min-height: clamp(6.6rem, 17vh, 8.9rem);
 }
 
 .mechanic-panel__section h3 {
@@ -274,12 +390,12 @@
 .mechanic-panel__wheel-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.34rem;
+  gap: 0.42rem;
 }
 
 .mechanic-panel__swatch {
   position: relative;
-  min-height: clamp(1.72rem, 4.25vh, 2.22rem);
+  min-height: clamp(2.02rem, 4.8vh, 2.6rem);
   border: 0.1rem solid rgba(255, 255, 255, 0.62);
   border-radius: 0.6rem;
   background:
@@ -313,7 +429,7 @@
 .mechanic-panel__card-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.38rem;
+  gap: 0.46rem;
 }
 
 .mechanic-panel__card-row--decals {
@@ -327,7 +443,7 @@
   gap: 0.2rem;
   align-items: center;
   justify-content: center;
-  min-height: clamp(2.28rem, 5.55vh, 2.88rem);
+  min-height: clamp(2.45rem, 5.85vh, 3rem);
   border: 0.09rem solid rgba(255, 255, 255, 0.26);
   border-radius: 0.6rem;
   background:
@@ -355,7 +471,7 @@
 
 .mechanic-panel__wheel-choice {
   position: relative;
-  min-height: clamp(1.72rem, 4.25vh, 2.22rem);
+  min-height: clamp(2.02rem, 4.8vh, 2.6rem);
   border: 0.09rem solid rgba(255, 255, 255, 0.28);
   border-radius: 0.6rem;
   background:
@@ -405,33 +521,33 @@
 }
 
 .garage-actions {
-  position: absolute;
-  left: 3.5%;
-  right: 3.5%;
-  bottom: 1.6%;
-  height: 16.8%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: contents;
   z-index: 5;
 }
 
 .garage-actions__link {
-  position: relative;
+  position: absolute;
   display: block;
   width: 24.3%;
   flex: 0 0 24.3%;
-  height: 100%;
+  height: 16.8%;
   border: none;
   background: transparent;
   color: inherit;
   cursor: pointer;
   padding: 0;
   text-decoration: none;
+  z-index: 5;
 }
 
-.garage-actions__link + .garage-actions__link {
-  margin-left: -1.2%;
+.garage-actions__link--dino {
+  left: 25.35%;
+  bottom: 1.6%;
+}
+
+.garage-actions__link--storytime {
+  left: 50.35%;
+  bottom: 1.6%;
 }
 
 .garage-actions__nav-image {
@@ -441,20 +557,68 @@
   object-fit: contain;
 }
 
+.garage-actions__link--dino .garage-actions__nav-image,
+.garage-actions__link--storytime .garage-actions__nav-image {
+  width: 94%;
+  margin: 0 auto;
+}
+
+.garage-actions__link--dino .garage-actions__nav-image {
+  transform: translateX(-1%);
+}
+
+.garage-actions__link--storytime .garage-actions__nav-image {
+  transform: scaleY(1.11);
+}
+
+.garage-actions__leave {
+  position: absolute;
+  right: 2.2%;
+  bottom: 2.2%;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(2rem, 4.3vw, 3rem);
+  aspect-ratio: 1;
+  border: 0.08rem solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  background: rgba(10, 14, 16, 0.42);
+  color: rgba(255, 255, 255, 0.84);
+  text-decoration: none;
+  box-shadow:
+    inset 0 0.08rem 0 rgba(255, 255, 255, 0.12),
+    0 0.18rem 0.4rem rgba(0, 0, 0, 0.24);
+}
+
+.garage-actions__leave svg {
+  width: 52%;
+  height: 52%;
+  filter: drop-shadow(0 0.08rem 0.08rem rgba(0, 0, 0, 0.45));
+}
+
 .mechanic-panel__swatch:hover,
 .mechanic-panel__option:hover,
 .mechanic-panel__wheel-choice:hover,
-.garage-actions__link:hover {
+.mechanic-panel__tab:hover,
+.garage-actions__link:hover,
+.garage-actions__leave:hover {
   transform: translateY(-0.08rem);
 }
 
 .mechanic-panel__swatch:focus-visible,
 .mechanic-panel__option:focus-visible,
 .mechanic-panel__wheel-choice:focus-visible,
-.garage-actions__link:focus-visible {
+.mechanic-panel__tab:focus-visible,
+.garage-actions__link:focus-visible,
+.garage-actions__leave:focus-visible {
   outline: 0.22rem solid rgba(255, 255, 255, 0.95);
   outline-offset: 0.12rem;
   border-radius: 1.25rem;
+}
+
+.garage-actions__leave:focus-visible {
+  border-radius: 50%;
 }
 
 @media (max-width: 920px) {
@@ -481,7 +645,7 @@
   }
 
   .mechanic-guide__message {
-    right: 24%;
+    right: 38%;
     width: 64%;
     min-height: 5rem;
     font-size: 0.72rem;
@@ -494,9 +658,6 @@
   }
 
   .garage-actions {
-    left: 3.5%;
-    right: 3.5%;
-    bottom: 1.6%;
-    height: 16.8%;
+    display: contents;
   }
 }
