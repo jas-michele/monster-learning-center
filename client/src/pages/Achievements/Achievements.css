@@ -1,0 +1,27 @@
+.achievements {
+    padding: 2rem;
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.achievement-card {
+    padding: 1rem;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.achievement-card--locked {
+    opacity: .45;
+}
+
+.achievement-card--unlocked {
+    border: 2px solid gold;
+}
+
+.achievement-icon {
+    font-size: 3rem;
+}

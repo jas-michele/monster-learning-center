@@ -30,9 +30,11 @@ const Register = () => {
 
             const data = await registerUser(formData);
 
+            console.log("API Response:", data);
+
             localStorage.setItem("token", data.token);
 
-            console.log("Registration Successful", data);
+            console.log("Stored token:", localStorage.getItem("token"));
 
             navigate("/home");
 
