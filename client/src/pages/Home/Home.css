@@ -41,7 +41,8 @@
 .home__nav-hotspots {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 20;
+  pointer-events: none;
 }
 
 .home__nav-hotspot {
@@ -50,6 +51,8 @@
   background: transparent;
   cursor: pointer;
   padding: 0;
+
+  pointer-events: auto;
 }
 
 .home__nav-hotspot:focus-visible {
@@ -127,7 +130,7 @@ img {
 .home__nav-hero {
     position: absolute;
     inset: 0;
-    z-index: 20;
+    z-index: 10;
 }
 
 .home__nav-hero-button {
@@ -164,6 +167,6 @@ img {
     height: 120px;
 }
 
-.home__nav-hero-button {
-    background: rgba(255, 0, 0, 0.3);
-}
+/* .home__nav-hero-button {
+    background: rgba(255, 0, 0, 0.3); */
+/* } */
