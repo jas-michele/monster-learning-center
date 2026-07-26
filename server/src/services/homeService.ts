@@ -3,54 +3,18 @@ import { connectDB } from "../database/db.js";
 export async function getHomeData(userId: number) {
     const db = await connectDB();
 
-    const getUser = async (userId: number) => {
-        return db.get(
-            `
-        SELECT *
-        FROM users 
-        WHERE id = ?
-        `,
-            [userId]);
-    };
-
-    let user = await db.get(`
+    const user = await db.get(`
         SELECT * 
         FROM users
         WHERE id = ?
-        `);
+        `,
+        [userId]
+    );
 
-    
     if (!user) {
-
-        const result = await db.run(
-            `
-            INSERT INTO users(firstName)
-            VALUES(?)
-            `,
-            ["DERRICK"]
-        );
-
-        const userId = Number(result.lastID)
-
-        await db.run(
-            `
-        INSERT INTO settings(userId)
-        VALUES(?)
-        `,
-            [userId]
-        );
-
-        await db.run(
-            `
-        INSERT INTO progress(userId)
-        VALUES(?)
-        `,
-            [userId]
-        );
-
-        user = await getUser(userId)
+        throw new Error("User not found.");
     }
-
+    
     const settings = await db.get(
         `
         SELECT *
