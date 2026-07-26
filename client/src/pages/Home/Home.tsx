@@ -1,11 +1,33 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Home.css'
 import bg from '../../assets/playhouseBG.png'
 import Avatar, { type AvatarOutfit } from '../../components/Avatar'
+import { getHomeData } from '../../services/homeService'
 
 const Home: React.FC = () => {
-  const [outfit, setOutfit] = useState<AvatarOutfit>('casual')
+  const [outfit, setOutfit] = useState<AvatarOutfit>('casual');
+  const [homeData, setHomeData] = useState<any>(null);
   const isStorytime = outfit === 'storytime'
+
+  useEffect(() => {
+    async function loadHome() {
+        try {
+            const token = localStorage.getItem("token");
+
+            if (!token) return;
+
+            const data = await getHomeData(token);
+
+            console.log(data);
+
+            setHomeData(data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    loadHome();
+}, []);
 
   const hoverAvatar = (avatarOutfit: AvatarOutfit) => () => setOutfit(avatarOutfit)
   const resetAvatar = () => setOutfit('casual')
