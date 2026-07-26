@@ -6,8 +6,8 @@
 */
 
 :root {
-  --scene-width: min(100vw, 150dvh);
-  --scene-height: min(100dvh, 66.6667vw);
+  --scene-max-height: min(100dvh, 700px);
+  --scene-max-width: min(100vw, 1440px, calc(var(--scene-max-height) * 3 / 2));
 }
 
 .home {
@@ -15,17 +15,24 @@
   height: 100vh;
   height: 100dvh;
   display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
+  overflow: hidden;
+}
+
+.home__scene-frame {
+  width: var(--scene-max-width);
+  max-height: var(--scene-max-height);
+  aspect-ratio: 3 / 2;
+  position: relative;
+  flex: 0 0 auto;
   overflow: hidden;
 }
 
 .home__scene {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: var(--scene-width);
-  height: var(--scene-height);
-  transform: translate(-50%, -50%);
+  inset: 0;
 }
 
 .home__bg {
@@ -38,21 +45,64 @@
   z-index: 0;
 }
 
+.mechanic__bg {
+  filter: brightness(1.18) saturate(1.04);
+}
+
 .home__nav-hotspots {
   position: absolute;
-  inset: 0;
+
+  left: 3.5%;
+  right: 3.5%;
+  bottom: 1.6%;
+  height: 16.8%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
   z-index: 20;
   pointer-events: none;
 }
 
 .home__nav-hotspot {
-  position: absolute;
+  position: relative;
+  display: block;
+  width: 24.3%;
+  height: 100%;
+  flex: 0 0 24.3%;
   border: none;
   background: transparent;
+  color: inherit;
   cursor: pointer;
   padding: 0;
 
   pointer-events: auto;
+  text-decoration: none;
+}
+
+.home__nav-hotspot + .home__nav-hotspot {
+  margin-left: -1.2%;
+}
+
+.home__nav-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.home__nav-hotspot--mechanic .home__nav-image {
+  transform: translateX(10.5%);
+}
+
+.home__nav-hotspot--storytime .home__nav-image {
+  transform: translateX(-9%);
+}
+
+.home__nav-hotspot--playhouse .home__nav-image {
+  transform: translateX(10.5%);
 }
 
 .home__nav-hotspot:focus-visible {
@@ -61,40 +111,12 @@
   border-radius: 1.25rem;
 }
 
-.home__nav-hotspot--storytime {
-  left: 7.6%;
-  top: 82.8%;
-  width: 20.7%;
-  height: 14.6%;
-}
-
-.home__nav-hotspot--mechanic {
-  left: 29%;
-  top: 82.8%;
-  width: 20.1%;
-  height: 14.6%;
-}
-
-.home__nav-hotspot--racetrack {
-  left: 50.1%;
-  top: 82.8%;
-  width: 19.2%;
-  height: 14.6%;
-}
-
-.home__nav-hotspot--dino {
-  left: 70.2%;
-  top: 82.8%;
-  width: 18.7%;
-  height: 14.6%;
-}
-
 .home__avatar-wrap {
   position: absolute;
-  left: 50%;
-  top: 22%;
-  width: 30%;
-  height: 62%;
+  left: 49.5%;
+  top: 20%;
+  width: 31%;
+  height: 64%;
   transform: translateX(-50%);
   overflow: hidden;
   display: block;
@@ -104,7 +126,7 @@
 }
 
 .home__avatar-wrap--storytime {
-  top: 20%;
+  top: 18%;
 }
 
 .home__avatar {

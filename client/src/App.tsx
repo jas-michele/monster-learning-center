@@ -5,18 +5,26 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import Register from './pages/Register/Register';
 import Achievements from './pages/Achievements/Achievements';
+import Mechanic from './pages/Mechanic/Mechanic'
+import Race from './pages/Race/Race'
+import DinoHunt from './pages/DinoHunt/DinoHunt'
+import Storytime from './pages/Storytime/Storytime'
 
 
 function App() {
   return (
-  <BrowserRouter>
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Register />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Register/>} />
+        <Route path='/home' element={<Home />} />
         <Route path="/achievements" element={<Achievements />} />
+        <Route path="/mechanic" element={<Mechanic />} />
+        <Route path="/race" element={<Race />} />
+        <Route path="/dinohunt" element={<DinoHunt />} />
+        <Route path="/storytime" element={<Storytime />} />
       </Routes>
-  </BrowserRouter>
-  );
+    </BrowserRouter>
+  )
 }
 
 export default App
