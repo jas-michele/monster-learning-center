@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { connectDB } from "../database/db.js";
+import { createDefaultAchievements } from "./achievementService.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -51,6 +52,10 @@ export async function registerUser(
 
     const userId = result.lastID;
 
+    if (userId === undefined) {
+        throw new Error("Failed to create user.")
+    }
+
     await db.run(
         `
         INSERT INTO settings(userId)
@@ -67,6 +72,8 @@ export async function registerUser(
     [userId]
 );
 
+ await createDefaultAchievements(userId);
+
     const user = await db.get(
         `
         SELECT id, firstName, lastName, email, level, stars, createdAt, updatedAt
@@ -76,9 +83,10 @@ export async function registerUser(
         [userId]
     );
 
+   
     const token = jwt.sign(
         {
-            userId: user.id,
+            id: user.id,
             email: user.email
         },
         JWT_SECRET,
@@ -113,7 +121,7 @@ export async function loginUser(email: string, password: string) {
 
     const token = jwt.sign(
         {
-            userId: user.id,
+            id: user.id,
             email: user.email
         },
         JWT_SECRET,
@@ -131,4 +139,23 @@ export async function loginUser(email: string, password: string) {
         user: safeUser,
         token
     };
+}
+
+export const getCurrentUser = async (userId: number) => {
+    const db =  await connectDB();
+    const user = await db.get(
+        `
+        SELECT
+            id,
+            firstName,
+            lastName,
+            email,
+            level,
+            FROM users
+            WHERE id = ?
+        `,
+        [userId]
+    );
+
+    return user;
 }

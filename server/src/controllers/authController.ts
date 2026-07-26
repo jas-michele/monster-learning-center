@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { loginUser, registerUser } from "../services/authService.js";
+import { loginUser, registerUser, getCurrentUser } from "../services/authService.js";
 
 export async function register(req: Request, res: Response) {
     try {
@@ -49,3 +49,30 @@ export async function login(req: Request, res: Response) {
         })
     }
 }
+
+export const currentUser = async(
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const user = await getCurrentUser(req.user.id);
+
+        if (!user) {
+            res.status(404).json({
+                message: "User not found",
+            });
+            return;
+        }
+
+        res.status(200).json({
+           user,
+        })
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to retrieve user",
+        });
+    }
+};
+

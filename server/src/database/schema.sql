@@ -29,3 +29,16 @@ CREATE TABLE IF NOT EXISTS progress (
 
     FOREIGN KEY(userId) REFERENCES users(id)
 );
+
+
+CREATE TABLE IF NOT EXISTS achievements (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    icon TEXT NOT NULL,
+    unlocked INTEGER DEFAULT 0,
+    unlockedAt TEXT,
+
+    FOREIGN KEY(userId) REFERENCES users(id)
+);

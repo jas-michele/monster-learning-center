@@ -1,6 +1,6 @@
 import { connectDB } from "../database/db.js";
 
-export async function getHomeData() {
+export async function getHomeData(userId: number) {
     const db = await connectDB();
 
     const getUser = async (userId: number) => {
@@ -16,7 +16,7 @@ export async function getHomeData() {
     let user = await db.get(`
         SELECT * 
         FROM users
-        LIMIT 1
+        WHERE id = ?
         `);
 
     

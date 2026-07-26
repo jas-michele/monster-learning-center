@@ -3,7 +3,7 @@ import { getHomeData } from "../services/homeService.js";
 
 export async function getHome(req: Request, res: Response) {
     try {
-        const homeData = await getHomeData();
+        const homeData = await getHomeData(req.user.id);
 
         res.status(200).json(homeData);   
     } catch (error) {
