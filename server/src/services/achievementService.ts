@@ -61,12 +61,6 @@ export async function createDefaultAchievements(userId: number) {
 
 
 
-
-
-
-
-
-
 export async function getAchievements(userId: number) {
     const db = await connectDB();
 

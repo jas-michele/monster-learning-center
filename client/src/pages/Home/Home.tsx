@@ -39,7 +39,6 @@ const Home: React.FC = () => {
   }, []);
 
 
-
   return (
     <div className="home" role="main" aria-label="Playhouse home screen">
       <div className="home__scene-frame">
@@ -69,41 +68,10 @@ const Home: React.FC = () => {
             />
           </nav>
 
-
-          <nav className="home__nav-hotspots" aria-label="Play areas">
-            <button
-              className="home__nav-hotspot home__nav-hotspot--storytime"
-              aria-label="Story time"
-              onMouseEnter={hoverAvatar('storytime')}
-              onMouseLeave={resetAvatar}
-              onFocus={hoverAvatar('storytime')}
-              onBlur={resetAvatar}
-            />
-            <button
-              className="home__nav-hotspot home__nav-hotspot--mechanic"
-              aria-label="Mechanic shop"
-              onMouseEnter={hoverAvatar('mechanic')}
-              onMouseLeave={resetAvatar}
-              onFocus={hoverAvatar('mechanic')}
-              onBlur={resetAvatar}
-            />
-            <button
-              className="home__nav-hotspot home__nav-hotspot--racetrack"
-              aria-label="Race track"
-              onMouseEnter={hoverAvatar('race')}
-              onMouseLeave={resetAvatar}
-              onFocus={hoverAvatar('race')}
-              onBlur={resetAvatar}
-            />
-            <button
-              className="home__nav-hotspot home__nav-hotspot--dino"
-              aria-label="Dino hunt"
-              onMouseEnter={hoverAvatar('safari')}
-              onMouseLeave={resetAvatar}
-              onFocus={hoverAvatar('safari')}
-              onBlur={resetAvatar}
-            />
-          </nav>
+          <PlayAreaNav
+            onPreview={setOutfit}
+            onResetPreview={resetAvatar}
+          />
 
           <div className={`home__avatar-wrap${isStorytime ? ' home__avatar-wrap--storytime' : ''}`} aria-hidden>
             <Avatar outfit={outfit} animation="idle" className="home__avatar" />

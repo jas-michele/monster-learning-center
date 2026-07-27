@@ -13,10 +13,14 @@ export async function getUserAchievements(
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("Achievement Error:", error);
 
-        res.status(500).json({
-            message: "Failed to retrieve achievements"
-        });
+    if (error instanceof Error) {
+        console.error(error.stack);
+    }
+
+    res.status(500).json({
+        message: "Failed to retrieve achievements",
+    });
     }
 }
