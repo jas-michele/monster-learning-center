@@ -6,6 +6,7 @@ import { REQUIRED_CORRECT_ANSWERS, ACTIVE_POOL_SIZE } from "./constants.js";
 import {
     LearningCategory,
     LearningItem,
+    CategoryState,
     LearningState,
     QuestionResult,
     AnswerResult,
@@ -19,33 +20,44 @@ const curriculum: Record<LearningCategory, LearningItem[]> = {
     shapes,
 };
 
-export function createLearningState(
+function createCategoryState(
     category: LearningCategory
-): LearningState {
+): CategoryState {
     const categoryItems = curriculum[category];
 
     const startingItems = categoryItems
-    .slice(0, ACTIVE_POOL_SIZE)
-    .map((item) => item.id);
+        .slice(0, ACTIVE_POOL_SIZE)
+        .map((item) => item.id);
 
+        return {
+            activeItemIds: startingItems,
+            progress: startingItems.map((itemId) => ({
+                itemId,
+                correctAnswers: 0,
+                mastered: false,
+            }))
+        }
+}
+
+export function createLearningState(): LearningState {
     return {
-        category,
-        activeItemIds: startingItems,
-        progress: startingItems.map((itemId) => ({
-            itemId,
-            correctAnswers: 0,
-            mastered: false,
-        })),
-    };
+        letters: createCategoryState("letters"),
+        numbers: createCategoryState("numbers"),
+        colors: createCategoryState("colors"),
+        shapes: createCategoryState("shapes"),
+    }
 }
 
 export function getNextQuestion(
-    state: LearningState
+    state: LearningState,
+    category: LearningCategory
 ): QuestionResult {
-    const categoryItems = curriculum[state.category];
 
-    const activeItems = categoryItems.filter((item) => 
-        state.activeItemIds.includes(item.id)
+    const categoryState = state[category];
+    const categoryItems = curriculum[category];
+
+    const activeItems = categoryItems.filter((item) =>
+        categoryState.activeItemIds.includes(item.id)
     );
 
     if (activeItems.length === 0) {
@@ -57,17 +69,21 @@ export function getNextQuestion(
     );
 
     return {
-        category: state.category,
+        category,
         item: activeItems[randomIndex],
-    }
+    };
+
 }
 
 export function submitAnswer(
     state: LearningState,
+    category: LearningCategory,
     itemId: number,
     childAnswer: string
 ): AnswerResult {
-    const categoryItems = curriculum[state.category];
+
+    const categoryState = state[category];
+    const categoryItems = curriculum[category];
 
     const learningItem = categoryItems.find(
         (item) => item.id === itemId
@@ -85,24 +101,30 @@ export function submitAnswer(
         .trim()
         .toLowerCase();
 
-    const correct = 
-        normalizedChildAnswer === normalizedCorrectAnswer;    
-        
-    const updatedProgress = state.progress.map((progressItem) => {
-        if (progressItem.itemId !== itemId || !correct) {
-            return progressItem;
+    const correct =
+        normalizedChildAnswer === normalizedCorrectAnswer;
+
+    const updatedProgress = categoryState.progress.map(
+        (progressItem) => {
+
+            if (
+                progressItem.itemId !== itemId ||
+                !correct
+            ) {
+                return progressItem;
+            }
+
+            const correctAnswers =
+                progressItem.correctAnswers + 1;
+
+            return {
+                ...progressItem,
+                correctAnswers,
+                mastered:
+                    correctAnswers >= REQUIRED_CORRECT_ANSWERS,
+            };
         }
-
-        const correctAnswers = 
-        progressItem.correctAnswers + 1;
-
-        return {
-            ...progressItem,
-            correctAnswers,
-            mastered: 
-                correctAnswers >= REQUIRED_CORRECT_ANSWERS,
-        };
-    });
+    );
 
     const currentProgress = updatedProgress.find(
         (progressItem) => progressItem.itemId === itemId
@@ -112,24 +134,31 @@ export function submitAnswer(
         throw new Error("Progress record not found.");
     }
 
-    let updatedActiveItemIds = [...state.activeItemIds];
+    let updatedActiveItemIds = [
+        ...categoryState.activeItemIds,
+    ];
+
     let finalProgress = [...updatedProgress];
 
     if (currentProgress.mastered) {
-        updatedActiveItemIds = updatedActiveItemIds.filter(
-            (activeItemId) => activeItemId !== itemId
-        );
+
+        updatedActiveItemIds =
+            updatedActiveItemIds.filter(
+                (activeItemId) =>
+                    activeItemId !== itemId
+            );
 
         const nextItem = categoryItems.find(
-            (item) => 
-                !updatedActiveItemIds.includes(item.id) && 
-            !finalProgress.some(
-                (progressItem) =>
-                    progressItem.itemId === item.id
-            )
+            (item) =>
+                !updatedActiveItemIds.includes(item.id) &&
+                !finalProgress.some(
+                    (progressItem) =>
+                        progressItem.itemId === item.id
+                )
         );
 
         if (nextItem) {
+
             updatedActiveItemIds.push(nextItem.id);
 
             finalProgress.push({
@@ -137,20 +166,36 @@ export function submitAnswer(
                 correctAnswers: 0,
                 mastered: false,
             });
+
         }
+
     }
 
     const updatedState: LearningState = {
+
         ...state,
-        activeItemIds: updatedActiveItemIds,
-        progress: finalProgress
+
+        [category]: {
+            activeItemIds: updatedActiveItemIds,
+            progress: finalProgress,
+        },
+
     };
 
     return {
+
         correct,
+
         mastered: currentProgress.mastered,
-        correctAnswers: currentProgress.correctAnswers,
-        requiredAnswers: REQUIRED_CORRECT_ANSWERS,
-        state: updatedState
-    }
+
+        correctAnswers:
+            currentProgress.correctAnswers,
+
+        requiredAnswers:
+            REQUIRED_CORRECT_ANSWERS,
+
+        state: updatedState,
+
+    };
+
 }

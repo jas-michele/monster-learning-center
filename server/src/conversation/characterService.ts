@@ -12,34 +12,26 @@ async function askJax(input: string): Promise<string> {
 }
 
 
-export async function generateGreeting(childName: string): Promise<string> {
-    const response = await openai.responses.create({
-        model: "gpt-4.1-mini",
-        instructions: mechanicPrompt,
-        input: `Greet ${childName} and invite them to their monster truck.`,
-    });
-
-      console.log(JSON.stringify(response, null, 2));
-
-    return response.output_text;
-
-}
+export  function generateGreeting(childName: string): Promise<string> {
+    return askJax(
+        `Greet ${childName} and invite them to build their monster truck.`
+    );     
+    };
 
 export async function generateQuestion(question: string): Promise<string> {
-    const response = await openai.responses.create({
-        model: "gpt-4.1-mini",
-        instructions: mechanicPrompt,
-        input: `Ask the child this learning question: ${question}`,
-    });
-
-    return response.output_text;
+   return askJax(
+    `Ask the child this learning question: ${question}`
+   );
 }
 
-export async function generatePraise(): Promise<string> {
-    const response = await openai.responses.create({
-        model: "gpt-4.1-mini",
-        instructions: "Praise the child for answering correctly and celebrate installing a tire."
-    });
+export function generatePraise(): Promise<string> {
+    return askJax(
+        "Praise the child for answering correctly and celebrate installing a tire."
+    );
+}
 
-    return response.output_text;
+export async function generateEncouragement(): Promise<string> {
+    return askJax(
+        "Encourage the child after an incorrect answer. Never reveal the answer."
+    )
 }
