@@ -1,16 +1,16 @@
 import { FaCheck, FaFlagCheckered, FaLock, FaRedo } from 'react-icons/fa'
 import buildIconBody from '../../assets/build-icon-body.png'
 import buildIconLights from '../../assets/build-icon-lights.png'
+import buildIconPaint from '../../assets/build-icon-paint.png'
 import buildIconWheels from '../../assets/build-icon-wheels.png'
 import type { TruckPart } from './truckBuild'
 
 type CustomizationPanelProps = {
   completedParts: TruckPart[]
   earnedPart: TruckPart | undefined
-  nextPart: TruckPart | undefined
   onReset: () => void
-  onEarnPart: () => void
   onSaveAndRace: () => void
+  canReset: boolean
   canSave: boolean
 }
 
@@ -18,23 +18,23 @@ const partOptions: Array<{ value: TruckPart; label: string; instruction: string;
   { value: 'wheels', label: 'Wheels', instruction: 'Step 1', asset: buildIconWheels },
   { value: 'body', label: 'Body', instruction: 'Step 2', asset: buildIconBody },
   { value: 'lights', label: 'Lights', instruction: 'Step 3', asset: buildIconLights },
+  { value: 'paint', label: 'Paint', instruction: 'Step 4', asset: buildIconPaint },
 ]
+
+function PartIcon({ part }: { part: (typeof partOptions)[number] }) {
+  return <img className="build-tray__icon" src={part.asset} alt="" draggable={false} aria-hidden />
+}
 
 export default function CustomizationPanel({
   completedParts,
   earnedPart,
-  nextPart,
   onReset,
-  onEarnPart,
   onSaveAndRace,
+  canReset,
   canSave,
 }: CustomizationPanelProps) {
-  const nextPartLabel = nextPart ? partOptions.find((part) => part.value === nextPart)?.label : undefined
-
   return (
-    <section className="mechanic-panel build-tray" aria-labelledby="build-title">
-      <h2 id="build-title">Build the Monster Truck</h2>
-
+    <section className="mechanic-panel build-tray" aria-label="Build the monster truck">
       <div className="build-tray__parts" role="list" aria-label="Truck parts">
         {partOptions.map((part) => {
           const isComplete = completedParts.includes(part.value)
@@ -45,7 +45,7 @@ export default function CustomizationPanel({
             <div className="build-tray__slot" role="listitem" key={part.value}>
               <button
                 type="button"
-                className={`build-tray__part build-tray__part--${part.value}${isComplete ? ' build-tray__part--complete' : ''}`}
+                className={`build-tray__part build-tray__part--${part.value}${isComplete ? ' build-tray__part--complete' : ''}${isEarned ? ' build-tray__part--earned' : ''}${isLocked ? ' build-tray__part--locked' : ''}`}
                 aria-label={`${part.label} truck part${isLocked ? ' locked' : isComplete ? ' complete' : ' unlocked'}`}
                 aria-pressed={isComplete}
                 disabled
@@ -53,7 +53,7 @@ export default function CustomizationPanel({
                 <span className="build-tray__status" aria-hidden>
                   {isComplete ? <FaCheck /> : isLocked ? <FaLock /> : 'Ready'}
                 </span>
-                <img className="build-tray__icon" src={part.asset} alt="" draggable={false} aria-hidden />
+                <PartIcon part={part} />
                 <span className="build-tray__label">{part.label}</span>
               </button>
             </div>
@@ -61,11 +61,7 @@ export default function CustomizationPanel({
         })}
       </div>
 
-      <button type="button" className="build-tray__earn" disabled={!nextPart || Boolean(earnedPart)} onClick={onEarnPart}>
-        {nextPartLabel ? `Earn ${nextPartLabel}` : 'All Parts Earned'}
-      </button>
-
-      <button type="button" className="build-tray__reset" onClick={onReset}>
+      <button type="button" className="build-tray__reset" disabled={!canReset} onClick={onReset}>
         <FaRedo aria-hidden />
         Reset Truck
       </button>
