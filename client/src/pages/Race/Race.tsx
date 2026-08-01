@@ -6,6 +6,7 @@ import {
   colorOptions,
   defaultTruckCustomization,
   lightOptions,
+  wheelOptions,
   type RoofLightOption,
   type TruckColor,
   type TruckCustomization,
@@ -19,6 +20,7 @@ const roofLightOptions = new Set(lightOptions.map((option) => option.value))
 type SavedRaceTruck = {
   customization: TruckCustomization
   isGrayed: boolean
+  hasWheelSelection: boolean
 }
 
 function isTruckColor(value: unknown): value is TruckColor {
@@ -53,6 +55,7 @@ function getSavedRaceTruck(): SavedRaceTruck {
       return {
         customization: defaultTruckCustomization,
         isGrayed: false,
+        hasWheelSelection: false,
       }
     }
 
@@ -61,26 +64,34 @@ function getSavedRaceTruck(): SavedRaceTruck {
       return {
         customization: defaultTruckCustomization,
         isGrayed: false,
+        hasWheelSelection: false,
       }
     }
 
     const maybeSavedRaceTruck = parsed as Partial<SavedRaceTruck>
+    const selectedOptions = (maybeSavedRaceTruck as { selectedOptions?: { wheelColor?: unknown } }).selectedOptions
+    const parsedCustomization = parseCustomization(maybeSavedRaceTruck.customization)
 
     if ('customization' in maybeSavedRaceTruck) {
       return {
-        customization: parseCustomization(maybeSavedRaceTruck.customization),
+        customization: parsedCustomization,
         isGrayed: maybeSavedRaceTruck.isGrayed === true,
+        hasWheelSelection: selectedOptions?.wheelColor === true || parsedCustomization.wheelColor !== parsedCustomization.bodyColor,
       }
     }
 
+    const legacyCustomization = parseCustomization(parsed)
+
     return {
-      customization: parseCustomization(parsed),
+      customization: legacyCustomization,
       isGrayed: false,
+      hasWheelSelection: legacyCustomization.wheelColor !== legacyCustomization.bodyColor,
     }
   } catch {
     return {
       customization: defaultTruckCustomization,
       isGrayed: false,
+      hasWheelSelection: false,
     }
   }
 }
@@ -111,7 +122,7 @@ function RaceTruckLights({ roofLights }: { roofLights: RoofLightOption }) {
 }
 
 export default function Race() {
-  const { customization, isGrayed } = getSavedRaceTruck()
+  const { customization, isGrayed, hasWheelSelection } = getSavedRaceTruck()
 
   return (
     <div className="home" role="main" aria-label="Race track">
@@ -119,7 +130,8 @@ export default function Race() {
         <div className="home__scene">
           <div className="home__bg" style={{ backgroundImage: `url(${raceBg})` }} aria-hidden />
           <section className={`race-truck${isGrayed ? ' race-truck--grayed' : ''}`} aria-label="Your monster truck">
-            <img src={bodyAssets[customization.bodyColor]} alt="Your customized monster truck on the race track" />
+            <img className="race-truck__body-image" src={bodyAssets[customization.bodyColor]} alt="Your customized monster truck on the race track" />
+            {hasWheelSelection && <img className="race-truck__wheel-overlay" src={wheelOptions[customization.wheelColor].asset} alt="" aria-hidden />}
             <RaceTruckDecal decal={customization.decal} />
             <RaceTruckLights roofLights={customization.roofLights} />
           </section>

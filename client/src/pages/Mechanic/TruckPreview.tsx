@@ -1,47 +1,30 @@
-import {
-  bodyAssets,
-  lightOptions,
-  type RoofLightOption,
-  type TruckCustomization,
-  type TruckDecal,
-} from './truckCustomization'
+import truckBodyRed from '../../assets/truck-body-red.png'
+import truckLights from '../../assets/truck-lights.png'
+import truckWheelsRed from '../../assets/truck-wheels-red.png'
+import type { TruckPart } from './Mechanic'
 
-function DecalLayer({ decal }: { decal: TruckDecal }) {
-  if (decal === 'none') return null
-
-  return (
-    <div className={`truck-preview__decal truck-preview__decal--${decal}`} aria-hidden>
-      {decal === 'flames' && '🔥'}
-      {decal === 'claw-marks' && '///'}
-      {decal === 'skull' && '☠'}
-    </div>
-  )
-}
-
-function LightLayer({ roofLights }: { roofLights: RoofLightOption }) {
-  const count = lightOptions.find((option) => option.value === roofLights)?.count ?? 0
-  if (count === 0) return null
+export default function TruckPreview({ completedParts, isComplete }: { completedParts: TruckPart[]; isComplete: boolean }) {
+  const hasWheels = completedParts.includes('wheels')
+  const hasBody = completedParts.includes('body')
+  const hasLights = completedParts.includes('lights')
 
   return (
-    <div className={`truck-preview__lights truck-preview__lights--${count}`} aria-hidden>
-      {Array.from({ length: count }, (_, index) => (
-        <span key={index} />
-      ))}
-    </div>
-  )
-}
-
-export default function TruckPreview({ customization, isGrayed }: { customization: TruckCustomization; isGrayed: boolean }) {
-  return (
-    <section className="truck-preview" aria-label="Truck preview">
-      <div
-        className={`truck-preview__truck truck-preview__truck--body-${customization.bodyColor} truck-preview__truck--wheels-${customization.wheelColor}${
-          isGrayed ? ' truck-preview__truck--grayed' : ''
-        }`}
-      >
-        <img src={bodyAssets[customization.bodyColor]} alt="Customized monster truck preview" />
-        <DecalLayer decal={customization.decal} />
-        <LightLayer roofLights={customization.roofLights} />
+    <section className="truck-preview" aria-label="Truck assembly area">
+      <div className={`truck-preview__assembly${isComplete ? ' truck-preview__assembly--complete' : ''}`}>
+        {hasWheels && (
+          <img
+            className="truck-preview__part truck-preview__part--wheels"
+            src={truckWheelsRed}
+            alt="Wheels and axle added"
+            draggable={false}
+          />
+        )}
+        {hasBody && (
+          <img className="truck-preview__part truck-preview__part--body" src={truckBodyRed} alt="Truck body added" draggable={false} />
+        )}
+        {hasLights && (
+          <img className="truck-preview__part truck-preview__part--lights" src={truckLights} alt="Roof lights added" draggable={false} />
+        )}
       </div>
     </section>
   )

@@ -22,23 +22,23 @@
 
 .mechanic-guide__message {
   position: absolute;
-  right: 42%;
-  top: 14%;
+  right: 74%;
+  top: 1%;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(64%, 8.15rem);
-  min-height: 5.8rem;
-  padding: 0.7rem 0.72rem;
+  width: min(44%, 7.4rem);
+  min-height: 7.9rem;
+  padding: 0.95rem 1.08rem;
   border-radius: 0.82rem;
   border: 0.09rem solid rgba(86, 69, 50, 0.24);
   background: linear-gradient(180deg, rgba(255, 248, 231, 0.98), rgba(245, 229, 200, 0.97));
   color: #1c1713;
-  font-size: clamp(0.73rem, 1.16vw, 0.98rem);
+  font-size: clamp(0.86rem, 1.35vw, 1.22rem);
   font-weight: 900;
-  line-height: 1.18;
-  text-align: center;
+  line-height: 1.3;
+  text-align: left;
   box-shadow:
     inset 0 0.08rem 0 rgba(255, 255, 255, 0.85),
     inset 0 -0.08rem 0 rgba(155, 108, 54, 0.12),
@@ -50,8 +50,8 @@
 .mechanic-guide__message::before {
   content: "";
   position: absolute;
-  left: 50%;
-  bottom: -1.24rem;
+  right: 18%;
+  bottom: -1.36rem;
   z-index: 2;
   width: 0;
   height: 0;
@@ -59,39 +59,28 @@
   border-right: 0.78rem solid transparent;
   border-top: 1.32rem solid rgba(245, 229, 200, 0.98);
   filter: drop-shadow(0.1rem 0.14rem 0.12rem rgba(0, 0, 0, 0.18));
-  transform: translateX(-50%) rotate(-14deg);
+  transform: rotate(-10deg);
   transform-origin: center top;
 }
 
 .mechanic-guide__message::after {
   content: "";
   position: absolute;
-  left: 50%;
-  bottom: -1.38rem;
+  right: calc(18% - 0.1rem);
+  bottom: -1.52rem;
   z-index: 1;
   width: 0;
   height: 0;
   border-left: 0.88rem solid transparent;
   border-right: 0.88rem solid transparent;
   border-top: 1.48rem solid rgba(86, 69, 50, 0.24);
-  transform: translateX(-50%) rotate(-14deg);
+  transform: rotate(-10deg);
   transform-origin: center top;
 }
 
 .mechanic-guide__message-text {
   position: relative;
   z-index: 1;
-}
-
-.mechanic-guide__message-text::after {
-  content: "";
-  display: inline-block;
-  width: 0.08em;
-  height: 0.92em;
-  margin-left: 0.08em;
-  background: currentColor;
-  vertical-align: -0.1em;
-  animation: mechanic-type-caret 760ms steps(2, start) infinite;
 }
 
 @keyframes mechanic-message-pop {
@@ -106,19 +95,13 @@
   }
 }
 
-@keyframes mechanic-type-caret {
-  50% {
-    opacity: 0;
-  }
-}
-
 .mechanic-guide__avatar {
   position: absolute;
-  left: 12%;
-  bottom: -17%;
+  right: -12%;
+  bottom: -24%;
   z-index: 3;
-  width: 70%;
-  height: 88%;
+  width: 128%;
+  height: 104%;
   pointer-events: none;
 }
 
@@ -129,134 +112,115 @@
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 0.62rem 0.72rem rgba(0, 0, 0, 0.38));
+  user-select: none;
 }
 
 .truck-preview {
   position: relative;
   grid-column: 2;
   grid-row: 1;
-  align-self: end;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
   min-width: 0;
   overflow: visible;
   z-index: 2;
 }
 
-.truck-preview__truck {
-  position: absolute;
-  left: 55%;
-  bottom: 2.8%;
-  width: min(86%, 39.5rem);
-  aspect-ratio: 1382 / 1044;
-  transform: translateX(-50%);
+.truck-preview__assembly {
+  position: relative;
+  width: min(124%, 57rem);
+  aspect-ratio: 1536 / 1024;
+  transform: translate(4%, 23%) scale(1.25);
+  transform-origin: center center;
+  user-select: none;
+  pointer-events: none;
 }
 
-.truck-preview__truck--grayed {
-  filter: grayscale(1) saturate(0) brightness(0.78) contrast(0.92);
+.truck-preview__assembly--complete {
+  animation: truck-complete-bounce 520ms ease-out;
+  filter:
+    drop-shadow(0 0 0.45rem rgba(255, 218, 81, 0.62))
+    drop-shadow(0 1rem 1.1rem rgba(0, 0, 0, 0.34));
 }
 
-.truck-preview__truck--body-orange {
-  transform: translateX(calc(-50% + 0.18%)) translateY(7.38%);
-}
-
-.truck-preview__truck--body-green {
-  transform: translateX(calc(-50% + 1.41%)) translateY(-0.96%);
-}
-
-.truck-preview__truck--body-blue {
-  transform: translateX(calc(-50% + 1.48%)) translateY(6.7%);
-}
-
-.truck-preview__truck--body-purple {
-  transform: translateX(calc(-50% - 0.22%)) translateY(3.64%);
-}
-
-.truck-preview__truck--body-black {
-  transform: translateX(calc(-50% + 1.52%)) translateY(4.02%);
-}
-
-.truck-preview__truck img {
+.truck-preview__part {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+.truck-preview__part--wheels {
   z-index: 1;
+  animation: truck-wheels-in 420ms ease-out both;
 }
 
-.truck-preview__truck--wheels-red img {
-  filter: drop-shadow(0 0.2rem 0.22rem rgba(215, 25, 25, 0.42));
-}
-
-.truck-preview__truck--wheels-orange img {
-  filter: drop-shadow(0 0.2rem 0.22rem rgba(255, 138, 0, 0.42));
-}
-
-.truck-preview__truck--wheels-green img {
-  filter: drop-shadow(0 0.2rem 0.22rem rgba(79, 184, 0, 0.42));
-}
-
-.truck-preview__truck--wheels-blue img {
-  filter: drop-shadow(0 0.2rem 0.22rem rgba(8, 119, 216, 0.42));
-}
-
-.truck-preview__truck--wheels-purple img {
-  filter: drop-shadow(0 0.2rem 0.22rem rgba(123, 34, 200, 0.42));
-}
-
-.truck-preview__truck--wheels-black img {
-  filter: drop-shadow(0 0.2rem 0.22rem rgba(0, 0, 0, 0.5));
-}
-
-.truck-preview__decal {
-  position: absolute;
+.truck-preview__part--body {
   z-index: 2;
-  color: #fff;
-  font-weight: 900;
-  text-shadow: 0 0.12rem 0.16rem rgba(0, 0, 0, 0.75);
-  pointer-events: none;
+  animation: truck-body-in 450ms ease-out both;
 }
 
-.truck-preview__decal--flames {
-  left: 23%;
-  top: 42%;
-  font-size: clamp(1.45rem, 3.7vw, 3.3rem);
-  filter: drop-shadow(0 0.08rem 0.08rem rgba(0, 0, 0, 0.6));
+.truck-preview__part--lights {
+  z-index: 3;
+  animation: truck-lights-in 380ms ease-out both;
 }
 
-.truck-preview__decal--claw-marks {
-  left: 30%;
-  top: 44%;
-  color: #f2f2ef;
-  font-size: clamp(1.6rem, 3.5vw, 3.1rem);
-  letter-spacing: -0.32em;
-  transform: rotate(-20deg);
+@keyframes truck-wheels-in {
+  from {
+    opacity: 0;
+    transform: translateY(24%) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.truck-preview__decal--skull {
-  left: 31%;
-  top: 42%;
-  font-size: clamp(1.55rem, 3.6vw, 3.2rem);
+@keyframes truck-body-in {
+  from {
+    opacity: 0;
+    transform: translateX(-26%) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
 }
 
-.truck-preview__lights {
-  position: absolute;
-  left: 51%;
-  top: 9.5%;
-  z-index: 4;
-  display: flex;
-  gap: 0.26rem;
-  transform: translateX(-50%);
-  pointer-events: none;
+@keyframes truck-lights-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-42%) scale(0.96);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateY(4%) scale(1.02);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.truck-preview__lights span {
-  width: clamp(0.7rem, 1.55vw, 1.45rem);
-  aspect-ratio: 1;
-  border: 0.12rem solid #1d1d1d;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 34%, #fff5ac, #ffb51d 58%, #4d2b00);
-  box-shadow: 0 0 0.3rem rgba(255, 198, 49, 0.75);
+@keyframes truck-complete-bounce {
+  0%,
+  100% {
+    transform: translate(4%, 23%) scale(1.25);
+  }
+
+  45% {
+    transform: translate(4%, 20%) scale(1.3);
+  }
 }
 
 .mechanic-panel {
@@ -293,10 +257,163 @@
   text-shadow: 0 0.12rem 0 rgba(0, 0, 0, 0.65);
 }
 
+.build-tray {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.62rem, 1.2vw, 0.9rem);
+}
+
+.build-tray__parts {
+  display: grid;
+  gap: clamp(0.52rem, 1vw, 0.74rem);
+}
+
+.build-tray__slot {
+  min-width: 0;
+}
+
+.build-tray__part,
+.build-tray__reset,
+.build-tray__save {
+  min-height: 4rem;
+  min-width: 4rem;
+  touch-action: manipulation;
+}
+
+.build-tray__part {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 42%) minmax(0, 1fr);
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.44rem 0.54rem;
+  border: 0.1rem solid rgba(255, 255, 255, 0.24);
+  border-radius: 0.72rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.025)),
+    rgba(255, 255, 255, 0.06);
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0.08rem 0 rgba(255, 255, 255, 0.08),
+    0 0.14rem 0.3rem rgba(0, 0, 0, 0.28);
+}
+
+.build-tray__part img {
+  width: 100%;
+  height: clamp(3rem, 8.2vh, 4.75rem);
+  display: block;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 0.18rem 0.16rem rgba(0, 0, 0, 0.46));
+}
+
+.build-tray__part--wheels img {
+  object-position: center 72%;
+  transform: scale(1.42);
+}
+
+.build-tray__part--body img {
+  object-position: center 45%;
+  transform: scale(1.2);
+}
+
+.build-tray__part--lights img {
+  object-position: center 15%;
+  transform: scale(2.08);
+}
+
+.build-tray__label {
+  min-width: 0;
+  font-size: clamp(0.82rem, 1.22vw, 1.08rem);
+  font-weight: 1000;
+  line-height: 1.05;
+  text-align: left;
+  text-transform: uppercase;
+  text-shadow: 0 0.1rem 0 rgba(0, 0, 0, 0.62);
+}
+
+.build-tray__status {
+  position: absolute;
+  right: 0.48rem;
+  top: 0.42rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.65rem;
+  min-height: 1.65rem;
+  padding: 0 0.32rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.38);
+  color: #ffdc54;
+  font-size: 0.68rem;
+  font-weight: 1000;
+  line-height: 1;
+}
+
+.build-tray__part--complete {
+  border-color: #69e28d;
+  background:
+    linear-gradient(180deg, rgba(105, 226, 141, 0.16), rgba(255, 255, 255, 0.03)),
+    rgba(255, 255, 255, 0.07);
+}
+
+.build-tray__part:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.build-tray__part:disabled:not(.build-tray__part--complete) img {
+  filter: grayscale(1) brightness(0.72);
+}
+
+.build-tray__reset,
+.build-tray__save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  border: 0.1rem solid rgba(255, 214, 76, 0.68);
+  border-radius: 0.72rem;
+  background:
+    linear-gradient(180deg, rgba(255, 214, 76, 0.18), rgba(0, 0, 0, 0.08)),
+    rgba(78, 46, 11, 0.74);
+  color: #fff7d6;
+  cursor: pointer;
+  font-size: clamp(0.82rem, 1.1vw, 0.98rem);
+  font-weight: 1000;
+  text-transform: uppercase;
+  text-shadow: 0 0.1rem 0 rgba(0, 0, 0, 0.65);
+}
+
+.build-tray__reset {
+  margin-top: auto;
+}
+
+.build-tray__save {
+  border-color: rgba(119, 236, 134, 0.72);
+  background:
+    linear-gradient(180deg, rgba(120, 236, 134, 0.22), rgba(0, 0, 0, 0.08)),
+    rgba(19, 97, 42, 0.82);
+  color: #f6ffe8;
+}
+
+.build-tray__save:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  filter: grayscale(0.8);
+}
+
 .mechanic-panel__swatch,
 .mechanic-panel__option,
 .mechanic-panel__wheel-choice,
 .mechanic-panel__tab,
+.build-tray__reset,
+.build-tray__save,
 .garage-actions__link {
   transition:
     transform 160ms ease,
@@ -601,6 +718,9 @@
 .mechanic-panel__option:hover,
 .mechanic-panel__wheel-choice:hover,
 .mechanic-panel__tab:hover,
+.build-tray__part:not(:disabled):hover,
+.build-tray__reset:hover,
+.build-tray__save:not(:disabled):hover,
 .garage-actions__link:hover,
 .garage-actions__leave:hover {
   transform: translateY(-0.08rem);
@@ -610,6 +730,9 @@
 .mechanic-panel__option:focus-visible,
 .mechanic-panel__wheel-choice:focus-visible,
 .mechanic-panel__tab:focus-visible,
+.build-tray__part:focus-visible,
+.build-tray__reset:focus-visible,
+.build-tray__save:focus-visible,
 .garage-actions__link:focus-visible,
 .garage-actions__leave:focus-visible {
   outline: 0.22rem solid rgba(255, 255, 255, 0.95);
@@ -644,20 +767,86 @@
     width: 82%;
   }
 
+  .truck-preview__assembly {
+    width: min(122%, 45rem);
+    transform: translate(3%, 18%) scale(1.25);
+  }
+
+  .build-tray__part {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0.26rem;
+    min-height: 4.25rem;
+    padding: 0.38rem;
+  }
+
+  .build-tray__part img {
+    height: 2.85rem;
+  }
+
+  .build-tray__label {
+    text-align: center;
+    font-size: 0.74rem;
+  }
+
   .mechanic-guide__message {
-    right: 38%;
-    width: 64%;
-    min-height: 5rem;
-    font-size: 0.72rem;
+    right: 70%;
+    top: 1%;
+    width: 48%;
+    min-height: 6.8rem;
+    font-size: 0.7rem;
   }
 
   .mechanic-guide__avatar {
-    left: 10%;
-    width: 72%;
-    bottom: -16%;
+    right: -15%;
+    width: 126%;
+    bottom: -23%;
   }
 
   .garage-actions {
     display: contents;
+  }
+}
+
+@media (max-width: 680px) {
+  .mechanic-shop {
+    grid-template-columns: minmax(0, 34%) minmax(0, 66%);
+    grid-template-rows: minmax(0, 1fr) 16.8%;
+    padding-top: 5.2rem;
+  }
+
+  .mechanic-guide {
+    display: none;
+  }
+
+  .truck-preview {
+    grid-column: 2;
+  }
+
+  .mechanic-panel {
+    width: 100%;
+  }
+
+  .build-tray {
+    gap: 0.45rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .truck-preview__part,
+  .truck-preview__assembly--complete,
+  .mechanic-guide__message {
+    animation: none;
+  }
+
+  .mechanic-panel__swatch,
+  .mechanic-panel__option,
+  .mechanic-panel__wheel-choice,
+  .mechanic-panel__tab,
+  .build-tray__part,
+  .build-tray__reset,
+  .build-tray__save,
+  .garage-actions__link {
+    transition: none;
   }
 }

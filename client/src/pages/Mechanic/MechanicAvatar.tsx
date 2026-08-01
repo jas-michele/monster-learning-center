@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import Avatar from '../../components/Avatar'
+import jaxAvatar from '../../assets/avatars/jax.png'
 
 export default function MechanicAvatar({ message }: { message: string }) {
   const [typewriterState, setTypewriterState] = useState({ message, visibleLength: 0 })
@@ -26,12 +26,12 @@ export default function MechanicAvatar({ message }: { message: string }) {
   const visibleMessage = typewriterState.message === message ? message.slice(0, typewriterState.visibleLength) : ''
 
   return (
-    <aside className="mechanic-guide" aria-label="Derrick the mechanic">
+    <aside className="mechanic-guide" aria-label="Jax the mechanic">
       <div key={message} className="mechanic-guide__message" aria-live="polite">
         <span className="mechanic-guide__message-text">{visibleMessage}</span>
       </div>
       <div className="mechanic-guide__avatar" aria-hidden>
-        <Avatar outfit="mechanic" animation="stand" className="mechanic-guide__avatar-image" />
+        <img src={jaxAvatar} alt="" className="mechanic-guide__avatar-image" draggable={false} />
       </div>
     </aside>
   )
