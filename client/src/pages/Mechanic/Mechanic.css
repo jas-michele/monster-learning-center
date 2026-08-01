@@ -139,6 +139,12 @@
   pointer-events: none;
 }
 
+.truck-preview__assembly--target-wheels,
+.truck-preview__assembly--target-body,
+.truck-preview__assembly--target-lights {
+  pointer-events: auto;
+}
+
 .truck-preview__assembly--complete {
   animation: truck-complete-bounce 520ms ease-out;
   filter:
@@ -169,6 +175,91 @@
 .truck-preview__part--lights {
   z-index: 3;
   animation: truck-lights-in 380ms ease-out both;
+}
+
+.truck-preview__target {
+  position: absolute;
+  z-index: 4;
+  border: 0.18rem dashed rgba(255, 236, 117, 0.96);
+  border-radius: 1.2rem;
+  background: rgba(255, 220, 84, 0.11);
+  box-shadow:
+    0 0 0 0.18rem rgba(12, 21, 22, 0.32),
+    0 0 1.15rem rgba(255, 220, 84, 0.78),
+    inset 0 0 0.9rem rgba(255, 255, 255, 0.18);
+  pointer-events: none;
+  animation: build-target-pulse 920ms ease-in-out infinite;
+}
+
+.truck-preview__target--wheels {
+  left: 4%;
+  right: 4%;
+  bottom: 1%;
+  height: 47%;
+  border-radius: 2rem;
+}
+
+.truck-preview__target--body {
+  left: 12%;
+  right: 11%;
+  top: 12%;
+  height: 52%;
+}
+
+.truck-preview__target--lights {
+  left: 33%;
+  top: 4%;
+  width: 34%;
+  height: 18%;
+  border-radius: 999px;
+}
+
+.earned-part {
+  position: absolute;
+  left: 50%;
+  top: 13%;
+  z-index: 6;
+  display: block;
+  width: min(34%, 18rem);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: grab;
+  filter:
+    drop-shadow(0 0 0.18rem rgba(255, 236, 117, 0.96))
+    drop-shadow(0 0 0.7rem rgba(255, 220, 84, 0.78))
+    drop-shadow(0 0.55rem 0.48rem rgba(0, 0, 0, 0.36));
+  transform: translateX(-50%);
+  animation: earned-part-pop 430ms cubic-bezier(0.2, 1.55, 0.38, 1) both;
+  touch-action: manipulation;
+}
+
+.earned-part:active {
+  cursor: grabbing;
+}
+
+.earned-part img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.earned-part--wheels {
+  top: 37%;
+  width: min(34%, 18.5rem);
+}
+
+.earned-part--body {
+  top: 18%;
+  width: min(36%, 19.5rem);
+}
+
+.earned-part--lights {
+  top: 14%;
+  width: min(25%, 13.5rem);
 }
 
 @keyframes truck-wheels-in {
@@ -209,6 +300,29 @@
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes build-target-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.025);
+  }
+}
+
+@keyframes earned-part-pop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-16%) scale(0.64);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
   }
 }
 
@@ -273,6 +387,7 @@
 }
 
 .build-tray__part,
+.build-tray__earn,
 .build-tray__reset,
 .build-tray__save {
   min-height: 4rem;
@@ -368,6 +483,7 @@
 }
 
 .build-tray__reset,
+.build-tray__earn,
 .build-tray__save {
   display: inline-flex;
   align-items: center;
@@ -385,6 +501,19 @@
   font-weight: 1000;
   text-transform: uppercase;
   text-shadow: 0 0.1rem 0 rgba(0, 0, 0, 0.65);
+}
+
+.build-tray__earn {
+  border-color: rgba(255, 236, 117, 0.78);
+  background:
+    linear-gradient(180deg, rgba(255, 236, 117, 0.24), rgba(0, 0, 0, 0.08)),
+    rgba(97, 66, 13, 0.86);
+}
+
+.build-tray__earn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  filter: grayscale(0.65);
 }
 
 .build-tray__reset {
@@ -409,6 +538,7 @@
 .mechanic-panel__option,
 .mechanic-panel__wheel-choice,
 .mechanic-panel__tab,
+.build-tray__earn,
 .build-tray__reset,
 .build-tray__save {
   transition:
@@ -638,6 +768,7 @@
 .mechanic-panel__wheel-choice:hover,
 .mechanic-panel__tab:hover,
 .build-tray__part:not(:disabled):hover,
+.build-tray__earn:not(:disabled):hover,
 .build-tray__reset:hover,
 .build-tray__save:not(:disabled):hover {
   transform: translateY(-0.08rem);
@@ -648,11 +779,20 @@
 .mechanic-panel__wheel-choice:focus-visible,
 .mechanic-panel__tab:focus-visible,
 .build-tray__part:focus-visible,
+.build-tray__earn:focus-visible,
 .build-tray__reset:focus-visible,
 .build-tray__save:focus-visible {
   outline: 0.22rem solid rgba(255, 255, 255, 0.95);
   outline-offset: 0.12rem;
   border-radius: 1.25rem;
+}
+
+.earned-part:focus-visible {
+  outline: none;
+  filter:
+    drop-shadow(0 0 0.22rem rgba(255, 255, 255, 0.98))
+    drop-shadow(0 0 0.78rem rgba(255, 220, 84, 0.88))
+    drop-shadow(0 0.55rem 0.48rem rgba(0, 0, 0, 0.36));
 }
 
 @media (max-width: 920px) {
@@ -752,6 +892,7 @@
   .mechanic-panel__wheel-choice,
   .mechanic-panel__tab,
   .build-tray__part,
+  .build-tray__earn,
   .build-tray__reset,
   .build-tray__save {
     transition: none;
