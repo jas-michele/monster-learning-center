@@ -1,7 +1,7 @@
 import truckBodyRed from '../../assets/truck-body-red.png'
 import truckLights from '../../assets/truck-lights.png'
 import truckWheelsRed from '../../assets/truck-wheels-red.png'
-import type { TruckPart } from './Mechanic'
+import type { TruckPart } from './truckBuild'
 
 export default function TruckPreview({ completedParts, isComplete }: { completedParts: TruckPart[]; isComplete: boolean }) {
   const hasWheels = completedParts.includes('wheels')

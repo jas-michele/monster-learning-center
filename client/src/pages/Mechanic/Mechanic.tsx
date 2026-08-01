@@ -6,11 +6,8 @@ import garageBg from '../../assets/garagBG.png'
 import CustomizationPanel from './CustomizationPanel'
 import MechanicAvatar from './MechanicAvatar'
 import TruckPreview from './TruckPreview'
+import { BUILD_ORDER, type TruckPart } from './truckBuild'
 import { defaultTruckCustomization, type TruckCustomization } from './truckCustomization'
-
-export type TruckPart = 'wheels' | 'body' | 'lights'
-
-const BUILD_ORDER: TruckPart[] = ['wheels', 'body', 'lights']
 
 export default function Mechanic() {
   const navigate = useNavigate()

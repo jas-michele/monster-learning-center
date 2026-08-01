@@ -1,8 +1,8 @@
 import { FaCheck, FaFlagCheckered, FaLock, FaRedo } from 'react-icons/fa'
-import truckBodyRed from '../../assets/truck-body-red.png'
-import truckLights from '../../assets/truck-lights.png'
-import truckWheelsRed from '../../assets/truck-wheels-red.png'
-import type { TruckPart } from './Mechanic'
+import buildIconBody from '../../assets/build-icon-body.png'
+import buildIconLights from '../../assets/build-icon-lights.png'
+import buildIconWheels from '../../assets/build-icon-wheels.png'
+import type { TruckPart } from './truckBuild'
 
 type CustomizationPanelProps = {
   completedParts: TruckPart[]
@@ -14,9 +14,9 @@ type CustomizationPanelProps = {
 }
 
 const partOptions: Array<{ value: TruckPart; label: string; instruction: string; asset: string }> = [
-  { value: 'wheels', label: 'Wheels', instruction: 'Step 1', asset: truckWheelsRed },
-  { value: 'body', label: 'Body', instruction: 'Step 2', asset: truckBodyRed },
-  { value: 'lights', label: 'Lights', instruction: 'Step 3', asset: truckLights },
+  { value: 'wheels', label: 'Wheels', instruction: 'Step 1', asset: buildIconWheels },
+  { value: 'body', label: 'Body', instruction: 'Step 2', asset: buildIconBody },
+  { value: 'lights', label: 'Lights', instruction: 'Step 3', asset: buildIconLights },
 ]
 
 export default function CustomizationPanel({ completedParts, currentPart, onPartSelect, onReset, onSaveAndRace, canSave }: CustomizationPanelProps) {
@@ -42,7 +42,7 @@ export default function CustomizationPanel({ completedParts, currentPart, onPart
                 <span className="build-tray__status" aria-hidden>
                   {isComplete ? <FaCheck /> : isLocked ? <FaLock /> : part.instruction}
                 </span>
-                <img src={part.asset} alt="" draggable={false} aria-hidden />
+                <img className="build-tray__icon" src={part.asset} alt="" draggable={false} aria-hidden />
                 <span className="build-tray__label">{part.label}</span>
               </button>
             </div>

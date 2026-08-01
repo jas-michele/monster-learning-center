@@ -301,7 +301,7 @@
     0 0.14rem 0.3rem rgba(0, 0, 0, 0.28);
 }
 
-.build-tray__part img {
+.build-tray__icon {
   width: 100%;
   height: clamp(3rem, 8.2vh, 4.75rem);
   display: block;
@@ -311,19 +311,16 @@
   filter: drop-shadow(0 0.18rem 0.16rem rgba(0, 0, 0, 0.46));
 }
 
-.build-tray__part--wheels img {
-  object-position: center 72%;
-  transform: scale(1.42);
+.build-tray__part--wheels .build-tray__icon {
+  transform: scale(1.08);
 }
 
-.build-tray__part--body img {
-  object-position: center 45%;
-  transform: scale(1.2);
+.build-tray__part--body .build-tray__icon {
+  transform: scale(1.04);
 }
 
-.build-tray__part--lights img {
-  object-position: center 15%;
-  transform: scale(2.08);
+.build-tray__part--lights .build-tray__icon {
+  transform: scale(1.32);
 }
 
 .build-tray__label {
@@ -413,8 +410,7 @@
 .mechanic-panel__wheel-choice,
 .mechanic-panel__tab,
 .build-tray__reset,
-.build-tray__save,
-.garage-actions__link {
+.build-tray__save {
   transition:
     transform 160ms ease,
     border-color 160ms ease,
@@ -637,92 +633,13 @@
   transform: rotate(-35deg);
 }
 
-.garage-actions {
-  display: contents;
-  z-index: 5;
-}
-
-.garage-actions__link {
-  position: absolute;
-  display: block;
-  width: 24.3%;
-  flex: 0 0 24.3%;
-  height: 16.8%;
-  border: none;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: none;
-  z-index: 5;
-}
-
-.garage-actions__link--dino {
-  left: 25.35%;
-  bottom: 1.6%;
-}
-
-.garage-actions__link--storytime {
-  left: 50.35%;
-  bottom: 1.6%;
-}
-
-.garage-actions__nav-image {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
-}
-
-.garage-actions__link--dino .garage-actions__nav-image,
-.garage-actions__link--storytime .garage-actions__nav-image {
-  width: 94%;
-  margin: 0 auto;
-}
-
-.garage-actions__link--dino .garage-actions__nav-image {
-  transform: translateX(-1%);
-}
-
-.garage-actions__link--storytime .garage-actions__nav-image {
-  transform: scaleY(1.11);
-}
-
-.garage-actions__leave {
-  position: absolute;
-  right: 2.2%;
-  bottom: 2.2%;
-  z-index: 6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: clamp(2rem, 4.3vw, 3rem);
-  aspect-ratio: 1;
-  border: 0.08rem solid rgba(255, 255, 255, 0.28);
-  border-radius: 50%;
-  background: rgba(10, 14, 16, 0.42);
-  color: rgba(255, 255, 255, 0.84);
-  text-decoration: none;
-  box-shadow:
-    inset 0 0.08rem 0 rgba(255, 255, 255, 0.12),
-    0 0.18rem 0.4rem rgba(0, 0, 0, 0.24);
-}
-
-.garage-actions__leave svg {
-  width: 52%;
-  height: 52%;
-  filter: drop-shadow(0 0.08rem 0.08rem rgba(0, 0, 0, 0.45));
-}
-
 .mechanic-panel__swatch:hover,
 .mechanic-panel__option:hover,
 .mechanic-panel__wheel-choice:hover,
 .mechanic-panel__tab:hover,
 .build-tray__part:not(:disabled):hover,
 .build-tray__reset:hover,
-.build-tray__save:not(:disabled):hover,
-.garage-actions__link:hover,
-.garage-actions__leave:hover {
+.build-tray__save:not(:disabled):hover {
   transform: translateY(-0.08rem);
 }
 
@@ -732,16 +649,10 @@
 .mechanic-panel__tab:focus-visible,
 .build-tray__part:focus-visible,
 .build-tray__reset:focus-visible,
-.build-tray__save:focus-visible,
-.garage-actions__link:focus-visible,
-.garage-actions__leave:focus-visible {
+.build-tray__save:focus-visible {
   outline: 0.22rem solid rgba(255, 255, 255, 0.95);
   outline-offset: 0.12rem;
   border-radius: 1.25rem;
-}
-
-.garage-actions__leave:focus-visible {
-  border-radius: 50%;
 }
 
 @media (max-width: 920px) {
@@ -803,9 +714,6 @@
     bottom: -23%;
   }
 
-  .garage-actions {
-    display: contents;
-  }
 }
 
 @media (max-width: 680px) {
@@ -845,8 +753,7 @@
   .mechanic-panel__tab,
   .build-tray__part,
   .build-tray__reset,
-  .build-tray__save,
-  .garage-actions__link {
+  .build-tray__save {
     transition: none;
   }
 }
