@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import './Home.css'
+import achievementsIcon from '../../assets/home-icon-achievements.png'
+import backpackIcon from '../../assets/home-icon-backpack.png'
+import settingsIcon from '../../assets/home-icon-settings.png'
 import bg from '../../assets/playhouseBG-centered-rug.png'
 import Avatar, { type AvatarOutfit } from '../../components/Avatar'
 import { getHomeData } from '../../services/homeService'
@@ -45,33 +48,19 @@ const Home: React.FC = () => {
         <div className="home__scene">
           <div className="home__bg" style={{ backgroundImage: `url(${bg})` }} aria-hidden />
 
-          <nav
-            className="home__nav-hero"
-            aria-label="Main navigation"
-          >
-            <button
-              className="home__nav-hero-button home__nav-hero-button--achievements"
-              aria-label="Achievements"
-              onClick={() => navigate("/achievements")}
-            />
+          <div className="home__top-actions" aria-label="Playhouse tools">
+            <button type="button" className="home__top-action home__top-action--achievements" aria-label="Achievements">
+              <img src={achievementsIcon} alt="" draggable={false} aria-hidden />
+            </button>
+            <button type="button" className="home__top-action home__top-action--settings" aria-label="Settings">
+              <img src={settingsIcon} alt="" draggable={false} aria-hidden />
+            </button>
+            <button type="button" className="home__top-action home__top-action--backpack" aria-label="Backpack">
+              <img src={backpackIcon} alt="" draggable={false} aria-hidden />
+            </button>
+          </div>
 
-            <button
-              className="home__nav-hero-button home__nav-hero-button--settings"
-              aria-label="Settings"
-              onClick={() => navigate("/settings")}
-            />
-
-            <button
-              className="home__nav-hero-button home__nav-hero-button--my-room"
-              aria-label="My Room"
-              onClick={() => navigate("/my-room")}
-            />
-          </nav>
-
-          <PlayAreaNav
-            onPreview={setOutfit}
-            onResetPreview={resetAvatar}
-          />
+          <PlayAreaNav onPreview={setOutfit} onResetPreview={resetAvatar} />
 
           <div className={`home__avatar-wrap${isStorytime ? ' home__avatar-wrap--storytime' : ''}`} aria-hidden>
             <Avatar outfit={outfit} animation="idle" className="home__avatar" />

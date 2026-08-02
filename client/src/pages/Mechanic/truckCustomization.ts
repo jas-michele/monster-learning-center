@@ -4,6 +4,12 @@ import greenTruck from '../../assets/greenTruck.png'
 import orangeTruck from '../../assets/orangeTruck.png'
 import purpleTruck from '../../assets/purpleTruck.png'
 import redTruck from '../../assets/redTruck.png'
+import blackWheels from '../../assets/black-wheels.png'
+import blueWheels from '../../assets/blue-wheels.png'
+import greenWheels from '../../assets/green-wheels.png'
+import orangeWheels from '../../assets/orange-wheels.png'
+import purpleWheels from '../../assets/purple-wheels.png'
+import redWheels from '../../assets/red-wheels.png'
 
 export type TruckColor = 'red' | 'orange' | 'green' | 'blue' | 'purple' | 'black'
 export type TruckDecal = 'flames' | 'claw-marks' | 'skull' | 'none'
@@ -40,6 +46,15 @@ export const bodyAssets: Record<TruckColor, string> = {
   blue: blueTruck,
   purple: purpleTruck,
   black: blackTruck,
+}
+
+export const wheelOptions: Record<WheelColor, { label: string; asset: string }> = {
+  red: { label: 'Red wheels', asset: redWheels },
+  orange: { label: 'Orange wheels', asset: orangeWheels },
+  green: { label: 'Green wheels', asset: greenWheels },
+  blue: { label: 'Blue wheels', asset: blueWheels },
+  purple: { label: 'Purple wheels', asset: purpleWheels },
+  black: { label: 'Black wheels', asset: blackWheels },
 }
 
 export const decalOptions: Array<{ value: TruckDecal; label: string; icon: string }> = [

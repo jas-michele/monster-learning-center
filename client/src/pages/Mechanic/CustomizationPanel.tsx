@@ -1,185 +1,75 @@
-import { useState } from 'react'
-import { FaBolt, FaCheck, FaCog, FaFire, FaPalette } from 'react-icons/fa'
-import {
-  colorOptions,
-  decalOptions,
-  lightOptions,
-  type RoofLightOption,
-  type TruckColor,
-  type TruckCustomization,
-  type TruckDecal,
-  type WheelColor,
-} from './truckCustomization'
+import { FaCheck, FaFlagCheckered, FaLock, FaRedo } from 'react-icons/fa'
+import buildIconBody from '../../assets/build-icon-body.png'
+import buildIconLights from '../../assets/build-icon-lights.png'
+import buildIconPaint from '../../assets/build-icon-paint.png'
+import buildIconWheels from '../../assets/build-icon-wheels.png'
+import type { TruckPart } from './truckBuild'
 
 type CustomizationPanelProps = {
-  customization: TruckCustomization
-  selectedOptions: {
-    bodyColor: boolean
-    decal: boolean
-    wheelColor: boolean
-    roofLights: boolean
-  }
-  onColorChange: (color: TruckColor) => void
-  onDecalChange: (decal: TruckDecal) => void
-  onWheelColorChange: (color: WheelColor) => void
-  onLightChange: (option: RoofLightOption) => void
+  completedParts: TruckPart[]
+  earnedPart: TruckPart | undefined
+  onReset: () => void
+  onSaveAndRace: () => void
+  canReset: boolean
+  canSave: boolean
 }
 
-type CustomizationTab = 'paint' | 'decal' | 'wheels' | 'lights'
-
-const customizationTabs: Array<{ value: CustomizationTab; label: string; icon: React.ComponentType<{ 'aria-hidden'?: boolean }> }> = [
-  { value: 'paint', label: 'Paint', icon: FaPalette },
-  { value: 'decal', label: 'Decal', icon: FaFire },
-  { value: 'wheels', label: 'Wheels', icon: FaCog },
-  { value: 'lights', label: 'Lights', icon: FaBolt },
+const partOptions: Array<{ value: TruckPart; label: string; instruction: string; asset: string }> = [
+  { value: 'wheels', label: 'Wheels', instruction: 'Step 1', asset: buildIconWheels },
+  { value: 'body', label: 'Body', instruction: 'Step 2', asset: buildIconBody },
+  { value: 'lights', label: 'Lights', instruction: 'Step 3', asset: buildIconLights },
+  { value: 'paint', label: 'Paint', instruction: 'Step 4', asset: buildIconPaint },
 ]
 
-function SelectionCheck() {
-  return <FaCheck aria-hidden className="mechanic-panel__check" />
-}
-
-function PaintPicker({ selected, onColorChange }: { selected: TruckColor | null; onColorChange: (color: TruckColor) => void }) {
-  return (
-    <div className="mechanic-panel__paint-row" role="group" aria-label="Paint color">
-      {colorOptions.map((color) => (
-        <button
-          key={color.value}
-          type="button"
-          className="mechanic-panel__swatch"
-          style={{ '--swatch-color': color.hex } as React.CSSProperties}
-          aria-label={`${color.label} paint`}
-          aria-pressed={selected === color.value}
-          onClick={() => onColorChange(color.value)}
-        >
-          {selected === color.value && <SelectionCheck />}
-        </button>
-      ))}
-    </div>
-  )
-}
-
-function DecalPicker({ selected, onDecalChange }: { selected: TruckDecal | null; onDecalChange: (decal: TruckDecal) => void }) {
-  return (
-    <div className="mechanic-panel__card-row mechanic-panel__card-row--decals" role="group" aria-label="Decal">
-      {decalOptions.map((decal) => (
-        <button
-          key={decal.value}
-          type="button"
-          className="mechanic-panel__option"
-          aria-pressed={selected === decal.value}
-          onClick={() => onDecalChange(decal.value)}
-        >
-          <span className={`mechanic-panel__decal-icon mechanic-panel__decal-icon--${decal.value}`} aria-hidden>
-            {decal.icon}
-          </span>
-          <span>{decal.label}</span>
-          {selected === decal.value && <SelectionCheck />}
-        </button>
-      ))}
-    </div>
-  )
-}
-
-function WheelPicker({ selected, onWheelColorChange }: { selected: WheelColor | null; onWheelColorChange: (color: WheelColor) => void }) {
-  return (
-    <div className="mechanic-panel__wheel-row" role="group" aria-label="Wheel color">
-      {colorOptions.map((color) => (
-        <button
-          key={color.value}
-          type="button"
-          className="mechanic-panel__wheel-choice"
-          style={{ '--swatch-color': color.hex } as React.CSSProperties}
-          aria-label={`${color.label} wheels`}
-          aria-pressed={selected === color.value}
-          onClick={() => onWheelColorChange(color.value)}
-        >
-          <span aria-hidden />
-          {selected === color.value && <SelectionCheck />}
-        </button>
-      ))}
-    </div>
-  )
-}
-
-function LightPreview({ count }: { count: number }) {
-  return (
-    <span className="mechanic-panel__light-preview" aria-hidden>
-      {count > 0 ? Array.from({ length: count }, (_, index) => <span key={index} />) : <span className="mechanic-panel__no-light" />}
-    </span>
-  )
-}
-
-function LightPicker({ selected, onLightChange }: { selected: RoofLightOption | null; onLightChange: (option: RoofLightOption) => void }) {
-  return (
-    <div className="mechanic-panel__card-row" role="group" aria-label="Roof lights">
-      {lightOptions.map((option) => (
-        <button
-          key={option.value}
-          type="button"
-          className="mechanic-panel__option"
-          aria-pressed={selected === option.value}
-          onClick={() => onLightChange(option.value)}
-        >
-          <LightPreview count={option.count} />
-          <span>{option.label}</span>
-          {selected === option.value && <SelectionCheck />}
-        </button>
-      ))}
-    </div>
-  )
+function PartIcon({ part }: { part: (typeof partOptions)[number] }) {
+  return <img className="build-tray__icon" src={part.asset} alt="" draggable={false} aria-hidden />
 }
 
 export default function CustomizationPanel({
-  customization,
-  selectedOptions,
-  onColorChange,
-  onDecalChange,
-  onWheelColorChange,
-  onLightChange,
+  completedParts,
+  earnedPart,
+  onReset,
+  onSaveAndRace,
+  canReset,
+  canSave,
 }: CustomizationPanelProps) {
-  const [activeTab, setActiveTab] = useState<CustomizationTab | null>(null)
-
-  const activeTitle = customizationTabs.find((tab) => tab.value === activeTab)?.label ?? 'Paint'
-
   return (
-    <section className="mechanic-panel" aria-labelledby="customize-title">
-      <div className="mechanic-panel__top">
-        <h2 id="customize-title">Customize Your Truck</h2>
-        <div className="mechanic-panel__tabs" role="tablist" aria-label="Customization categories">
-          {customizationTabs.map((tab) => {
-            const Icon = tab.icon
+    <section className="mechanic-panel build-tray" aria-label="Build the monster truck">
+      <div className="build-tray__parts" role="list" aria-label="Truck parts">
+        {partOptions.map((part) => {
+          const isComplete = completedParts.includes(part.value)
+          const isEarned = part.value === earnedPart
+          const isLocked = !isComplete && !isEarned
 
-            return (
+          return (
+            <div className="build-tray__slot" role="listitem" key={part.value}>
               <button
-                key={tab.value}
                 type="button"
-                className="mechanic-panel__tab"
-                role="tab"
-                aria-selected={activeTab === tab.value}
-                aria-controls={activeTab ? 'customization-options' : undefined}
-                onClick={() => setActiveTab(tab.value)}
+                className={`build-tray__part build-tray__part--${part.value}${isComplete ? ' build-tray__part--complete' : ''}${isEarned ? ' build-tray__part--earned' : ''}${isLocked ? ' build-tray__part--locked' : ''}`}
+                aria-label={`${part.label} truck part${isLocked ? ' locked' : isComplete ? ' complete' : ' unlocked'}`}
+                aria-pressed={isComplete}
+                disabled
               >
-                <Icon aria-hidden />
-                <span>{tab.label}</span>
+                <span className="build-tray__status" aria-hidden>
+                  {isComplete ? <FaCheck /> : isLocked ? <FaLock /> : 'Ready'}
+                </span>
+                <PartIcon part={part} />
+                <span className="build-tray__label">{part.label}</span>
               </button>
-            )
-          })}
-        </div>
+            </div>
+          )
+        })}
       </div>
 
-      {activeTab && (
-        <div className="mechanic-panel__section mechanic-panel__section--active" id="customization-options" role="tabpanel">
-          <h3>{activeTitle}</h3>
-          {activeTab === 'paint' && (
-            <PaintPicker selected={selectedOptions.bodyColor ? customization.bodyColor : null} onColorChange={onColorChange} />
-          )}
-          {activeTab === 'decal' && <DecalPicker selected={selectedOptions.decal ? customization.decal : null} onDecalChange={onDecalChange} />}
-          {activeTab === 'wheels' && (
-            <WheelPicker selected={selectedOptions.wheelColor ? customization.wheelColor : null} onWheelColorChange={onWheelColorChange} />
-          )}
-          {activeTab === 'lights' && <LightPicker selected={selectedOptions.roofLights ? customization.roofLights : null} onLightChange={onLightChange} />}
-        </div>
-      )}
+      <button type="button" className="build-tray__reset" disabled={!canReset} onClick={onReset}>
+        <FaRedo aria-hidden />
+        Reset Truck
+      </button>
+
+      <button type="button" className="build-tray__save" disabled={!canSave} onClick={onSaveAndRace}>
+        <FaFlagCheckered aria-hidden />
+        Save &amp; Race
+      </button>
     </section>
   )
 }
