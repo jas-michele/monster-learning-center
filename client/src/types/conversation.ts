@@ -42,7 +42,7 @@ export interface RespondConversationResponse {
     message: string;
     action: GameAction;
     mastered: boolean;
-    correctAnswer: number;
+    correctAnswers: number;
     requiredAnswers: number;
     nextQuestion: Question | null;
     conversationState: ConversationState;

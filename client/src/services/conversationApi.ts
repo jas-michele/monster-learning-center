@@ -1,16 +1,15 @@
-import axios from "axios";
+import api from "./api"
 import type {
     StartConversationResponse,
     RespondConversationResponse,
+    Question
 } from "../types/conversation";
 
-const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL
-});
 
 export async function startConversation(): Promise<StartConversationResponse> {
     const { data } = await api.post<StartConversationResponse>(
-        "/conversation/start"
+        "/conversation/start",
+       
     );
 
     return data;
@@ -18,13 +17,16 @@ export async function startConversation(): Promise<StartConversationResponse> {
 
 export async function respondConversation(
     answer: string,
+    question: Question,
     conversationState: unknown
 ): Promise<RespondConversationResponse> {
     const { data } = await api.post<RespondConversationResponse>(
-        "/conversation/respon",
+        "/conversation/respond",
         {
             answer,
-            conversationState
+            conversationState,
+            category: question.category,
+            itemId: question.item.id,
         }
     );
 

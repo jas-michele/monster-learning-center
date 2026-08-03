@@ -1,13 +1,27 @@
 import { useEffect, useState } from 'react'
 import jaxAvatar from '../../assets/avatars/jax.png'
+import type { Question } from '../../types/conversation'
+import QuestionCard from '../../components/QuestionCard/QuestionCard'
+
 
 type MechanicAvatarProps = {
-  message: string
+  message: string;
+  question: Question | null;
+  loading: boolean;
+  onSubmit: (answer: string) => Promise<void>;
+
   onMessageClick?: () => void
   messageActionLabel?: string
 }
 
-export default function MechanicAvatar({ message, onMessageClick, messageActionLabel }: MechanicAvatarProps) {
+export default function MechanicAvatar({
+  message,
+  question,
+  loading,
+  onSubmit,
+  onMessageClick,
+  messageActionLabel,
+}: MechanicAvatarProps) {
   const [typewriterState, setTypewriterState] = useState({ message, visibleLength: 0 })
 
   useEffect(() => {
@@ -46,8 +60,20 @@ export default function MechanicAvatar({ message, onMessageClick, messageActionL
           {messageContent}
         </button>
       ) : (
-        <div key={message} className="mechanic-guide__message" aria-live="polite">
+        <div
+          key={message}
+          className="mechanic-guide__message"
+          aria-live="polite"
+        >
           {messageContent}
+
+          {question && (
+            <QuestionCard
+              question={question}
+              loading={loading}
+              onSubmit={onSubmit}
+            />
+          )}
         </div>
       )}
       <div className="mechanic-guide__avatar" aria-hidden>

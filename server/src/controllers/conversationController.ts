@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
-import { startConversation, respondToAnswer } from "../services/converstationService.js";
-
+import { startConversation, respondToAnswer } from "../services/conversationService.js";
 
 export async function startConversationController(
     req: Request,
     res: Response
 ) {
+
+
+console.log("✅ startConversationController hit");
     try {
-        const { childName } = req.body;
+        const { childName } = req.body ?? {};
 
         const conversation = await startConversation(childName);
 

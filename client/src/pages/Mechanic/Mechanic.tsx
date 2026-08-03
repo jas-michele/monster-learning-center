@@ -1,6 +1,6 @@
 import '../Home/Home.css'
 import './Mechanic.css'
-import { type CSSProperties, useState } from 'react'
+import { type CSSProperties, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FaSignOutAlt } from 'react-icons/fa'
 import buildIconBody from '../../assets/build-icon-body.png'
@@ -12,6 +12,9 @@ import MechanicAvatar from './MechanicAvatar'
 import TruckPreview from './TruckPreview'
 import { BUILD_ORDER, type TruckPart } from './truckBuild'
 import { colorOptions, defaultTruckCustomization, type TruckColor, type TruckCustomization } from './truckCustomization'
+import { startConversation, respondConversation } from '../../services/conversationApi'
+import type { ConversationState, Question, RespondConversationResponse, GameAction } from '../../types/conversation'
+
 
 const paintOptions = colorOptions.filter((color) => ['red', 'blue', 'green', 'purple'].includes(color.value))
 const tapPlaceOffsets: Partial<Record<TruckPart, { x: number; y: number }>> = {
@@ -41,7 +44,81 @@ export default function Mechanic() {
   const [earnedPart, setEarnedPart] = useState<TruckPart | undefined>()
   const [lastPlacedPart, setLastPlacedPart] = useState<TruckPart | undefined>()
   const [dropOffset, setDropOffset] = useState<{ x: number; y: number } | undefined>()
-  const [guideMessage, setGuideMessage] = useState(earnPrompts.wheels)
+  const [guideMessage, setGuideMessage] = useState("");
+  const [question, setQuestion] = useState<Question | null>(null);
+  const [conversationState, setConversationState] = useState<ConversationState | null>(null);
+  const [loadingQuestion, setLoadingQuestion] = useState(false);
+  const [currentAction, setCurrentAction] = useState<GameAction | null>(null);
+  const [truckComplete, setTruckComplete] = useState(false);
+
+  const [installedTires, setInstalledTires] = useState({
+    frontLeft: false,
+    frontRight: false,
+    rearLeft: false,
+    rearRight: false,
+  });
+
+ 
+
+  useEffect(() => {
+    async function loadConversation() {
+      try {
+        const response = await startConversation();
+
+        setGuideMessage(response.greeting);
+        setQuestion(response.firstQuestion);
+        setConversationState(response.conversationState);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    loadConversation();
+  }, []);
+
+  // useEffect(() => {
+  //   if (!currentAction) return;
+
+  //   switch (currentAction) {
+  //     case "install_tire":
+  //       installNextTire();
+  //       break;
+
+  //     case "shake_tire":
+  //       console.log("❌ Wrong answer");
+  //       break;
+
+  //     case "continue_learning":
+  //       console.log("➡️ Continue learning");
+  //       break;
+
+  //     case "start_race":
+  //       console.log("🏁 Start race");
+  //       break;
+  //   }
+  // }, [currentAction]);
+
+  async function handleAnswer(answer: string) {
+    if (!conversationState) return;
+
+    try {
+      setLoadingQuestion(true);
+
+      if (!question) return;
+
+      const response = await respondConversation(
+        answer,
+        question,
+        conversationState
+      );
+
+      handleResponse(response);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingQuestion(false);
+    }
+  }
 
   const nextPart = BUILD_ORDER[completedParts.length]
   const isTruckComplete = completedParts.length === BUILD_ORDER.length
@@ -53,7 +130,7 @@ export default function Mechanic() {
     setEarnedPart(undefined)
     setLastPlacedPart(undefined)
     setDropOffset(undefined)
-    setGuideMessage(earnPrompts.wheels)
+    setGuideMessage("")
   }
 
   const earnNextPart = () => {
@@ -138,6 +215,42 @@ export default function Mechanic() {
     earnedPart === 'wheels' ? 'Unlocked wheels truck part' : earnedPart === 'body' ? 'Unlocked body truck part' : 'Unlocked lights truck part'
   const canEarnFromSpeech = Boolean(nextPart && !earnedPart)
 
+  function handleResponse(response: RespondConversationResponse) {
+  setGuideMessage(response.message);
+
+  setConversationState(response.conversationState);
+
+  setQuestion(response.nextQuestion);
+
+  if (response.correct) {
+    installNextTire();
+  }
+}
+  
+
+  function installNextTire() {
+    console.log("installNextTire called");
+  setInstalledTires((current) => {
+    if (!current.frontLeft) {
+      return { ...current, frontLeft: true };
+    }
+
+    if (!current.frontRight) {
+      return { ...current, frontRight: true };
+    }
+
+    if (!current.rearRight) {
+      return { ...current, rearRight: true };
+    }
+
+    if (!current.rearLeft) {
+      return { ...current, rearLeft: true };
+    }
+
+    return current;
+  });
+}
+
   return (
     <div className="home" role="main" aria-label="Mechanic shop">
       <div className="home__scene-frame">
@@ -163,6 +276,7 @@ export default function Mechanic() {
               bodyColor={customization.bodyColor}
               isComplete={isTruckComplete}
               onPartPlaced={addPart}
+              installedTires={installedTires}
             />
             {earnedPart && partAsset && (
               <button
@@ -198,8 +312,9 @@ export default function Mechanic() {
             )}
             <MechanicAvatar
               message={guideMessage}
-              onMessageClick={canEarnFromSpeech ? earnNextPart : undefined}
-              messageActionLabel={nextPart ? earnLabels[nextPart] : undefined}
+              question={question}
+              loading={loadingQuestion}
+              onSubmit={handleAnswer}
             />
           </div>
         </div>

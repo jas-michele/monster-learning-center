@@ -29,14 +29,14 @@ function createCategoryState(
         .slice(0, ACTIVE_POOL_SIZE)
         .map((item) => item.id);
 
-        return {
-            activeItemIds: startingItems,
-            progress: startingItems.map((itemId) => ({
-                itemId,
-                correctAnswers: 0,
-                mastered: false,
-            }))
-        }
+    return {
+        activeItemIds: startingItems,
+        progress: startingItems.map((itemId) => ({
+            itemId,
+            correctAnswers: 0,
+            mastered: false,
+        }))
+    }
 }
 
 export function createLearningState(): LearningState {
@@ -82,6 +82,9 @@ export function submitAnswer(
     childAnswer: string
 ): AnswerResult {
 
+    console.log("Category:", category);
+    console.log("Curriculum keys:", Object.keys(curriculum));
+    
     const categoryState = state[category];
     const categoryItems = curriculum[category];
 

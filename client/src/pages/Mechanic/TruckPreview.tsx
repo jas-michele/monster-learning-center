@@ -13,6 +13,9 @@ import truckWheelsPurple from '../../assets/truck-wheels-purple.png'
 import truckWheelsRed from '../../assets/truck-wheels-red.png'
 import type { TruckPart } from './truckBuild'
 import type { TruckColor } from './truckCustomization'
+import blackTruck from "../../assets/Truck-body-bl.png"
+import blackTire from "../../assets/Tires (1).png"
+import completeTruck from "../../assets/blackTruck.png"
 
 type TruckPreviewProps = {
   completedParts: TruckPart[]
@@ -22,6 +25,13 @@ type TruckPreviewProps = {
   bodyColor: TruckColor
   isComplete: boolean
   onPartPlaced: (part: TruckPart, dropOffset?: { x: number; y: number }) => void
+
+  installedTires: {
+    frontLeft: boolean;
+    frontRight: boolean;
+    rearLeft: boolean;
+    rearRight: boolean;
+  }
 }
 
 const partAnchors: Record<TruckPart, { x: number; y: number }> = {
@@ -58,7 +68,7 @@ const lightLayerAssets: Record<TruckColor, string> = {
   black: truckLights,
 }
 
-export default function TruckPreview({ completedParts, earnedPart, lastPlacedPart, dropOffset, bodyColor, isComplete, onPartPlaced }: TruckPreviewProps) {
+export default function TruckPreview({ completedParts, earnedPart, lastPlacedPart, dropOffset, bodyColor, isComplete, onPartPlaced, installedTires }: TruckPreviewProps) {
   const hasWheels = completedParts.includes('wheels')
   const hasBody = completedParts.includes('body')
   const hasLights = completedParts.includes('lights')
@@ -66,6 +76,7 @@ export default function TruckPreview({ completedParts, earnedPart, lastPlacedPar
   const bodyAsset = hasPaint ? bodyLayerAssets[bodyColor] : truckBodyRed
   const wheelAsset = hasPaint ? wheelLayerAssets[bodyColor] : truckWheelsRed
   const lightAsset = hasPaint ? lightLayerAssets[bodyColor] : truckLights
+
 
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
     if (!earnedPart) return
@@ -92,11 +103,12 @@ export default function TruckPreview({ completedParts, earnedPart, lastPlacedPar
   const placedStyle =
     lastPlacedPart && dropOffset
       ? ({
-          '--drop-x': `${dropOffset.x}%`,
-          '--drop-y': `${dropOffset.y}%`,
-        } as CSSProperties)
+        '--drop-x': `${dropOffset.x}%`,
+        '--drop-y': `${dropOffset.y}%`,
+      } as CSSProperties)
       : undefined
 
+      console.log(installedTires);
   return (
     <section className="truck-preview" aria-label="Truck assembly area">
       <div
@@ -114,24 +126,52 @@ export default function TruckPreview({ completedParts, earnedPart, lastPlacedPar
             draggable={false}
           />
         )}
-        {hasBody && (
+
+        {!installedTires.rearLeft ? (
+          <>
+            <img
+              className="truck-preview__body"
+              src={blackTruck}
+              alt="Monster Truck"
+              draggable={false}
+            />
+
+            {installedTires.frontLeft && (
+              <img
+                className="truck-preview__tire truck-preview__tire--front-left"
+                src={blackTire}
+                alt=""
+                draggable={false}
+              />
+            )}
+
+            {installedTires.frontRight && (
+              <img
+                className="truck-preview__tire truck-preview__tire--front-right"
+                src={blackTire}
+                alt=""
+                draggable={false}
+              />
+            )}
+
+            {installedTires.rearRight && (
+              <img
+                className="truck-preview__tire truck-preview__tire--rear-right"
+                src={blackTire}
+                alt=""
+                draggable={false}
+              />
+            )}
+          </>
+        ) : (
           <img
-            className="truck-preview__part truck-preview__part--body"
-            src={bodyAsset}
-            alt="Truck body added"
-            style={lastPlacedPart === 'body' ? placedStyle : undefined}
+            className="truck-preview__body truck-preview__body--complete"
+            src={completeTruck}
+            alt="Completed Monster Truck"
             draggable={false}
           />
         )}
-        {hasLights && (
-          <img
-            className="truck-preview__part truck-preview__part--lights"
-            src={lightAsset}
-            alt="Roof lights added"
-            style={lastPlacedPart === 'lights' ? placedStyle : undefined}
-            draggable={false}
-          />
-        )}
+
       </div>
     </section>
   )

@@ -1,79 +1,104 @@
 import { useEffect, useState } from "react";
-import { startConversation } from "../services/conversationApi";
-import type { Question, ConversationState, RespondConversationResponse } from "../types/conversation";
-import QuestionCard from "../components/QuestionCard";
+import {
+  startConversation,
+  respondConversation,
+} from "../services/conversationApi";
 
+import type {
+  Question,
+  ConversationState,
+  RespondConversationResponse,
+} from "../types/conversation";
+
+import QuestionCard from "../components/QuestionCard/QuestionCard";
 
 export default function GaragePage() {
-    const [greeting, setGreeting] = useState("");
+  const [greeting, setGreeting] = useState("");
+  const [message, setMessage] = useState("");
 
-    const [question, setQuestion] = useState<Question | null>(null);
+  const [question, setQuestion] = useState<Question | null>(null);
 
-    const [conversationState, setConversationState] =
-        useState<ConversationState | null>(null);
+  const [conversationState, setConversationState] =
+    useState<ConversationState | null>(null);
 
-    const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [loadingQuestion, setLoadingQuestion] = useState(false);
 
-    const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-    const [error, setError] = useState("");
+  useEffect(() => {
+    async function loadConversation() {
+      try {
+        const response = await startConversation();
 
-    useEffect(() => {
-        async function loadConversation() {
-            try {
-                const response = await startConversation();
-                setGreeting(response.greeting);
-                setQuestion(response.firstQuestion);
-                setConversationState(response.conversationState);
-            } catch (err) {
-                console.error(err);
-                setError("Unable to start conversation.")
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        loadConversation();
-    }, []);
-
-    if (loading) {
-        return <h2>Loading Garage...</h2>;
+        setGreeting(response.greeting);
+        setQuestion(response.firstQuestion);
+        setConversationState(response.conversationState);
+      } catch (err) {
+        console.error(err);
+        setError("Unable to start conversation.");
+      } finally {
+        setLoading(false);
+      }
     }
 
-    if (error) {
-        return <h2>{error}</h2>;
-    }
+    loadConversation();
+  }, []);
 
-   function handleResponse(response: RespondConversationResponse) {
-    // Show Jax's latest message
+  async function handleAnswer(answer: string) {
+    if (!conversationState || !question) return;
+
+    try {
+      setLoadingQuestion(true);
+
+      const response = await respondConversation(
+        answer,
+        question,
+        conversationState
+      );
+
+      handleResponse(response);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to process answer.");
+    } finally {
+      setLoadingQuestion(false);
+    }
+  }
+
+  function handleResponse(response: RespondConversationResponse) {
     setMessage(response.message);
 
-    // Replace the backend state
     setConversationState(response.conversationState);
 
-    // Display the next question if there is one
-    if (response.nextQuestion) {
-        setQuestion(response.nextQuestion);
-    }
+    setQuestion(response.nextQuestion);
 
     console.log("Game Action:", response.action);
-}
+  }
 
-    return (
-        <div>
-            <h1>Monster Truck Garage</h1>
+  if (loading) {
+    return <h2>Loading Garage...</h2>;
+  }
 
-            <h2>{greeting}</h2>
+  if (error) {
+    return <h2>{error}</h2>;
+  }
 
-            {message && <h3>{message}</h3>}
+  return (
+    <div>
+      <h1>Monster Truck Garage</h1>
 
-            {question && conversationState && (
-                <QuestionCard
-                    question={question}
-                    conversationState={conversationState}
-                    onResponse={handleResponse}
-                />
-            )}
-        </div>
-    )
+      <h2>{greeting}</h2>
+
+      {message && <h3>{message}</h3>}
+
+      {question && (
+        <QuestionCard
+          question={question}
+          loading={loadingQuestion}
+          onSubmit={handleAnswer}
+        />
+      )}
+    </div>
+  );
 }

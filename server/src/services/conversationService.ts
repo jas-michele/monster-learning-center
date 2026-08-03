@@ -39,9 +39,11 @@ export async function startConversation(childName: string) {
     const greeting = await generateGreeting(childName);
 
     return {
-        character: "jax",
-        message: greeting,
-        question,
+        character: {
+            name: "jax",
+        },
+        greeting,
+        firstQuestion: question,
         conversationState,
     };
 }
@@ -70,7 +72,7 @@ export async function respondToAnswer(
     } else if (updatedTruckState.completed) {
         action = "start_race"
     }
-     else {
+    else {
         action = "install_tire";
     }
 
@@ -83,10 +85,30 @@ export async function respondToAnswer(
         truckState: updatedTruckState,
     };
 
-    const nextQuestion = getNextQuestion(
-        updatedConversationState.learningState,
-        category
-    );
+    const CATEGORY_ORDER: LearningCategory[] = [
+        "letters",
+        "numbers",
+        "colors",
+        "shapes",
+    ];
+
+    const currentIndex = CATEGORY_ORDER.indexOf(category);
+
+    const nextCategory =
+        result.correct && action === "install_tire"
+            ? CATEGORY_ORDER[currentIndex + 1]
+            : category;
+
+
+    console.log("Current category:", category);
+    console.log("Next category:", nextCategory);
+  const nextQuestion =
+    action === "start_race"
+        ? null
+        : getNextQuestion(
+            updatedConversationState.learningState,
+            nextCategory
+        );
     return {
         correct: result.correct,
         message,
