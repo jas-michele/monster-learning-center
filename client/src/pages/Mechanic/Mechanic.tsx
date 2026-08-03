@@ -58,45 +58,25 @@ export default function Mechanic() {
     rearRight: false,
   });
 
- 
+
+
+
+  async function loadConversation() {
+    try {
+      const response = await startConversation();
+
+      setGuideMessage(response.greeting);
+      setQuestion(response.firstQuestion);
+      setConversationState(response.conversationState);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
-    async function loadConversation() {
-      try {
-        const response = await startConversation();
-
-        setGuideMessage(response.greeting);
-        setQuestion(response.firstQuestion);
-        setConversationState(response.conversationState);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
     loadConversation();
   }, []);
 
-  // useEffect(() => {
-  //   if (!currentAction) return;
-
-  //   switch (currentAction) {
-  //     case "install_tire":
-  //       installNextTire();
-  //       break;
-
-  //     case "shake_tire":
-  //       console.log("❌ Wrong answer");
-  //       break;
-
-  //     case "continue_learning":
-  //       console.log("➡️ Continue learning");
-  //       break;
-
-  //     case "start_race":
-  //       console.log("🏁 Start race");
-  //       break;
-  //   }
-  // }, [currentAction]);
 
   async function handleAnswer(answer: string) {
     if (!conversationState) return;
@@ -121,16 +101,34 @@ export default function Mechanic() {
   }
 
   const nextPart = BUILD_ORDER[completedParts.length]
-  const isTruckComplete = completedParts.length === BUILD_ORDER.length
-  const canReset = completedParts.length > 0 || Boolean(earnedPart)
+  const isTruckComplete = installedTires.rearLeft;
+  const canReset =
+    installedTires.frontLeft ||
+    installedTires.frontRight ||
+    installedTires.rearRight ||
+    installedTires.rearLeft;
 
   const resetTruck = () => {
-    setCustomization(defaultTruckCustomization)
-    setCompletedParts([])
-    setEarnedPart(undefined)
-    setLastPlacedPart(undefined)
-    setDropOffset(undefined)
-    setGuideMessage("")
+    // Restore the default truck
+    setCustomization(defaultTruckCustomization);
+
+    // Reset sidebar progress
+    setCompletedParts([]);
+
+    // Remove all installed tires
+    setInstalledTires({
+      frontLeft: false,
+      frontRight: false,
+      rearRight: false,
+      rearLeft: false,
+    });
+
+    // Clear placement state
+    setLastPlacedPart(undefined);
+    setDropOffset(undefined);
+
+    // Reset guide message
+    loadConversation();
   }
 
   const earnNextPart = () => {
@@ -181,14 +179,21 @@ export default function Mechanic() {
   }
 
   const choosePaint = (color: TruckColor) => {
-    if (earnedPart !== 'paint' || completedParts.includes('paint')) return
-    setCustomization((current) => ({ ...current, bodyColor: color, wheelColor: color }))
-    setCompletedParts((current) => [...current, 'paint'])
-    setEarnedPart(undefined)
-    setLastPlacedPart('paint')
-    setDropOffset(undefined)
-    setGuideMessage('Truck complete! You are ready to race!')
-  }
+    // if (completedParts.includes("paint")) return;
+
+    setCustomization((current) => ({
+      ...current,
+      bodyColor: color,
+      wheelColor: color,
+    }));
+
+    setCompletedParts((current) => [...current, "paint"]);
+
+    setLastPlacedPart("paint");
+    setDropOffset(undefined);
+
+    setGuideMessage("Awesome! Your truck is ready to race!");
+  };
 
   const saveAndRace = (nextCustomization: TruckCustomization) => {
     setGuideMessage("Let's hit the track!")
@@ -216,40 +221,41 @@ export default function Mechanic() {
   const canEarnFromSpeech = Boolean(nextPart && !earnedPart)
 
   function handleResponse(response: RespondConversationResponse) {
-  setGuideMessage(response.message);
+    setGuideMessage(response.message);
 
-  setConversationState(response.conversationState);
+    setConversationState(response.conversationState);
 
-  setQuestion(response.nextQuestion);
+    setQuestion(response.nextQuestion);
 
-  if (response.correct) {
-    installNextTire();
+    if (response.correct) {
+      installNextTire();
+    }
   }
-}
-  
+
 
   function installNextTire() {
     console.log("installNextTire called");
-  setInstalledTires((current) => {
-    if (!current.frontLeft) {
-      return { ...current, frontLeft: true };
-    }
+    setInstalledTires((current) => {
+      if (!current.frontLeft) {
+        return { ...current, frontLeft: true };
+      }
 
-    if (!current.frontRight) {
-      return { ...current, frontRight: true };
-    }
+      if (!current.frontRight) {
+        return { ...current, frontRight: true };
+      }
 
-    if (!current.rearRight) {
-      return { ...current, rearRight: true };
-    }
+      if (!current.rearRight) {
+        return { ...current, rearRight: true };
+      }
 
-    if (!current.rearLeft) {
-      return { ...current, rearLeft: true };
-    }
+      if (!current.rearLeft) {
+        // setCompletedParts(["wheels"]);
+        return { ...current, rearLeft: true };
+      }
 
-    return current;
-  });
-}
+      return current;
+    });
+  }
 
   return (
     <div className="home" role="main" aria-label="Mechanic shop">
@@ -262,7 +268,6 @@ export default function Mechanic() {
             </Link>
             <CustomizationPanel
               completedParts={completedParts}
-              earnedPart={earnedPart}
               onReset={resetTruck}
               onSaveAndRace={() => saveAndRace(customization)}
               canReset={canReset}
@@ -293,7 +298,7 @@ export default function Mechanic() {
                 <img src={partAsset} alt="" draggable={false} aria-hidden />
               </button>
             )}
-            {earnedPart === 'paint' && (
+            {isTruckComplete && (
               <div className="paint-picker" aria-label="Choose a truck paint color">
                 {paintOptions.map((color) => (
                   <button

@@ -16,6 +16,10 @@ import type { TruckColor } from './truckCustomization'
 import blackTruck from "../../assets/Truck-body-bl.png"
 import blackTire from "../../assets/Tires (1).png"
 import completeTruck from "../../assets/blackTruck.png"
+import redCompleteTruck from "../../assets/redTruck.png"
+import blueCompleteTruck from "../../assets/blueTruck.png"
+import greenCompleteTruck from "../../assets/greenTruck.png"
+import purpleCompleteTruck from "../../assets/purpleTruck.png"
 
 type TruckPreviewProps = {
   completedParts: TruckPart[]
@@ -67,6 +71,15 @@ const lightLayerAssets: Record<TruckColor, string> = {
   purple: truckLightsPurple,
   black: truckLights,
 }
+
+const completeTruckAssets: Record<TruckColor, string> = {
+  black: completeTruck,
+  red: redCompleteTruck,
+  blue: blueCompleteTruck,
+  green: greenCompleteTruck,
+  purple: purpleCompleteTruck,
+  orange: redCompleteTruck, // temporary if needed
+};
 
 export default function TruckPreview({ completedParts, earnedPart, lastPlacedPart, dropOffset, bodyColor, isComplete, onPartPlaced, installedTires }: TruckPreviewProps) {
   const hasWheels = completedParts.includes('wheels')
@@ -166,7 +179,7 @@ export default function TruckPreview({ completedParts, earnedPart, lastPlacedPar
         ) : (
           <img
             className="truck-preview__body truck-preview__body--complete"
-            src={completeTruck}
+            src={completeTruckAssets[bodyColor]}
             alt="Completed Monster Truck"
             draggable={false}
           />

@@ -26,7 +26,7 @@ export default function GaragePage() {
 
   const [error, setError] = useState("");
 
-  useEffect(() => {
+
     async function loadConversation() {
       try {
         const response = await startConversation();
@@ -41,6 +41,8 @@ export default function GaragePage() {
         setLoading(false);
       }
     }
+
+    useEffect(() => {
 
     loadConversation();
   }, []);

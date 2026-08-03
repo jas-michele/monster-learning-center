@@ -59,3 +59,35 @@
 .mechanic-guide__message-text {
     margin-top: 0.75rem;
 }
+
+.question-card__color {
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    margin: 1rem auto;
+    border: 4px solid #333;
+}
+
+.question-card__shape {
+    width: 120px;
+    height: 120px;
+    margin: 1rem auto;
+}
+
+.question-card__shape--circle {
+    background: #3b82f6;
+    border-radius: 50%;
+}
+
+.question-card__shape--square {
+    background: #3b82f6;
+}
+
+.question-card__shape--triangle {
+    width: 0;
+    height: 0;
+
+    border-left: 60px solid transparent;
+    border-right: 60px solid transparent;
+    border-bottom: 110px solid #3b82f6;
+}
