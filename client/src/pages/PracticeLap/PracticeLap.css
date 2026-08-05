@@ -38,6 +38,53 @@
   object-fit: cover;
 }
 
+.practice-lap-nav {
+    position: absolute;
+    bottom: 2%;
+    z-index: 120;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(2rem, 4.3vw, 3rem);
+    aspect-ratio: 1;
+    border: 0.08rem solid rgba(255, 255, 255, 0.24);
+    border-radius: 50%;
+    background: rgba(10, 14, 16, 0.32);
+    color: rgba(228, 232, 232, 0.74);
+    text-decoration: none;
+    box-shadow:
+        inset 0 0.08rem 0 rgba(255, 255, 255, 0.1),
+        0 0.18rem 0.4rem rgba(0, 0, 0, 0.22);
+}
+
+.practice-lap-nav svg {
+    width: 52%;
+    height: 52%;
+    display: block;
+    filter: drop-shadow(0 0.08rem 0.08rem rgba(0, 0, 0, 0.42));
+}
+
+.practice-lap-nav--mechanic {
+    left: 1.55%;
+}
+
+.practice-lap-nav--mechanic svg {
+    transform: scaleX(-1);
+}
+
+.practice-lap-nav--playhouse {
+    right: 1.55%;
+}
+
+.practice-lap-nav:hover {
+    transform: translateY(-0.08rem);
+}
+
+.practice-lap-nav:focus-visible {
+    outline: 0.2rem solid rgba(255, 255, 255, 0.95);
+    outline-offset: 0.12rem;
+}
+
 .countdown {
 
     position: absolute;
@@ -76,7 +123,7 @@
     left: 0;
     top: 0;
     z-index: 22;
-    transform: translate(43vw, 88vh);
+    transform: translate(50vw, 88vh);
     pointer-events: none;
 }
 
@@ -84,25 +131,134 @@
     animation: practiceLapPath 9s linear forwards;
 }
 
-.practice-truck {
-    width: clamp(135px, 13vw, 240px);
+.practice-truck-runner--revving {
+    animation: practiceTruckRev 180ms ease-in-out infinite;
+}
+
+.practice-truck-stack {
+    position: relative;
+    width: clamp(155px, 15.2vw, 285px);
     transform: translate(-50%, -100%) scale(1);
     transform-origin: center bottom;
+}
+
+.practice-truck {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 100%;
     filter: drop-shadow(0 0.7rem 0.75rem rgba(0, 0, 0, 0.35));
 }
 
-.practice-truck-runner--driving .practice-truck {
+.practice-truck-smoke {
+    position: absolute;
+    left: -6%;
+    top: 66%;
+    z-index: 3;
+    width: 68%;
+    height: 42%;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.practice-truck-smoke::before {
+    content: "";
+    position: absolute;
+    left: 38%;
+    bottom: 16%;
+    width: clamp(2.1rem, 3.8vw, 4.4rem);
+    aspect-ratio: 1.55;
+    border-radius: 999px;
+    background:
+        radial-gradient(circle at 35% 48%, rgba(255, 255, 255, 0.78), rgba(214, 221, 224, 0.48) 54%, rgba(148, 148, 148, 0) 76%);
+    filter: blur(0.12rem);
+    transform: translate(-50%, 0);
+}
+
+.practice-truck-smoke span {
+    position: absolute;
+    left: 36%;
+    bottom: 14%;
+    width: clamp(1.65rem, 2.85vw, 3.25rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.98), rgba(219, 226, 229, 0.86) 54%, rgba(128, 128, 128, 0) 76%);
+    filter: blur(0.09rem);
+    transform: translate(-50%, 0) scale(0.42);
+}
+
+.practice-truck-runner--revving .practice-truck-smoke {
+    opacity: 1;
+}
+
+.practice-truck-runner--revving .practice-truck-smoke span {
+    animation: practiceTruckSmoke 0.98s ease-out infinite;
+}
+
+.practice-truck-runner--revving .practice-truck-smoke span:nth-child(2) {
+    animation-delay: 0.24s;
+}
+
+.practice-truck-runner--revving .practice-truck-smoke span:nth-child(3) {
+    animation-delay: 0.48s;
+}
+
+.practice-truck-runner--revving .practice-truck-smoke span:nth-child(4) {
+    animation-delay: 0.72s;
+}
+
+.practice-truck-runner--driving .practice-truck-stack {
     animation: practiceLapDepth 9s ease-in-out forwards;
+}
+
+.practice-truck-runner--driving .practice-truck-smoke {
+    display: none;
+}
+
+@keyframes practiceTruckSmoke {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.26);
+  }
+
+  18% {
+    opacity: 0.86;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% - 4.6rem), -1.85rem) scale(1.48);
+  }
+}
+
+@keyframes practiceTruckRev {
+  0%,
+  100% {
+    transform: translate(50vw, 88vh) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(calc(50vw - 0.18rem), calc(88vh + 0.08rem)) rotate(-0.35deg);
+  }
+
+  50% {
+    transform: translate(calc(50vw + 0.14rem), calc(88vh - 0.08rem)) rotate(0.3deg);
+  }
+
+  75% {
+    transform: translate(calc(50vw - 0.08rem), calc(88vh + 0.06rem)) rotate(-0.2deg);
+  }
 }
 
 @keyframes practiceLapPath {
   0% {
-    transform: translate(43vw, 88vh);
+    transform: translate(50vw, 88vh);
     z-index: 22;
   }
 
   10% {
-    transform: translate(66vw, 84vh);
+    transform: translate(68vw, 84vh);
     z-index: 22;
   }
 
@@ -137,12 +293,12 @@
   }
 
   94% {
-    transform: translate(28vw, 82vh);
+    transform: translate(30vw, 82vh);
     z-index: 22;
   }
 
   100% {
-    transform: translate(43vw, 88vh);
+    transform: translate(50vw, 88vh);
     z-index: 22;
   }
 }
