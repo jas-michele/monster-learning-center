@@ -1,34 +1,13 @@
-import { type CSSProperties, type DragEvent } from 'react'
-import truckBodyBlue from '../../assets/truck-body-blue.png'
-import truckBodyGreen from '../../assets/truck-body-green.png'
-import truckBodyPurple from '../../assets/truck-body-purple.png'
-import truckBodyRed from '../../assets/truck-body-red.png'
-import truckLightsBlue from '../../assets/truck-lights-blue.png'
-import truckLightsGreen from '../../assets/truck-lights-green.png'
-import truckLightsPurple from '../../assets/truck-lights-purple.png'
-import truckLights from '../../assets/truck-lights.png'
-import truckWheelsBlue from '../../assets/truck-wheels-blue.png'
-import truckWheelsGreen from '../../assets/truck-wheels-green.png'
-import truckWheelsPurple from '../../assets/truck-wheels-purple.png'
-import truckWheelsRed from '../../assets/truck-wheels-red.png'
-import type { TruckPart } from './truckBuild'
-import type { TruckColor } from './truckCustomization'
-import blackTruck from "../../assets/Truck-body-bl.png"
-import blackTire from "../../assets/Tires (1).png"
-import completeTruck from "../../assets/blackTruck.png"
-import redCompleteTruck from "../../assets/redTruck.png"
-import blueCompleteTruck from "../../assets/blueTruck.png"
-import greenCompleteTruck from "../../assets/greenTruck.png"
-import purpleCompleteTruck from "../../assets/purpleTruck.png"
+import { type CSSProperties } from 'react'
+import truckStage0Axles from '../../assets/mechanic/truck-stage-0-axles.png'
+import truckStage1OneWheel from '../../assets/mechanic/truck-stage-1-one-wheel.png'
+import truckStage2TwoWheels from '../../assets/mechanic/truck-stage-2-two-wheels.png'
+import truckStage3ThreeWheels from '../../assets/mechanic/truck-stage-3-three-wheels.png'
+import { bodyAssets, type TruckColor } from './truckCustomization'
 
 type TruckPreviewProps = {
-  completedParts: TruckPart[]
-  earnedPart: TruckPart | undefined
-  lastPlacedPart: TruckPart | undefined
-  dropOffset: { x: number; y: number } | undefined
   bodyColor: TruckColor
   isComplete: boolean
-  onPartPlaced: (part: TruckPart, dropOffset?: { x: number; y: number }) => void
 
   installedTires: {
     frontLeft: boolean;
@@ -38,153 +17,82 @@ type TruckPreviewProps = {
   }
 }
 
-const partAnchors: Record<TruckPart, { x: number; y: number }> = {
-  wheels: { x: 0.5, y: 0.76 },
-  body: { x: 0.5, y: 0.38 },
-  lights: { x: 0.5, y: 0.13 },
-  paint: { x: 0.5, y: 0.5 },
+const truckStageAssets = [
+  truckStage0Axles,
+  truckStage1OneWheel,
+  truckStage2TwoWheels,
+  truckStage3ThreeWheels,
+] as const
+
+const truckStageAlignment = [
+  { x: '0.92%', y: '0.38%' },
+  { x: '-0.12%', y: '-2.68%' },
+  { x: '-0.52%', y: '0.39%' },
+  { x: '0%', y: '0%' },
+] as const
+
+const completeTruckAlignment: Record<TruckColor, { x: string; y: string }> = {
+  blue: { x: '0%', y: '0%' },
+  black: { x: '0.04%', y: '-2.49%' },
+  red: { x: '-1.48%', y: '-6.66%' },
+  green: { x: '-0.11%', y: '-7.52%' },
+  purple: { x: '-1.7%', y: '-2.83%' },
 }
 
-const bodyLayerAssets: Record<TruckColor, string> = {
-  red: truckBodyRed,
-  orange: truckBodyRed,
-  green: truckBodyGreen,
-  blue: truckBodyBlue,
-  purple: truckBodyPurple,
-  black: truckBodyRed,
+function getTruckStage(installedTires: TruckPreviewProps['installedTires']) {
+  if (installedTires.rearRight || installedTires.rearLeft) return 3
+  if (installedTires.frontRight) return 2
+  if (installedTires.frontLeft) return 1
+  return 0
 }
 
-const wheelLayerAssets: Record<TruckColor, string> = {
-  red: truckWheelsRed,
-  orange: truckWheelsRed,
-  green: truckWheelsGreen,
-  blue: truckWheelsBlue,
-  purple: truckWheelsPurple,
-  black: truckWheelsRed,
+function TruckStageImage({ stage }: { stage: number }) {
+  const alignment = truckStageAlignment[stage]
+  const stageStyle = {
+    '--stage-x': alignment.x,
+    '--stage-y': alignment.y,
+  } as CSSProperties
+
+  return (
+    <div className="truck-preview__stage-window" aria-hidden>
+      <img
+        className="truck-preview__stage-image"
+        src={truckStageAssets[stage]}
+        style={stageStyle}
+        alt=""
+        draggable={false}
+      />
+    </div>
+  )
 }
 
-const lightLayerAssets: Record<TruckColor, string> = {
-  red: truckLights,
-  orange: truckLights,
-  green: truckLightsGreen,
-  blue: truckLightsBlue,
-  purple: truckLightsPurple,
-  black: truckLights,
+function CompleteTruckImage({ bodyColor }: { bodyColor: TruckColor }) {
+  const alignment = completeTruckAlignment[bodyColor]
+  const completeTruckStyle = {
+    '--complete-truck-x': alignment.x,
+    '--complete-truck-y': alignment.y,
+  } as CSSProperties
+
+  return (
+    <div className="truck-preview__complete-window" aria-hidden>
+      <img
+        className="truck-preview__complete-image"
+        src={bodyAssets[bodyColor]}
+        style={completeTruckStyle}
+        alt=""
+        draggable={false}
+      />
+    </div>
+  )
 }
 
-const completeTruckAssets: Record<TruckColor, string> = {
-  black: completeTruck,
-  red: redCompleteTruck,
-  blue: blueCompleteTruck,
-  green: greenCompleteTruck,
-  purple: purpleCompleteTruck,
-  orange: redCompleteTruck, // temporary if needed
-};
+export default function TruckPreview({ bodyColor, isComplete, installedTires }: TruckPreviewProps) {
+  const truckStage = getTruckStage(installedTires)
 
-export default function TruckPreview({ completedParts, earnedPart, lastPlacedPart, dropOffset, bodyColor, isComplete, onPartPlaced, installedTires }: TruckPreviewProps) {
-  const hasWheels = completedParts.includes('wheels')
-  const hasBody = completedParts.includes('body')
-  const hasLights = completedParts.includes('lights')
-  const hasPaint = completedParts.includes('paint')
-  const bodyAsset = hasPaint ? bodyLayerAssets[bodyColor] : truckBodyRed
-  const wheelAsset = hasPaint ? wheelLayerAssets[bodyColor] : truckWheelsRed
-  const lightAsset = hasPaint ? lightLayerAssets[bodyColor] : truckLights
-
-
-  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
-    if (!earnedPart) return
-    event.preventDefault()
-  }
-
-  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-    const droppedPart = event.dataTransfer.getData('text/plain') as TruckPart
-    if (droppedPart === earnedPart) {
-      const bounds = event.currentTarget.getBoundingClientRect()
-      const anchor = partAnchors[droppedPart]
-      const releaseX = event.clientX - bounds.left
-      const releaseY = event.clientY - bounds.top
-      const targetX = bounds.width * anchor.x
-      const targetY = bounds.height * anchor.y
-      onPartPlaced(droppedPart, {
-        x: ((releaseX - targetX) / bounds.width) * 100,
-        y: ((releaseY - targetY) / bounds.height) * 100,
-      })
-    }
-  }
-
-  const placedStyle =
-    lastPlacedPart && dropOffset
-      ? ({
-        '--drop-x': `${dropOffset.x}%`,
-        '--drop-y': `${dropOffset.y}%`,
-      } as CSSProperties)
-      : undefined
-
-      console.log(installedTires);
   return (
     <section className="truck-preview" aria-label="Truck assembly area">
-      <div
-        className={`truck-preview__assembly${hasPaint ? ' truck-preview__assembly--painted' : ''}${isComplete ? ' truck-preview__assembly--complete' : ''}${earnedPart ? ` truck-preview__assembly--target-${earnedPart}` : ''}`}
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-      >
-        {earnedPart && <div className={`truck-preview__target truck-preview__target--${earnedPart}`} aria-hidden />}
-        {hasWheels && (
-          <img
-            className="truck-preview__part truck-preview__part--wheels"
-            src={wheelAsset}
-            alt="Wheels and axle added"
-            style={lastPlacedPart === 'wheels' ? placedStyle : undefined}
-            draggable={false}
-          />
-        )}
-
-        {!installedTires.rearLeft ? (
-          <>
-            <img
-              className="truck-preview__body"
-              src={blackTruck}
-              alt="Monster Truck"
-              draggable={false}
-            />
-
-            {installedTires.frontLeft && (
-              <img
-                className="truck-preview__tire truck-preview__tire--front-left"
-                src={blackTire}
-                alt=""
-                draggable={false}
-              />
-            )}
-
-            {installedTires.frontRight && (
-              <img
-                className="truck-preview__tire truck-preview__tire--front-right"
-                src={blackTire}
-                alt=""
-                draggable={false}
-              />
-            )}
-
-            {installedTires.rearRight && (
-              <img
-                className="truck-preview__tire truck-preview__tire--rear-right"
-                src={blackTire}
-                alt=""
-                draggable={false}
-              />
-            )}
-          </>
-        ) : (
-          <img
-            className="truck-preview__body truck-preview__body--complete"
-            src={completeTruckAssets[bodyColor]}
-            alt="Completed Monster Truck"
-            draggable={false}
-          />
-        )}
-
+      <div className={`truck-preview__assembly${isComplete ? ' truck-preview__assembly--complete' : ''}`}>
+        {isComplete ? <CompleteTruckImage bodyColor={bodyColor} /> : <TruckStageImage stage={truckStage} />}
       </div>
     </section>
   )

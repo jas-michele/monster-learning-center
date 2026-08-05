@@ -30,16 +30,6 @@
     background: #8b5a2b;
 }
 
-.practice-truck {
-    position: absolute;
-
-    left: 40px;
-
-    bottom: 70px;
-
-    font-size: 64px;
-}
-
 .practice-track {
   position: absolute;
   inset: 0;
@@ -81,45 +71,99 @@
     }
 }
 
-.practice-truck {
+.practice-truck-runner {
     position: absolute;
-    left: 220px;      /* your tuned position */
-    bottom: 210px;
-    width: 250px;
-    z-index: 20;
+    left: 0;
+    top: 0;
+    z-index: 22;
+    transform: translate(43vw, 88vh);
+    pointer-events: none;
+}
+
+.practice-truck-runner--driving {
+    animation: practiceLapPath 9s linear forwards;
 }
 
 .practice-truck {
-    offset-path: path("M 200 500 C ...");
-    animation: lap 12s linear forwards;
+    width: clamp(135px, 13vw, 240px);
+    transform: translate(-50%, -100%) scale(1);
+    transform-origin: center bottom;
+    filter: drop-shadow(0 0.7rem 0.75rem rgba(0, 0, 0, 0.35));
 }
 
-.practice-truck--driving {
-    animation: drive 8s ease-in-out forwards;
+.practice-truck-runner--driving .practice-truck {
+    animation: practiceLapDepth 9s ease-in-out forwards;
 }
 
-@keyframes drive {
+@keyframes practiceLapPath {
   0% {
-    transform: translate(0px, 0px) scale(1);
+    transform: translate(43vw, 88vh);
+    z-index: 22;
+  }
+
+  10% {
+    transform: translate(66vw, 84vh);
+    z-index: 22;
   }
 
   20% {
-    transform: translate(260px, -90px) scale(0.92);
+    transform: translate(88vw, 74vh);
+    z-index: 22;
   }
 
-  40% {
-    transform: translate(560px, -150px) scale(0.82);
+  32% {
+    transform: translate(86vw, 61vh);
+    z-index: 18;
   }
 
-  60% {
-    transform: translate(900px, -80px) scale(0.92);
+  45% {
+    transform: translate(62vw, 52vh);
+    z-index: 18;
   }
 
-  80% {
-    transform: translate(700px, 70px) scale(1.02);
+  58% {
+    transform: translate(34vw, 52vh);
+    z-index: 18;
+  }
+
+  72% {
+    transform: translate(15vw, 61vh);
+    z-index: 18;
+  }
+
+  84% {
+    transform: translate(12vw, 73vh);
+    z-index: 22;
+  }
+
+  94% {
+    transform: translate(28vw, 82vh);
+    z-index: 22;
   }
 
   100% {
-    transform: translate(0px, 0px) scale(1);
+    transform: translate(43vw, 88vh);
+    z-index: 22;
+  }
+}
+
+@keyframes practiceLapDepth {
+  0%,
+  100% {
+    transform: translate(-50%, -100%) scale(1);
+  }
+
+  20%,
+  84% {
+    transform: translate(-50%, -100%) scale(0.88);
+  }
+
+  45%,
+  58% {
+    transform: translate(-50%, -100%) scale(0.62);
+  }
+
+  94% {
+    transform: translate(-50%, -100%) scale(0.94);
   }
 }

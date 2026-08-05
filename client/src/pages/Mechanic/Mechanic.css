@@ -25,17 +25,21 @@
 
 .mechanic-guide__message {
   position: absolute;
-  right: 0;
-  top: 0.5%;
+  right: 3%;
+  bottom: 63%;
   z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
-  width: clamp(16rem, 20vw, 22em);
+  align-items: stretch;
+  width: fit-content;
+  min-width: clamp(7rem, 8.7vw, 9rem);
+  max-width: min(18.7rem, 22.7%);
   height: auto;
-  min-height: 12rem;
-  padding: 1rem 1.5rem;
+  min-height: clamp(3.4rem, 8vh, 5.4rem);
+  max-height: 68%;
+  padding: clamp(0.62rem, 0.9vw, 0.82rem) clamp(0.78rem, 1vw, 0.92rem);
+  box-sizing: border-box;
   border-radius: 1.25rem;
   border: 0.09rem solid rgba(86, 69, 50, 0.24);
   background: linear-gradient(180deg, rgba(255, 248, 231, 0.98), rgba(245, 229, 200, 0.97));
@@ -54,6 +58,12 @@
   pointer-events: auto;
 }
 
+.mechanic-guide__message:has(.question-card) {
+  min-width: clamp(10.3rem, 14.7vw, 13.3rem);
+  max-width: min(19.3rem, 23.3%);
+  min-height: 0;
+}
+
 .mechanic-guide__message--action {
   cursor: pointer;
 }
@@ -70,7 +80,7 @@
 .mechanic-guide__message::before {
   content: "";
   position: absolute;
-  left: 30%;
+  left: 33%;
   right: auto;
   bottom: -0.78rem;
   z-index: 2;
@@ -81,14 +91,14 @@
   border-top: 0.88rem solid rgba(245, 229, 200, 0.98);
   border-bottom: 0;
   filter: drop-shadow(0.1rem 0.14rem 0.12rem rgba(0, 0, 0, 0.18));
-  transform: rotate(22deg);
+  transform: rotate(-24deg);
   transform-origin: center top;
 }
 
 .mechanic-guide__message::after {
   content: "";
   position: absolute;
-  left: calc(30% - 0.1rem);
+  left: calc(33% - 0.1rem);
   right: auto;
   bottom: -0.96rem;
   z-index: 1;
@@ -98,13 +108,62 @@
   border-right: 0.68rem solid transparent;
   border-top: 1.04rem solid rgba(86, 69, 50, 0.24);
   border-bottom: 0;
-  transform: rotate(22deg);
+  transform: rotate(-24deg);
   transform-origin: center top;
 }
 
 .mechanic-guide__message-text {
   position: relative;
   z-index: 1;
+  display: grid;
+  width: 100%;
+  text-align: center;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.mechanic-guide__message-text::before {
+  content: attr(data-message);
+  grid-area: 1 / 1;
+  visibility: hidden;
+}
+
+.mechanic-guide__message-visible {
+  grid-area: 1 / 1;
+}
+
+.mechanic-guide .question-card {
+  gap: clamp(0.38rem, 0.8vw, 0.58rem);
+  margin-top: clamp(0.46rem, 0.86vw, 0.66rem);
+  width: 100%;
+}
+
+.mechanic-guide .question-card__prompt {
+  font-size: clamp(0.94rem, 1.25vw, 1.18rem);
+}
+
+.mechanic-guide .question-card__shape {
+  width: clamp(4.35rem, 6.2vw, 5.3rem);
+  height: clamp(4.35rem, 6.2vw, 5.3rem);
+  margin: clamp(0.38rem, 0.8vw, 0.58rem) auto;
+}
+
+.mechanic-guide .question-card__shape--triangle {
+  width: 0;
+  height: 0;
+  border-left-width: clamp(2.18rem, 3.1vw, 2.65rem);
+  border-right-width: clamp(2.18rem, 3.1vw, 2.65rem);
+  border-bottom-width: clamp(3.95rem, 5.65vw, 4.82rem);
+}
+
+.mechanic-guide .question-card__input {
+  box-sizing: border-box;
+  max-width: none;
+  padding: clamp(0.48rem, 0.76vw, 0.62rem) clamp(0.76rem, 1vw, 0.9rem);
+}
+
+.mechanic-guide .question-card__button {
+  padding: clamp(0.52rem, 0.8vw, 0.68rem) clamp(1rem, 1.5vw, 1.35rem);
 }
 
 @keyframes mechanic-message-pop {
@@ -191,10 +250,15 @@
 }
 
 .truck-preview__assembly {
+  --truck-assembly-x: 7%;
+  --truck-assembly-y: 24%;
+  --truck-assembly-scale: 0.8;
+  --truck-stage-window-width: min(98%, 43rem);
+
   position: relative;
-  width: min(124%, 57rem);
+  width: min(108%, 48rem);
   aspect-ratio: 1536 / 1024;
-  transform: translate(4%, 23%) scale(1.25);
+  transform: translate(var(--truck-assembly-x), var(--truck-assembly-y)) scale(var(--truck-assembly-scale));
   transform-origin: center center;
   user-select: none;
   pointer-events: none;
@@ -207,125 +271,9 @@
 }
 
 .truck-preview__assembly--complete {
-  animation: truck-complete-bounce 520ms ease-out;
   filter:
     drop-shadow(0 0 0.45rem rgba(255, 218, 81, 0.62))
     drop-shadow(0 1rem 1.1rem rgba(0, 0, 0, 0.34));
-}
-
-.truck-preview__part {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  user-select: none;
-  pointer-events: none;
-}
-
-.truck-preview__assembly:not(.truck-preview__assembly--painted) .truck-preview__part {
-  filter: grayscale(1) brightness(0.82) contrast(1.08);
-}
-
-.truck-preview__part--wheels {
-  z-index: 1;
-  animation: truck-part-drop-in 620ms cubic-bezier(0.18, 0.92, 0.24, 1) both;
-}
-
-.truck-preview__part--body {
-  z-index: 2;
-  animation: truck-part-drop-in 640ms cubic-bezier(0.18, 0.92, 0.24, 1) both;
-}
-
-.truck-preview__part--lights {
-  z-index: 3;
-  animation: truck-part-drop-in 580ms cubic-bezier(0.18, 0.92, 0.24, 1) both;
-}
-
-.truck-preview__target {
-  position: absolute;
-  z-index: 4;
-  border: 0.18rem dashed rgba(255, 236, 117, 0.96);
-  border-radius: 1.2rem;
-  background: rgba(255, 220, 84, 0.11);
-  box-shadow:
-    0 0 0 0.18rem rgba(12, 21, 22, 0.32),
-    0 0 1.15rem rgba(255, 220, 84, 0.78),
-    inset 0 0 0.9rem rgba(255, 255, 255, 0.18);
-  pointer-events: none;
-  animation: build-target-pulse 920ms ease-in-out infinite;
-}
-
-.truck-preview__target--wheels {
-  left: 4%;
-  right: 4%;
-  bottom: 1%;
-  height: 47%;
-  border-radius: 2rem;
-}
-
-.truck-preview__target--body {
-  left: 12%;
-  right: 11%;
-  top: 12%;
-  height: 52%;
-}
-
-.truck-preview__target--lights {
-  left: 33%;
-  top: 4%;
-  width: 34%;
-  height: 18%;
-  border-radius: 999px;
-}
-
-.earned-part {
-  position: absolute;
-  left: 50%;
-  top: 13%;
-  z-index: 6;
-  display: block;
-  width: min(34%, 18rem);
-  padding: 0;
-  border: 0;
-  background: transparent;
-  cursor: grab;
-  filter:
-    drop-shadow(0 0 0.18rem rgba(255, 236, 117, 0.96))
-    drop-shadow(0 0 0.7rem rgba(255, 220, 84, 0.78))
-    drop-shadow(0 0.55rem 0.48rem rgba(0, 0, 0, 0.36));
-  transform: translateX(-50%);
-  animation: earned-part-pop 430ms cubic-bezier(0.2, 1.55, 0.38, 1) both;
-  touch-action: manipulation;
-}
-
-.earned-part:active {
-  cursor: grabbing;
-}
-
-.earned-part img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  pointer-events: none;
-  user-select: none;
-  filter: grayscale(1) brightness(0.82) contrast(1.08);
-}
-
-.earned-part--wheels {
-  top: 37%;
-  width: min(34%, 18.5rem);
-}
-
-.earned-part--body {
-  top: 18%;
-  width: min(36%, 19.5rem);
-}
-
-.earned-part--lights {
-  top: 14%;
-  width: min(25%, 13.5rem);
 }
 
 .paint-picker {
@@ -338,7 +286,7 @@
   gap: clamp(0.48rem, 1vw, 0.72rem);
   width: min(46%, 25rem);
   transform: translateX(-50%);
-  animation: earned-part-pop 430ms cubic-bezier(0.2, 1.55, 0.38, 1) both;
+  animation: paint-picker-pop 430ms cubic-bezier(0.2, 1.55, 0.38, 1) both;
 }
 
 .paint-picker__choice {
@@ -377,43 +325,7 @@
     0 0.16rem 0.24rem rgba(0, 0, 0, 0.28);
 }
 
-@keyframes truck-part-drop-in {
-  0% {
-    opacity: 0.98;
-    transform: translate(var(--drop-x, 0), var(--drop-y, -18%)) scale(0.98);
-  }
-
-  68% {
-    opacity: 1;
-    transform: translate(0, 2.8%) scale(1.015);
-  }
-
-  84% {
-    transform: translate(0, -1.2%) scale(0.997);
-  }
-
-  94% {
-    transform: translate(0, 0.45%) scale(1.002);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translate(0, 0) scale(1);
-  }
-}
-
-@keyframes build-target-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.025);
-  }
-}
-
-@keyframes earned-part-pop {
+@keyframes paint-picker-pop {
   from {
     opacity: 0;
     transform: translateX(-50%) translateY(-16%) scale(0.64);
@@ -428,42 +340,31 @@
 @keyframes truck-complete-bounce {
   0%,
   100% {
-    transform: translate(4%, 23%) scale(1.25);
+    transform: translate(var(--truck-assembly-x), var(--truck-assembly-y)) scale(var(--truck-assembly-scale));
   }
 
   45% {
-    transform: translate(4%, 20%) scale(1.3);
+    transform: translate(var(--truck-assembly-x), calc(var(--truck-assembly-y) - 1.5%)) scale(calc(var(--truck-assembly-scale) + 0.015));
   }
 }
 
-.mechanic-panel {
-  grid-column: 1;
-  grid-row: 1;
-  align-self: center;
-  width: min(100%, 17.25rem);
-  justify-self: start;
+.mechanic-actions {
+  position: absolute;
+  left: 50%;
+  bottom: 2.1%;
+  transform: translateX(-50%);
+  width: min(37%, 27rem);
   min-width: 0;
   box-sizing: border-box;
-  padding: clamp(0.5rem, 0.9vw, 0.66rem);
-  border: 0.1rem solid rgba(210, 225, 232, 0.3);
-  border-radius: 0.95rem;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 15%),
-    radial-gradient(circle at 50% 0%, rgba(82, 126, 142, 0.16), transparent 42%),
-    linear-gradient(180deg, rgba(22, 28, 31, 0.98), rgba(4, 9, 11, 0.96));
-  box-shadow:
-    inset 0 0.08rem 0 rgba(255, 255, 255, 0.12),
-    inset 0 0 0 0.04rem rgba(255, 255, 255, 0.08),
-    0 0.75rem 1.45rem rgba(0, 0, 0, 0.42);
   color: #fff;
-  z-index: 4;
+  z-index: 7;
 }
 
 .build-tray {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   justify-content: center;
-  gap: clamp(0.34rem, 0.62vw, 0.48rem);
+  gap: clamp(0.42rem, 0.78vw, 0.62rem);
 }
 
 .build-tray__parts {
@@ -882,24 +783,12 @@
   border-radius: 1.25rem;
 }
 
-.earned-part:focus-visible {
-  outline: none;
-  filter:
-    drop-shadow(0 0 0.22rem rgba(255, 255, 255, 0.98))
-    drop-shadow(0 0 0.78rem rgba(255, 220, 84, 0.88))
-    drop-shadow(0 0.55rem 0.48rem rgba(0, 0, 0, 0.36));
-}
-
 @media (max-width: 920px) {
   .mechanic-shop {
     grid-template-columns: minmax(0, 22%) minmax(0, 55%) minmax(0, 23%);
     grid-template-rows: minmax(0, 1fr) 16.8%;
     gap: 0.46rem;
     padding: 5.75rem 0.72rem 0.64rem;
-  }
-
-  .mechanic-panel {
-    padding: 0.68rem;
   }
 
   .mechanic-panel__swatch,
@@ -914,8 +803,12 @@
   }
 
   .truck-preview__assembly {
-    width: min(122%, 45rem);
-    transform: translate(3%, 18%) scale(1.25);
+    --truck-assembly-x: 7%;
+    --truck-assembly-y: 23%;
+    --truck-assembly-scale: 0.8;
+    --truck-stage-window-width: min(98%, 40rem);
+
+    width: min(106%, 40rem);
   }
 
   .build-tray__part {
@@ -936,11 +829,24 @@
   }
 
   .mechanic-guide__message {
-    right: 0.8%;
-    top: 14%;
-    width: min(11.5%, 6.4rem);
-    min-height: 3.5rem;
-    font-size: 0.52rem;
+    right: 3%;
+    bottom: 60%;
+    width: fit-content;
+    min-width: clamp(7rem, 12vw, 9rem);
+    max-width: min(17.3rem, 25.3%);
+    min-height: clamp(3.4rem, 8vh, 5.2rem);
+    font-size: 0.58rem;
+  }
+
+  .mechanic-guide__message:has(.question-card) {
+    min-width: clamp(9.7rem, 18.7vw, 12rem);
+    max-width: min(18rem, 28%);
+    min-height: 0;
+  }
+
+  .mechanic-actions {
+    bottom: 1.7%;
+    width: min(42%, 23rem);
   }
 
   .mechanic-guide__avatar {
@@ -967,8 +873,8 @@
     grid-column: 2;
   }
 
-  .mechanic-panel {
-    width: 100%;
+  .mechanic-actions {
+    width: min(78%, 21rem);
   }
 
   .build-tray {
@@ -977,7 +883,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .truck-preview__part,
+  .truck-preview__complete-window,
   .truck-preview__assembly--complete,
   .mechanic-guide__message {
     animation: none;
@@ -994,67 +900,75 @@
   }
 }
 
-.truck-preview__body {
-  width: 100%;
-  max-width: 42rem;
-  user-select: none;
-  pointer-events: none;
-}
-
-.truck-preview__body {
-    transform: translateY(2px);
-}
-
 .truck-preview {
     position: relative;
 }
 
-.truck-preview__body {
-    display: block;
-    width: 100%;
+.truck-preview__stage-window {
+  position: relative;
+  width: var(--truck-stage-window-width);
+  aspect-ratio: 1256 / 920;
+  margin: 0 auto;
+  overflow: hidden;
+  transform: translateY(2px);
+  transform-origin: center bottom;
+  pointer-events: none;
+  user-select: none;
 }
 
-.truck-preview__tire {
-    width: 105px;
-    position: absolute;
-    z-index: 5;
-    /* border: 2px solid red; */
-}
-.truck-preview__tire--front-left {
-    left: 24.5%;
-    bottom: 13%;
-}
-
-.truck-preview__tire--front-right {
-  width: 92px;  
-  left: 75.5%;
-  bottom: 21%;
-  
+.truck-preview__stage-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  transform: translate(var(--stage-x), var(--stage-y));
+  transform-origin: center center;
+  user-select: none;
+  pointer-events: none;
 }
 
-.truck-preview__tire--rear-right {
-   width: 93px;
-  left: 8%;
-    bottom: 17%;
+.truck-preview__complete-window {
+  position: relative;
+  width: min(106%, 46rem);
+  aspect-ratio: 1382 / 1044;
+  margin: 0 auto;
+  overflow: visible;
+  transform: translateY(-1.5%) scale(1.03);
+  transform-origin: center bottom;
+  pointer-events: none;
+  user-select: none;
+  animation: truck-complete-pop 620ms ease-out both;
+}
+
+.truck-preview__complete-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  transform: translate(var(--complete-truck-x, 0), var(--complete-truck-y, 0));
+  user-select: none;
+  pointer-events: none;
 }
 
 @keyframes truck-complete-pop {
   0% {
     opacity: 0;
-    transform: translateY(2px) scale(0.88);
+    transform: translateY(1.5%) scale(0.94);
   }
 
   60% {
     opacity: 1;
-    transform: translateY(-8px) scale(1.06);
+    transform: translateY(-3%) scale(1.08);
   }
 
   100% {
     opacity: 1;
-    transform: translateY(2px) scale(1);
+    transform: translateY(-1.5%) scale(1.03);
   }
 }
 
 .truck-preview__body--complete {
-  animation: truck-complete-pop 700ms ease-out;
+  animation: truck-complete-pop 620ms ease-out;
 }

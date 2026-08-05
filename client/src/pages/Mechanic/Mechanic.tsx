@@ -3,53 +3,24 @@ import './Mechanic.css'
 import { type CSSProperties, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FaSignOutAlt } from 'react-icons/fa'
-import buildIconBody from '../../assets/build-icon-body.png'
-import buildIconLights from '../../assets/build-icon-lights.png'
-import buildIconWheels from '../../assets/build-icon-wheels.png'
-import garageBg from '../../assets/garagBG.png'
+import garageBg from '../../assets/mechanic/garagBG.png'
 import CustomizationPanel from './CustomizationPanel'
 import MechanicAvatar from './MechanicAvatar'
 import TruckPreview from './TruckPreview'
-import { BUILD_ORDER, type TruckPart } from './truckBuild'
 import { colorOptions, defaultTruckCustomization, type TruckColor, type TruckCustomization } from './truckCustomization'
 import { startConversation, respondConversation } from '../../services/conversationApi'
-import type { ConversationState, Question, RespondConversationResponse, GameAction } from '../../types/conversation'
+import type { ConversationState, Question, RespondConversationResponse } from '../../types/conversation'
 
 
 const paintOptions = colorOptions.filter((color) => ['red', 'blue', 'green', 'purple'].includes(color.value))
-const tapPlaceOffsets: Partial<Record<TruckPart, { x: number; y: number }>> = {
-  wheels: { x: 0, y: -12 },
-  body: { x: 0, y: -10 },
-  lights: { x: 0, y: -4 },
-}
-
-const earnPrompts: Record<TruckPart, string> = {
-  wheels: "Yo Derrick! I'm Jax! Tap here to earn the wheels.",
-  body: 'Great wheels! Tap here to earn the body.',
-  lights: 'Nice work! Tap here to earn the lights.',
-  paint: 'Great lights! Tap here to earn paint.',
-}
-
-const earnLabels: Record<TruckPart, string> = {
-  wheels: 'Earn the wheels',
-  body: 'Earn the body',
-  lights: 'Earn the lights',
-  paint: 'Earn paint',
-}
 
 export default function Mechanic() {
   const navigate = useNavigate()
   const [customization, setCustomization] = useState<TruckCustomization>(defaultTruckCustomization)
-  const [completedParts, setCompletedParts] = useState<TruckPart[]>([])
-  const [earnedPart, setEarnedPart] = useState<TruckPart | undefined>()
-  const [lastPlacedPart, setLastPlacedPart] = useState<TruckPart | undefined>()
-  const [dropOffset, setDropOffset] = useState<{ x: number; y: number } | undefined>()
   const [guideMessage, setGuideMessage] = useState("");
   const [question, setQuestion] = useState<Question | null>(null);
   const [conversationState, setConversationState] = useState<ConversationState | null>(null);
   const [loadingQuestion, setLoadingQuestion] = useState(false);
-  const [currentAction, setCurrentAction] = useState<GameAction | null>(null);
-  const [truckComplete, setTruckComplete] = useState(false);
 
   const [installedTires, setInstalledTires] = useState({
     frontLeft: false,
@@ -100,7 +71,6 @@ export default function Mechanic() {
     }
   }
 
-  const nextPart = BUILD_ORDER[completedParts.length]
   const isTruckComplete = installedTires.rearLeft;
   const canReset =
     installedTires.frontLeft ||
@@ -112,9 +82,6 @@ export default function Mechanic() {
     // Restore the default truck
     setCustomization(defaultTruckCustomization);
 
-    // Reset sidebar progress
-    setCompletedParts([]);
-
     // Remove all installed tires
     setInstalledTires({
       frontLeft: false,
@@ -123,74 +90,15 @@ export default function Mechanic() {
       rearLeft: false,
     });
 
-    // Clear placement state
-    setLastPlacedPart(undefined);
-    setDropOffset(undefined);
-
     // Reset guide message
     loadConversation();
   }
 
-  const earnNextPart = () => {
-    if (!nextPart || earnedPart) return
-    setEarnedPart(nextPart)
-
-    if (nextPart === 'wheels') {
-      setGuideMessage('You earned the wheels! Drag them to the glowing outline.')
-      return
-    }
-
-    if (nextPart === 'body') {
-      setGuideMessage('You earned the body! Put it on the truck.')
-      return
-    }
-
-    if (nextPart === 'lights') {
-      setGuideMessage('You earned the lights! Place them on top.')
-      return
-    }
-
-    setGuideMessage('You earned paint! Pick a color for your truck.')
-  }
-
-  const addPart = (part: TruckPart, releaseOffset?: { x: number; y: number }) => {
-    if (part !== earnedPart || part === 'paint' || completedParts.includes(part)) return
-
-    const nextCompletedParts = [...completedParts, part]
-    setCompletedParts(nextCompletedParts)
-    setEarnedPart(undefined)
-    setLastPlacedPart(part)
-    setDropOffset(releaseOffset ?? tapPlaceOffsets[part] ?? { x: 0, y: -8 })
-
-    if (part === 'wheels') {
-      setCustomization((current) => ({ ...current, wheelColor: 'red' }))
-      setGuideMessage(earnPrompts.body)
-      return
-    }
-
-    if (part === 'body') {
-      setCustomization((current) => ({ ...current, bodyColor: 'red' }))
-      setGuideMessage(earnPrompts.lights)
-      return
-    }
-
-    setCustomization((current) => ({ ...current, roofLights: 'four-light' }))
-    setGuideMessage(earnPrompts.paint)
-  }
-
   const choosePaint = (color: TruckColor) => {
-    // if (completedParts.includes("paint")) return;
-
     setCustomization((current) => ({
       ...current,
       bodyColor: color,
-      wheelColor: color,
     }));
-
-    setCompletedParts((current) => [...current, "paint"]);
-
-    setLastPlacedPart("paint");
-    setDropOffset(undefined);
 
     setGuideMessage("Awesome! Your truck is ready to race!");
   };
@@ -202,23 +110,10 @@ export default function Mechanic() {
       JSON.stringify({
         customization: nextCustomization,
         isGrayed: !isTruckComplete,
-        selectedOptions: {
-          bodyColor: completedParts.includes('body'),
-          decal: false,
-          wheelColor: completedParts.includes('wheels'),
-          roofLights: completedParts.includes('lights'),
-          paint: completedParts.includes('paint'),
-        },
       }),
     )
     navigate('/practice-lap')
   }
-
-  const placeablePart = earnedPart === 'paint' ? undefined : earnedPart
-  const partAsset = earnedPart === 'wheels' ? buildIconWheels : earnedPart === 'body' ? buildIconBody : earnedPart === 'lights' ? buildIconLights : undefined
-  const partAlt =
-    earnedPart === 'wheels' ? 'Unlocked wheels truck part' : earnedPart === 'body' ? 'Unlocked body truck part' : 'Unlocked lights truck part'
-  const canEarnFromSpeech = Boolean(nextPart && !earnedPart)
 
   function handleResponse(response: RespondConversationResponse) {
     setGuideMessage(response.message);
@@ -228,6 +123,14 @@ export default function Mechanic() {
     setQuestion(response.nextQuestion);
 
     if (response.correct) {
+      if (installedTires.frontLeft && installedTires.frontRight && installedTires.rearRight && !installedTires.rearLeft) {
+        setCustomization((currentCustomization) => ({
+          ...currentCustomization,
+          bodyColor: 'black',
+          roofLights: 'four-light',
+        }));
+      }
+
       installNextTire();
     }
   }
@@ -249,7 +152,6 @@ export default function Mechanic() {
       }
 
       if (!current.rearLeft) {
-        // setCompletedParts(["wheels"]);
         return { ...current, rearLeft: true };
       }
 
@@ -267,37 +169,16 @@ export default function Mechanic() {
               <FaSignOutAlt aria-hidden />
             </Link>
             <CustomizationPanel
-              completedParts={completedParts}
               onReset={resetTruck}
               onSaveAndRace={() => saveAndRace(customization)}
               canReset={canReset}
               canSave={isTruckComplete}
             />
             <TruckPreview
-              completedParts={completedParts}
-              earnedPart={placeablePart}
-              lastPlacedPart={lastPlacedPart}
-              dropOffset={dropOffset}
               bodyColor={customization.bodyColor}
               isComplete={isTruckComplete}
-              onPartPlaced={addPart}
               installedTires={installedTires}
             />
-            {earnedPart && partAsset && (
-              <button
-                type="button"
-                className={`earned-part earned-part--${earnedPart}`}
-                draggable
-                onClick={() => addPart(earnedPart)}
-                onDragStart={(event) => {
-                  event.dataTransfer.setData('text/plain', earnedPart)
-                  event.dataTransfer.effectAllowed = 'move'
-                }}
-                aria-label={`${partAlt}. Drag it to the glowing outline or tap to place it.`}
-              >
-                <img src={partAsset} alt="" draggable={false} aria-hidden />
-              </button>
-            )}
             {isTruckComplete && (
               <div className="paint-picker" aria-label="Choose a truck paint color">
                 {paintOptions.map((color) => (

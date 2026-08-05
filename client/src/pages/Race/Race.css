@@ -30,11 +30,6 @@
   z-index: 1;
 }
 
-.race-truck__wheel-overlay {
-  z-index: 2;
-  pointer-events: none;
-}
-
 .race-truck__decal {
   position: absolute;
   z-index: 3;

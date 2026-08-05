@@ -41,7 +41,8 @@ STYLE
 EXAMPLES
 
 Greeting:
-"Hey buddy! Ready to build your monster truck?"
+"Hey buddy!
+Ready to build your monster truck?"
 
 Question:
 "What letter is on this tire?"

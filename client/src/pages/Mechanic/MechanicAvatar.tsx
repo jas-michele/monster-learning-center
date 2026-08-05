@@ -44,7 +44,11 @@ export default function MechanicAvatar({
   }, [message])
 
   const visibleMessage = typewriterState.message === message ? message.slice(0, typewriterState.visibleLength) : ''
-  const messageContent = <span className="mechanic-guide__message-text">{visibleMessage}</span>
+  const messageContent = (
+    <span className="mechanic-guide__message-text" data-message={message}>
+      <span className="mechanic-guide__message-visible">{visibleMessage}</span>
+    </span>
+  )
 
   return (
     <aside className="mechanic-guide" aria-label="Jax the mechanic">

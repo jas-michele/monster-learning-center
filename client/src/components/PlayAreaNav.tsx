@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import playhouseNav from '../assets/playhouseNav-mechanic-fit.png'
-import mechanicNav from '../assets/mechanicNav.png'
+import playhouseNav from '../assets/playhouse/playhouseNav-mechanic-fit.png'
+import mechanicNav from '../assets/mechanic/mechanicNav.png'
 import racetrackNav from '../assets/racetrackNav.png'
 import dinohuntNav from '../assets/dinohuntNav.png'
 import storyTimeNav from '../assets/storyTimeNav.png'

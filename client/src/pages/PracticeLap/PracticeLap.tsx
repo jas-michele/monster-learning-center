@@ -1,13 +1,13 @@
 import "./PracticeLap.css";
 import { useEffect, useState } from "react";
 import PracticeTrack from "../../components/PracticeTrack";
-import PracticeTruck from "../../components/PracticeTruck";
+import type { TruckColor } from "../Mechanic/truckCustomization";
 
-import completeTruck from "../../assets/blackTruck.png";
-import redCompleteTruck from "../../assets/redTruck.png";
-import blueCompleteTruck from "../../assets/blueTruck.png";
-import greenCompleteTruck from "../../assets/greenTruck.png";
-import purpleCompleteTruck from "../../assets/purpleTruck.png";
+import completeTruck from "../../assets/mechanic/blackTruck.png";
+import redCompleteTruck from "../../assets/mechanic/redTruck.png";
+import blueCompleteTruck from "../../assets/mechanic/blueTruck.png";
+import greenCompleteTruck from "../../assets/mechanic/greenTruck.png";
+import purpleCompleteTruck from "../../assets/mechanic/purpleTruck.png";
 
 import Countdown from "../../components/Countdown/Countdown";
 
@@ -21,16 +21,19 @@ export default function PracticeLap() {
         ? JSON.parse(savedTruck)
         : null;
 
-    const bodyColor = truckData?.customization?.bodyColor ?? "black";
-
-    const completeTruckAssets = {
+    const completeTruckAssets: Record<TruckColor, string> = {
         black: completeTruck,
         red: redCompleteTruck,
         blue: blueCompleteTruck,
         green: greenCompleteTruck,
         purple: purpleCompleteTruck,
-        orange: redCompleteTruck,
     };
+
+    const savedBodyColor = truckData?.customization?.bodyColor;
+    const bodyColor: TruckColor =
+        typeof savedBodyColor === "string" && savedBodyColor in completeTruckAssets
+            ? savedBodyColor as TruckColor
+            : "black";
 
     useEffect(() => {
         const values = ["3", "2", "1", "GO!"];
@@ -62,12 +65,13 @@ export default function PracticeLap() {
 
             <Countdown value={countdown} />
 
-            <img
-                className={`practice-truck ${driving ? "practice-truck--driving" : ""
-                    }`}
-                src={completeTruckAssets[bodyColor]}
-                alt="Monster Truck"
-            />
+            <div className={`practice-truck-runner ${driving ? "practice-truck-runner--driving" : ""}`}>
+                <img
+                    className="practice-truck"
+                    src={completeTruckAssets[bodyColor]}
+                    alt="Monster Truck"
+                />
+            </div>
 
 
         </main>
