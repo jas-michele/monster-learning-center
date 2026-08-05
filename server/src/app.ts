@@ -7,6 +7,7 @@ import homeRoutes from "./routes/homeRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import achievementRoutes from "./routes/achievementRoutes.js"
 import conversationRoutes from "./routes/conversationRoutes.js";
+import voiceRoutes from "./routes/voiceRoutes.js"
 
 
 
@@ -19,6 +20,7 @@ app.use("/api/home", homeRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/achievements", achievementRoutes);
 app.use("/api/conversation", conversationRoutes);
+app.use("/api/voice", voiceRoutes);
 
 app.get("/", (_req, res) => {
     res.send(" 🚙 Monster Learning Center API is running!")

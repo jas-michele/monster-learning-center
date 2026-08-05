@@ -10,6 +10,7 @@ import TruckPreview from './TruckPreview'
 import { colorOptions, defaultTruckCustomization, type TruckColor, type TruckCustomization } from './truckCustomization'
 import { startConversation, respondConversation } from '../../services/conversationApi'
 import type { ConversationState, Question, RespondConversationResponse } from '../../types/conversation'
+import { speak } from "../../services/voice";
 
 
 const paintOptions = colorOptions.filter((color) => ['red', 'blue', 'green', 'purple'].includes(color.value))
@@ -158,6 +159,14 @@ export default function Mechanic() {
       return current;
     });
   }
+
+  useEffect(() => {
+    if (!guideMessage) return;
+    
+    speak(guideMessage).catch((err) => {
+      console.error("Voice error:", err);
+    });
+  }, [guideMessage]);
 
   return (
     <div className="home" role="main" aria-label="Mechanic shop">
