@@ -211,7 +211,7 @@ export default function Mechanic() {
         },
       }),
     )
-    navigate('/race')
+    navigate('/practice-lap')
   }
 
   const placeablePart = earnedPart === 'paint' ? undefined : earnedPart
