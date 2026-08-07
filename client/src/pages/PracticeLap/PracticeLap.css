@@ -111,6 +111,133 @@
     animation: hideSign 0.6s ease forwards;
 }
 
+.practice-lap-effects {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.practice-lap-obstacle,
+.practice-lap-finished {
+    position: absolute;
+    background-image: var(--lap-assets);
+    background-repeat: no-repeat;
+    background-size: 200% 200%;
+    filter: drop-shadow(0 0.55rem 0.42rem rgba(43, 24, 8, 0.28));
+}
+
+.practice-lap-obstacle--mound {
+    left: 79%;
+    top: 76%;
+    width: clamp(10rem, 23vw, 25rem);
+    aspect-ratio: 3 / 2;
+    background-position: 0 0;
+    transform: translate(-50%, -50%) scale(0.82);
+    opacity: 1;
+}
+
+.practice-lap-obstacle--puddle {
+    left: 14%;
+    top: 73%;
+    width: clamp(9rem, 19vw, 20rem);
+    aspect-ratio: 3 / 2;
+    background-position: 100% 0;
+    transform: translate(-50%, -50%) scale(0.8);
+    filter: drop-shadow(0 0.5rem 0.32rem rgba(8, 44, 68, 0.22));
+    opacity: 1;
+}
+
+.practice-lap-splash {
+    position: absolute;
+    left: 14%;
+    top: 70.5%;
+    width: clamp(5rem, 11vw, 11rem);
+    aspect-ratio: 1.8;
+    border-radius: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35);
+    background:
+        radial-gradient(circle at 48% 72%, rgba(255, 255, 255, 0.82) 0 7%, transparent 8%),
+        radial-gradient(circle at 30% 62%, rgba(110, 205, 255, 0.9) 0 7%, transparent 8%),
+        radial-gradient(circle at 68% 56%, rgba(65, 174, 232, 0.86) 0 8%, transparent 9%),
+        radial-gradient(ellipse at 50% 82%, rgba(34, 133, 194, 0.62), rgba(34, 133, 194, 0) 64%);
+    filter: blur(0.02rem) drop-shadow(0 0.35rem 0.32rem rgba(16, 70, 102, 0.22));
+}
+
+.practice-lap-effects--active .practice-lap-splash {
+    animation: practiceLapSplash 9s linear forwards;
+}
+
+.practice-lap-finished {
+    left: 50%;
+    top: 47%;
+    z-index: 40;
+    width: clamp(13rem, 25vw, 28rem);
+    aspect-ratio: 3 / 2;
+    background-position: 100% 100%;
+    filter:
+        drop-shadow(0 0.7rem 0.65rem rgba(31, 16, 4, 0.32))
+        drop-shadow(0 0 1.4rem rgba(255, 225, 77, 0.28));
+    transform: translate(-50%, -50%) scale(0.62) rotate(-3deg);
+}
+
+.practice-lap-effects--active .practice-lap-finished {
+    animation: practiceLapFinished 9s ease-out forwards;
+}
+
+.practice-lap-confetti {
+    position: absolute;
+    inset: 0;
+    z-index: 38;
+    overflow: hidden;
+}
+
+.practice-lap-confetti span {
+    position: absolute;
+    left: calc(18% + (var(--confetti-index) * 2.5%));
+    top: -8%;
+    width: clamp(0.28rem, 0.7vw, 0.52rem);
+    height: clamp(0.5rem, 1.1vw, 0.9rem);
+    border-radius: 0.12rem;
+    background: hsl(calc(var(--confetti-index) * 43), 88%, 56%);
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+}
+
+.practice-lap-effects--active .practice-lap-confetti span {
+    animation: practiceLapConfetti 9s ease-in forwards;
+}
+
+.practice-lap-confetti span:nth-child(1) { --confetti-index: 1; }
+.practice-lap-confetti span:nth-child(2) { --confetti-index: 2; }
+.practice-lap-confetti span:nth-child(3) { --confetti-index: 3; }
+.practice-lap-confetti span:nth-child(4) { --confetti-index: 4; }
+.practice-lap-confetti span:nth-child(5) { --confetti-index: 5; }
+.practice-lap-confetti span:nth-child(6) { --confetti-index: 6; }
+.practice-lap-confetti span:nth-child(7) { --confetti-index: 7; }
+.practice-lap-confetti span:nth-child(8) { --confetti-index: 8; }
+.practice-lap-confetti span:nth-child(9) { --confetti-index: 9; }
+.practice-lap-confetti span:nth-child(10) { --confetti-index: 10; }
+.practice-lap-confetti span:nth-child(11) { --confetti-index: 11; }
+.practice-lap-confetti span:nth-child(12) { --confetti-index: 12; }
+.practice-lap-confetti span:nth-child(13) { --confetti-index: 13; }
+.practice-lap-confetti span:nth-child(14) { --confetti-index: 14; }
+.practice-lap-confetti span:nth-child(15) { --confetti-index: 15; }
+.practice-lap-confetti span:nth-child(16) { --confetti-index: 16; }
+.practice-lap-confetti span:nth-child(17) { --confetti-index: 17; }
+.practice-lap-confetti span:nth-child(18) { --confetti-index: 18; }
+.practice-lap-confetti span:nth-child(19) { --confetti-index: 19; }
+.practice-lap-confetti span:nth-child(20) { --confetti-index: 20; }
+.practice-lap-confetti span:nth-child(21) { --confetti-index: 21; }
+.practice-lap-confetti span:nth-child(22) { --confetti-index: 22; }
+.practice-lap-confetti span:nth-child(23) { --confetti-index: 23; }
+.practice-lap-confetti span:nth-child(24) { --confetti-index: 24; }
+.practice-lap-confetti span:nth-child(25) { --confetti-index: 25; }
+.practice-lap-confetti span:nth-child(26) { --confetti-index: 26; }
+.practice-lap-confetti span:nth-child(27) { --confetti-index: 27; }
+.practice-lap-confetti span:nth-child(28) { --confetti-index: 28; }
+
 @keyframes hideSign {
     to {
         opacity: 0;
@@ -148,6 +275,33 @@
     display: block;
     width: 100%;
     filter: drop-shadow(0 0.7rem 0.75rem rgba(0, 0, 0, 0.35));
+}
+
+.practice-truck-driver {
+    position: absolute;
+    left: 49%;
+    top: -34%;
+    z-index: 1;
+    width: 44%;
+    height: 82%;
+    overflow: hidden;
+    transform: translate(-50%, 0) rotate(-1deg);
+    transform-origin: center bottom;
+    pointer-events: none;
+}
+
+.practice-truck-driver img {
+    display: block;
+    width: 100%;
+    height: 136%;
+    object-fit: contain;
+    object-position: center top;
+    transform: translateY(1%);
+    filter: drop-shadow(0 0.12rem 0.08rem rgba(0, 0, 0, 0.25));
+}
+
+.practice-truck-runner--driving .practice-truck-driver {
+    animation: practiceDriverRide 9s ease-in-out forwards;
 }
 
 .practice-truck-smoke {
@@ -214,6 +368,10 @@
 
 .practice-truck-runner--driving .practice-truck-smoke {
     display: none;
+}
+
+.practice-truck-runner--driving .practice-truck {
+    animation: practiceTruckTerrain 9s ease-in-out forwards;
 }
 
 @keyframes practiceTruckSmoke {
@@ -321,5 +479,116 @@
 
   94% {
     transform: translate(-50%, -100%) scale(0.94);
+  }
+}
+
+@keyframes practiceTruckTerrain {
+  0%,
+  14%,
+  24%,
+  80%,
+  87%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  18% {
+    transform: translateY(-4.4vh) rotate(-5deg);
+  }
+
+  21% {
+    transform: translateY(-2.3vh) rotate(4deg);
+  }
+
+  84% {
+    transform: translateY(-1.1vh) rotate(-1deg) scaleY(0.95);
+  }
+}
+
+@keyframes practiceDriverRide {
+  0%,
+  14%,
+  24%,
+  80%,
+  87%,
+  100% {
+    transform: translate(-50%, 0) rotate(-1deg);
+  }
+
+  18% {
+    transform: translate(-50%, -4.4vh) rotate(-5deg);
+  }
+
+  21% {
+    transform: translate(-50%, -2.3vh) rotate(4deg);
+  }
+
+  84% {
+    transform: translate(-50%, -1.1vh) rotate(-1deg) scaleY(0.95);
+  }
+}
+
+@keyframes practiceLapSplash {
+  0%,
+  81% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35);
+  }
+
+  84% {
+    opacity: 0.95;
+    transform: translate(-50%, -68%) scale(1);
+  }
+
+  89% {
+    opacity: 0;
+    transform: translate(-50%, -92%) scale(1.24);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -92%) scale(1.24);
+  }
+}
+
+@keyframes practiceLapFinished {
+  0%,
+  87% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.62) rotate(-3deg);
+  }
+
+  92% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08) rotate(2deg);
+  }
+
+  96%,
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes practiceLapConfetti {
+  0%,
+  88% {
+    opacity: 0;
+    transform: translateY(42vh) rotate(0deg) scale(0.65);
+  }
+
+  91% {
+    opacity: 1;
+    transform: translateY(14vh) rotate(calc(var(--confetti-index) * 18deg)) scale(1);
+  }
+
+  94% {
+    opacity: 1;
+    transform: translateY(20vh) rotate(calc(var(--confetti-index) * 26deg)) scale(1);
+  }
+
+  100% {
+    opacity: 0.92;
+    transform: translateY(86vh) rotate(calc(var(--confetti-index) * 42deg)) scale(0.92);
   }
 }

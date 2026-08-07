@@ -1,4 +1,4 @@
-import { type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import truckStage0Axles from '../../assets/mechanic/truck-stage-0-axles.png'
 import truckStage1OneWheel from '../../assets/mechanic/truck-stage-1-one-wheel.png'
 import truckStage2TwoWheels from '../../assets/mechanic/truck-stage-2-two-wheels.png'
@@ -46,7 +46,7 @@ function getTruckStage(installedTires: TruckPreviewProps['installedTires']) {
   return 0
 }
 
-function TruckStageImage({ stage }: { stage: number }) {
+function TruckStageImage({ stage, isOutgoing = false }: { stage: number; isOutgoing?: boolean }) {
   const alignment = truckStageAlignment[stage]
   const stageStyle = {
     '--stage-x': alignment.x,
@@ -54,7 +54,7 @@ function TruckStageImage({ stage }: { stage: number }) {
   } as CSSProperties
 
   return (
-    <div className="truck-preview__stage-window" aria-hidden>
+    <div className={`truck-preview__stage-window${isOutgoing ? ' truck-preview__stage-window--outgoing' : ''}`} aria-hidden>
       <img
         className="truck-preview__stage-image"
         src={truckStageAssets[stage]}
@@ -88,11 +88,35 @@ function CompleteTruckImage({ bodyColor }: { bodyColor: TruckColor }) {
 
 export default function TruckPreview({ bodyColor, isComplete, installedTires }: TruckPreviewProps) {
   const truckStage = getTruckStage(installedTires)
+  const wasComplete = useRef(isComplete)
+  const [isCompleting, setIsCompleting] = useState(false)
+
+  useEffect(() => {
+    if (!wasComplete.current && isComplete) {
+      setIsCompleting(true)
+      const timeoutId = window.setTimeout(() => setIsCompleting(false), 880)
+
+      return () => window.clearTimeout(timeoutId)
+    }
+
+    wasComplete.current = isComplete
+  }, [isComplete])
+
+  useEffect(() => {
+    wasComplete.current = isComplete
+  }, [isComplete, isCompleting])
 
   return (
     <section className="truck-preview" aria-label="Truck assembly area">
-      <div className={`truck-preview__assembly${isComplete ? ' truck-preview__assembly--complete' : ''}`}>
-        {isComplete ? <CompleteTruckImage bodyColor={bodyColor} /> : <TruckStageImage stage={truckStage} />}
+      <div className={`truck-preview__assembly${isComplete ? ' truck-preview__assembly--complete' : ''}${isCompleting ? ' truck-preview__assembly--transitioning' : ''}`}>
+        {isComplete ? (
+          <>
+            {isCompleting && <TruckStageImage stage={3} isOutgoing />}
+            <CompleteTruckImage bodyColor={bodyColor} />
+          </>
+        ) : (
+          <TruckStageImage stage={truckStage} />
+        )}
       </div>
     </section>
   )

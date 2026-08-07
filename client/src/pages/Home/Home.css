@@ -1,15 +1,3 @@
-/* Home.css
-   Responsive, mobile-first Home screen layout.
-   - Background scales inside the viewport without cropping
-   - Avatar stands front-center on the playhouse rug
-   - Uses CSS variables, rem, and clamp() for responsive sizing
-*/
-
-:root {
-  --scene-max-height: min(100dvh, 700px);
-  --scene-max-width: min(100vw, 1440px, calc(var(--scene-max-height) * 3 / 2));
-}
-
 .home {
   width: 100vw;
   height: 100vh;
@@ -22,9 +10,8 @@
 }
 
 .home__scene-frame {
-  width: var(--scene-max-width);
-  max-height: var(--scene-max-height);
-  aspect-ratio: 3 / 2;
+  width: 100%;
+  height: 100%;
   position: relative;
   flex: 0 0 auto;
   overflow: hidden;
@@ -40,12 +27,18 @@
   inset: 0;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100% 100%;
+  background-size: cover;
   background-attachment: scroll;
   z-index: 0;
 }
 
+.home__bg--playhouse {
+  background-position: center 34%;
+}
+
 .mechanic__bg {
+  background-position: center;
+  background-size: 100% 100%;
   filter: brightness(1.18) saturate(1.04);
 }
 
@@ -100,7 +93,7 @@
 
   left: 3.5%;
   right: 3.5%;
-  bottom: 1.6%;
+  bottom: 0.5%;
   height: 16.8%;
 
   display: flex;
@@ -114,9 +107,9 @@
 .home__nav-hotspot {
   position: relative;
   display: block;
-  width: 24.3%;
+  width: 22.8%;
   height: 100%;
-  flex: 0 0 24.3%;
+  flex: 0 0 22.8%;
   border: none;
   background: transparent;
   color: inherit;
@@ -128,7 +121,7 @@
 }
 
 .home__nav-hotspot + .home__nav-hotspot {
-  margin-left: -1.2%;
+  margin-left: -2.8%;
 }
 
 .home__nav-image {
@@ -159,15 +152,15 @@
 
 .home__avatar-wrap {
   position: absolute;
-  left: 49.5%;
-  top: 21%;
-  width: 35%;
-  height: 69%;
+  left: 50%;
+  top: 20%;
+  width: 48%;
+  height: 80%;
   transform: translateX(-50%);
   overflow: hidden;
   display: block;
   border-radius: 0.75rem;
-  z-index: 2;
+  z-index: 24;
   pointer-events: none;
 }
 

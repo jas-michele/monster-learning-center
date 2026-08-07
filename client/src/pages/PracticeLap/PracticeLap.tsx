@@ -10,6 +10,8 @@ import redCompleteTruck from "../../assets/mechanic/redTruck.png";
 import blueCompleteTruck from "../../assets/mechanic/blueTruck.png";
 import greenCompleteTruck from "../../assets/mechanic/greenTruck.png";
 import purpleCompleteTruck from "../../assets/mechanic/purpleTruck.png";
+import lapAssets from "../../assets/lapassets.png";
+import raceAvatar from "../../assets/avatars/race.png";
 
 import Countdown from "../../components/Countdown/Countdown";
 
@@ -133,6 +135,18 @@ export default function PracticeLap() {
 
             <Countdown value={countdown} />
 
+            <div className={`practice-lap-effects ${driving ? "practice-lap-effects--active" : ""}`} aria-hidden>
+                <div className="practice-lap-obstacle practice-lap-obstacle--mound" style={{ backgroundImage: `url(${lapAssets})` }} />
+                <div className="practice-lap-obstacle practice-lap-obstacle--puddle" style={{ backgroundImage: `url(${lapAssets})` }} />
+                <div className="practice-lap-splash" />
+                <div className="practice-lap-finished" style={{ backgroundImage: `url(${lapAssets})` }} />
+                <div className="practice-lap-confetti">
+                    {Array.from({ length: 28 }, (_, index) => (
+                        <span key={index} />
+                    ))}
+                </div>
+            </div>
+
             <div className={`practice-truck-runner ${countdown && !driving ? "practice-truck-runner--revving" : ""} ${driving ? "practice-truck-runner--driving" : ""}`}>
                 <div className="practice-truck-stack">
                     <div className="practice-truck-smoke" aria-hidden>
@@ -140,6 +154,9 @@ export default function PracticeLap() {
                         <span />
                         <span />
                         <span />
+                    </div>
+                    <div className="practice-truck-driver" aria-hidden>
+                        <img src={raceAvatar} alt="" />
                     </div>
                     <img
                         className="practice-truck"
