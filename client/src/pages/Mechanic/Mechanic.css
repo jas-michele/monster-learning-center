@@ -972,3 +972,17 @@
 .truck-preview__body--complete {
   animation: truck-complete-pop 620ms ease-out;
 }
+
+.mechanic-guide__avatar--speaking .mechanic-guide__avatar-image {
+  animation: jaxTalk 0.18s infinite alternate;
+}
+
+@keyframes jaxTalk {
+  from {
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    transform: translateY(-2px) scale(1.01);
+  }
+}

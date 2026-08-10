@@ -2,6 +2,9 @@ import { useState } from "react";
 import type { Question } from "../../types/conversation";
 import "./QuestionCard.css";
 
+import speechRecognitionService from "../../services/speechRecognition";
+import { normalizeSpeech } from "../../utils/normalizeSpeech";
+
 
 interface QuestionCardProps {
   question: Question;
@@ -16,6 +19,7 @@ export default function QuestionCard({
   onSubmit,
 }: QuestionCardProps) {
   const [answer, setAnswer] = useState("");
+  const [isListening, setIsListening] = useState(false);
 
 
   function handleSubmit() {
@@ -25,6 +29,9 @@ export default function QuestionCard({
 
     setAnswer("");
   }
+
+
+
   return (
     <div className="question-card">
 
@@ -53,13 +60,39 @@ export default function QuestionCard({
       />
 
       <button
+        type="button"
+        className="question-card__mic"
+        disabled={isListening}
+        onClick={async () => {
+          try {
+            const transcript =
+              await speechRecognitionService.startListening(
+                setIsListening
+              );
+
+            const normalizedAnswer = normalizeSpeech(
+              transcript,
+              question.category
+            );
+
+            setAnswer(normalizedAnswer);
+
+            onSubmit(normalizedAnswer);
+          } catch (err) {
+            console.error(err);
+          }
+        }}
+      >
+        {isListening ? "🎙️ Listening..." : "🎤"}
+      </button>
+      <button
         className="question-card__button"
         onClick={handleSubmit}
         disabled={loading}
       >
         Build Truck!
       </button>
-    
+
 
     </div >
   );

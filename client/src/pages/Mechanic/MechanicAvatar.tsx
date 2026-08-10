@@ -9,6 +9,7 @@ type MechanicAvatarProps = {
   question: Question | null;
   loading: boolean;
   onSubmit: (answer: string) => Promise<void>;
+  isSpeaking: boolean;
 
   onMessageClick?: () => void
   messageActionLabel?: string
@@ -21,6 +22,7 @@ export default function MechanicAvatar({
   onSubmit,
   onMessageClick,
   messageActionLabel,
+  isSpeaking,
 }: MechanicAvatarProps) {
   const [typewriterState, setTypewriterState] = useState({ message, visibleLength: 0 })
 
@@ -49,7 +51,7 @@ export default function MechanicAvatar({
       <span className="mechanic-guide__message-visible">{visibleMessage}</span>
     </span>
   )
-
+console.log("isSpeaking:", isSpeaking);
   return (
     <aside className="mechanic-guide" aria-label="Jax the mechanic">
       {onMessageClick ? (
@@ -80,9 +82,19 @@ export default function MechanicAvatar({
           )}
         </div>
       )}
-      <div className="mechanic-guide__avatar" aria-hidden>
-        <img src={jaxAvatar} alt="" className="mechanic-guide__avatar-image" draggable={false} />
+      <div
+        className={`mechanic-guide__avatar ${isSpeaking ? "mechanic-guide__avatar--speaking" : ""
+          }`}
+        aria-hidden
+      >
+        <img
+          src={jaxAvatar}
+          alt=""
+          className="mechanic-guide__avatar-image"
+          draggable={false}
+        />
       </div>
+      {/* <div>{isSpeaking ? "Speaking" : "Silent"}</div> */}
     </aside>
   )
 }

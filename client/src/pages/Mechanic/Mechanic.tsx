@@ -22,6 +22,7 @@ export default function Mechanic() {
   const [question, setQuestion] = useState<Question | null>(null);
   const [conversationState, setConversationState] = useState<ConversationState | null>(null);
   const [loadingQuestion, setLoadingQuestion] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const [installedTires, setInstalledTires] = useState({
     frontLeft: false,
@@ -32,14 +33,33 @@ export default function Mechanic() {
 
 
 
+  function updateDialogue(
+    message: string,
+    nextQuestion: Question | null,
+    nextConversationState: ConversationState
+  ) {
+    setConversationState(nextConversationState);
+    setQuestion(nextQuestion);
+    setGuideMessage(message);
+  }
+
 
   async function loadConversation() {
+
+    console.log("loadConversation");
     try {
       const response = await startConversation();
 
-      setGuideMessage(response.greeting);
-      setQuestion(response.firstQuestion);
-      setConversationState(response.conversationState);
+      updateDialogue(
+        response.greeting,
+        response.firstQuestion,
+        response.conversationState
+      );
+
+      await playDialogue(
+        response.greeting,
+        response.firstQuestion
+      );
     } catch (error) {
       console.error(error);
     }
@@ -64,7 +84,7 @@ export default function Mechanic() {
         conversationState
       );
 
-      handleResponse(response);
+    await handleResponse(response);
     } catch (error) {
       console.error(error);
     } finally {
@@ -115,26 +135,35 @@ export default function Mechanic() {
     )
     navigate('/practice-lap')
   }
-
-  function handleResponse(response: RespondConversationResponse) {
-    setGuideMessage(response.message);
-
-    setConversationState(response.conversationState);
-
-    setQuestion(response.nextQuestion);
-
-    if (response.correct) {
-      if (installedTires.frontLeft && installedTires.frontRight && installedTires.rearRight && !installedTires.rearLeft) {
-        setCustomization((currentCustomization) => ({
-          ...currentCustomization,
-          bodyColor: 'black',
-          roofLights: 'four-light',
-        }));
-      }
-
-      installNextTire();
+ async function handleResponse(response: RespondConversationResponse) {
+  if (response.correct) {
+    if (
+      installedTires.frontLeft &&
+      installedTires.frontRight &&
+      installedTires.rearRight &&
+      !installedTires.rearLeft
+    ) {
+      setCustomization((currentCustomization) => ({
+        ...currentCustomization,
+        bodyColor: "black",
+        roofLights: "four-light",
+      }));
     }
+
+    installNextTire();
   }
+
+  updateDialogue(
+    response.message,
+    response.nextQuestion,
+    response.conversationState
+  );
+
+  await playDialogue(
+    response.message,
+    response.nextQuestion
+  );
+}
 
 
   function installNextTire() {
@@ -160,13 +189,45 @@ export default function Mechanic() {
     });
   }
 
-  useEffect(() => {
-    if (!guideMessage) return;
-    
-    speak(guideMessage).catch((err) => {
-      console.error("Voice error:", err);
-    });
-  }, [guideMessage]);
+function buildQuestionText(question: Question) {
+  switch (question.category) {
+    case "letters":
+      return "What letter is this?";
+
+    case "numbers":
+      return "What number is this?";
+
+    case "colors":
+      return "What color is this?";
+
+    case "shapes":
+      return "What shape is this?";
+
+    default:
+      return "";
+  }
+}
+
+  async function playDialogue(
+    message: string,
+    nextQuestion: Question | null
+  ) {
+    try {
+      setIsSpeaking(true);
+
+      await speak(message);
+
+      if (nextQuestion) {
+        await speak(buildQuestionText(nextQuestion));
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSpeaking(false);
+    }
+  }
+
+
 
   return (
     <div className="home" role="main" aria-label="Mechanic shop">
@@ -210,6 +271,7 @@ export default function Mechanic() {
               question={question}
               loading={loadingQuestion}
               onSubmit={handleAnswer}
+              isSpeaking={isSpeaking}
             />
           </div>
         </div>
