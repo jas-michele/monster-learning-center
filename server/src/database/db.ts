@@ -3,14 +3,13 @@ import { open } from "sqlite";
 import path from "node:path";
 import fs from "fs/promises";
 
-const databasePath= path.resolve(
-    process.cwd(),
-    "data",
-    "monster-learning.db"
-);
+const dataDirectory = path.resolve(process.cwd(), "data");
+const databasePath= path.resolve(dataDirectory, "monster-learning.db");
 
 
 export async function connectDB() {
+    await fs.mkdir(dataDirectory, { recursive: true });
+
     const db = await open({
         filename: databasePath,
         driver: sqlite3.Database,

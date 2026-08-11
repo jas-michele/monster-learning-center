@@ -46,7 +46,7 @@ const Home: React.FC = () => {
     <div className="home" role="main" aria-label="Playhouse home screen">
       <div className="home__scene-frame">
         <div className="home__scene">
-          <div className="home__bg" style={{ backgroundImage: `url(${bg})` }} aria-hidden />
+          <div className="home__bg home__bg--playhouse" style={{ backgroundImage: `url(${bg})` }} aria-hidden />
 
           <div className="home__top-actions" aria-label="Playhouse tools">
             <button type="button" className="home__top-action home__top-action--achievements" aria-label="Achievements">

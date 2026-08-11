@@ -51,15 +51,27 @@ export default function PlayAreaNav({ mechanicAsHome = false, onPreview, onReset
       )}
 
       {navItems.slice(1).map((item) => (
-        <button
-          key={item.key}
-          className={`home__nav-hotspot home__nav-hotspot--${item.key === 'safari' ? 'dino' : item.key}`}
-          aria-label={item.label}
-          type="button"
-          {...previewProps(item.key)}
-        >
-          <img src={item.image} alt="" className="home__nav-image" aria-hidden />
-        </button>
+        item.key === 'race' ? (
+          <Link
+            key={item.key}
+            className="home__nav-hotspot home__nav-hotspot--race"
+            aria-label={item.label}
+            to="/practice-lap"
+            {...previewProps(item.key)}
+          >
+            <img src={item.image} alt="" className="home__nav-image" aria-hidden />
+          </Link>
+        ) : (
+          <button
+            key={item.key}
+            className={`home__nav-hotspot home__nav-hotspot--${item.key === 'safari' ? 'dino' : item.key}`}
+            aria-label={item.label}
+            type="button"
+            {...previewProps(item.key)}
+          >
+            <img src={item.image} alt="" className="home__nav-image" aria-hidden />
+          </button>
+        )
       ))}
     </nav>
   )

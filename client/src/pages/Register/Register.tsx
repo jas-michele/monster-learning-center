@@ -1,8 +1,13 @@
 import { useState } from "react";
-import { registerUser } from "../../services/authService";
+import { loginUser, registerUser } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
+import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
+import "./Register.css";
+
+type AuthMode = "register" | "login";
 
 const Register = () => {
+    const [authMode, setAuthMode] = useState<AuthMode>("register");
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -13,6 +18,7 @@ const Register = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const isLogin = authMode === "login";
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -28,7 +34,12 @@ const Register = () => {
             setLoading(true);
             setError("");
 
-            const data = await registerUser(formData);
+            const data = isLogin
+                ? await loginUser({
+                    email: formData.email,
+                    password: formData.password,
+                })
+                : await registerUser(formData);
 
             console.log("API Response:", data);
 
@@ -40,53 +51,85 @@ const Register = () => {
 
         } catch (err: any) {
             console.error(err);
-            setError(err.response?.data?.message || "Registration failed.");
+            setError(err.response?.data?.message || `${isLogin ? "Login" : "Registration"} failed.`);
         } finally {
             setLoading(false);
         }
     };
 
+    const toggleAuthMode = () => {
+        setAuthMode(isLogin ? "register" : "login");
+        setError("");
+    };
+
 
     return (
-        <div>
-            <h1>Create Account</h1>
+        <div className="register-page">
+            <div className="register-scene-frame">
+                <div className="register-scene" />
 
-            <form onSubmit={handleSubmit}>
-                <input
-                    name="firstName"
-                    placeholder="First Name"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                />
+                <main className={`register-card ${isLogin ? "login-card" : ""}`} aria-label={isLogin ? "Login" : "Create an account"}>
+                    <form onSubmit={handleSubmit} className="register-form">
+                        {!isLogin && (
+                            <>
+                                <label className="register-field">
+                                    <FaUser aria-hidden="true" />
+                                    <input
+                                        name="firstName"
+                                        placeholder="First Name"
+                                        value={formData.firstName}
+                                        onChange={handleChange}
+                                    />
+                                </label>
 
-                <input
-                    name="lastName"
-                    placeholder="Last Name"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                />
+                                <label className="register-field">
+                                    <FaUser aria-hidden="true" />
+                                    <input
+                                        name="lastName"
+                                        placeholder="Last Name"
+                                        value={formData.lastName}
+                                        onChange={handleChange}
+                                    />
+                                </label>
+                            </>
+                        )}
 
-                <input
-                    name="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                />
+                        <label className="register-field">
+                            <FaEnvelope aria-hidden="true" />
+                            <input
+                                name="email"
+                                placeholder="Email Address"
+                                value={formData.email}
+                                onChange={handleChange}
+                            />
+                        </label>
 
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={formData.password}
-                    onChange={handleChange}
-                />
+                        <label className="register-field">
+                            <FaLock aria-hidden="true" />
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Password"
+                                value={formData.password}
+                                onChange={handleChange}
+                            />
+                        </label>
 
-                <button type="submit" disabled={loading}>
-                    {loading ? "Creating Account..." : "Register"}
-                </button>
-            </form>
+                        <button type="submit" className="register-submit" disabled={loading}>
+                            {loading ? (isLogin ? "Logging In..." : "Creating Account...") : (isLogin ? "Login" : "Register")}
+                        </button>
 
-            {error && <p>{error}</p>}
+                        <p className="auth-mode-prompt">
+                            {isLogin ? "Need an account?" : "Already have an account?"}
+                            <button type="button" onClick={toggleAuthMode}>
+                                {isLogin ? "Create account" : "Login"}
+                            </button>
+                        </p>
+                    </form>
+
+                    {error && <p className="register-error">{error}</p>}
+                </main>
+            </div>
         </div>
     );
 };

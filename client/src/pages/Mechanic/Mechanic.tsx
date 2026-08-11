@@ -235,7 +235,7 @@ function buildQuestionText(question: Question) {
         <div className="home__scene">
           <div className="home__bg mechanic__bg" style={{ backgroundImage: `url(${garageBg})` }} aria-hidden />
           <div className="mechanic-shop">
-            <Link className="mechanic-exit" to="/" aria-label="Go back to the playhouse">
+            <Link className="mechanic-exit" to="/home" aria-label="Go back to the playhouse">
               <FaSignOutAlt aria-hidden />
             </Link>
             <CustomizationPanel
