@@ -5,6 +5,7 @@ import racetrackNav from '../assets/racetrackNav.png'
 import dinohuntNav from '../assets/dinohuntNav.png'
 import storyTimeNav from '../assets/storyTimeNav.png'
 import type { AvatarOutfit } from './Avatar'
+import { startEngineRev } from '../utils/engineAudio'
 
 type NavItem = {
   key: 'mechanic' | 'race' | 'safari' | 'storytime'
@@ -57,6 +58,7 @@ export default function PlayAreaNav({ mechanicAsHome = false, onPreview, onReset
             className="home__nav-hotspot home__nav-hotspot--race"
             aria-label={item.label}
             to="/practice-lap"
+            onClick={startEngineRev}
             {...previewProps(item.key)}
           >
             <img src={item.image} alt="" className="home__nav-image" aria-hidden />

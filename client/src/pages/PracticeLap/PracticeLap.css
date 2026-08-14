@@ -130,7 +130,7 @@
 .practice-lap-obstacle--mound {
     left: 79%;
     top: 76%;
-    width: clamp(10rem, 23vw, 25rem);
+    width: clamp(15rem, 34.5vw, 37.5rem);
     aspect-ratio: 3 / 2;
     background-position: 0 0;
     transform: translate(-50%, -50%) scale(0.82);
@@ -140,7 +140,7 @@
 .practice-lap-obstacle--puddle {
     left: 14%;
     top: 73%;
-    width: clamp(9rem, 19vw, 20rem);
+    width: clamp(13.5rem, 28.5vw, 30rem);
     aspect-ratio: 3 / 2;
     background-position: 100% 0;
     transform: translate(-50%, -50%) scale(0.8);
@@ -152,7 +152,7 @@
     position: absolute;
     left: 14%;
     top: 70.5%;
-    width: clamp(5rem, 11vw, 11rem);
+    width: clamp(7.5rem, 16.5vw, 16.5rem);
     aspect-ratio: 1.8;
     border-radius: 50%;
     opacity: 0;
@@ -264,7 +264,7 @@
 
 .practice-truck-stack {
     position: relative;
-    width: clamp(155px, 15.2vw, 285px);
+    width: clamp(232.5px, 22.8vw, 427.5px);
     transform: translate(-50%, -100%) scale(1);
     transform-origin: center bottom;
 }

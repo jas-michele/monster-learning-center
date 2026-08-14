@@ -12,61 +12,15 @@ import greenCompleteTruck from "../../assets/mechanic/greenTruck.png";
 import purpleCompleteTruck from "../../assets/mechanic/purpleTruck.png";
 import lapAssets from "../../assets/lapassets.png";
 import raceAvatar from "../../assets/avatars/race.png";
+import {
+    playCrowdCheer,
+    playPuddleSplash,
+    scheduleEngineRevStop,
+    startEngineRev,
+    stopEngineRev,
+} from "../../utils/engineAudio";
 
 import Countdown from "../../components/Countdown/Countdown";
-
-function startEngineRev() {
-    const AudioContextConstructor =
-        window.AudioContext ||
-        (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-
-    if (!AudioContextConstructor) return undefined;
-
-    const audioContext = new AudioContextConstructor();
-    const engineOscillator = audioContext.createOscillator();
-    const revPulse = audioContext.createOscillator();
-    const lowPass = audioContext.createBiquadFilter();
-    const gain = audioContext.createGain();
-    const pulseGain = audioContext.createGain();
-
-    engineOscillator.type = "sawtooth";
-    engineOscillator.frequency.setValueAtTime(58, audioContext.currentTime);
-    engineOscillator.frequency.linearRampToValueAtTime(88, audioContext.currentTime + 3.2);
-
-    revPulse.type = "sine";
-    revPulse.frequency.setValueAtTime(7.5, audioContext.currentTime);
-    pulseGain.gain.setValueAtTime(10, audioContext.currentTime);
-    revPulse.connect(pulseGain);
-    pulseGain.connect(engineOscillator.frequency);
-
-    lowPass.type = "lowpass";
-    lowPass.frequency.setValueAtTime(190, audioContext.currentTime);
-    lowPass.frequency.linearRampToValueAtTime(360, audioContext.currentTime + 3.2);
-
-    gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.035, audioContext.currentTime + 0.12);
-    gain.gain.exponentialRampToValueAtTime(0.055, audioContext.currentTime + 3.1);
-
-    engineOscillator.connect(lowPass);
-    lowPass.connect(gain);
-    gain.connect(audioContext.destination);
-
-    engineOscillator.start();
-    revPulse.start();
-    void audioContext.resume().catch(() => undefined);
-
-    return () => {
-        const stopTime = audioContext.currentTime + 0.08;
-        gain.gain.cancelScheduledValues(audioContext.currentTime);
-        gain.gain.setValueAtTime(Math.max(gain.gain.value, 0.0001), audioContext.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, stopTime);
-        engineOscillator.stop(stopTime);
-        revPulse.stop(stopTime);
-        window.setTimeout(() => {
-            void audioContext.close().catch(() => undefined);
-        }, 140);
-    };
-}
 
 export default function PracticeLap() {
 
@@ -94,7 +48,7 @@ export default function PracticeLap() {
 
     useEffect(() => {
         const values = ["3", "2", "1", "GO!"];
-        const stopEngineRev = startEngineRev();
+        startEngineRev();
 
         let index = 0;
 
@@ -105,7 +59,7 @@ export default function PracticeLap() {
                 setCountdown(values[index]);
             } else {
                 clearInterval(timer);
-                stopEngineRev?.();
+                stopEngineRev();
 
                 setTimeout(() => {
                     setCountdown("");
@@ -116,9 +70,25 @@ export default function PracticeLap() {
 
         return () => {
             clearInterval(timer);
-            stopEngineRev?.();
+            scheduleEngineRevStop();
         };
     }, []);
+
+    useEffect(() => {
+        if (!driving) return undefined;
+
+        const splashTimer = window.setTimeout(() => {
+            playPuddleSplash();
+        }, 7560);
+        const cheerTimer = window.setTimeout(() => {
+            playCrowdCheer();
+        }, 8100);
+
+        return () => {
+            window.clearTimeout(splashTimer);
+            window.clearTimeout(cheerTimer);
+        };
+    }, [driving]);
 
 
     return (

@@ -10,6 +10,7 @@ import TruckPreview from './TruckPreview'
 import { colorOptions, defaultTruckCustomization, type TruckColor, type TruckCustomization } from './truckCustomization'
 import { startConversation, respondConversation } from '../../services/conversationApi'
 import type { ConversationState, Question, RespondConversationResponse } from '../../types/conversation'
+import { startEngineRev } from '../../utils/engineAudio'
 
 
 const paintOptions = colorOptions.filter((color) => ['red', 'blue', 'green', 'purple'].includes(color.value))
@@ -105,6 +106,7 @@ export default function Mechanic() {
 
   const saveAndRace = (nextCustomization: TruckCustomization) => {
     setGuideMessage("Let's hit the track!")
+    startEngineRev()
     window.localStorage.setItem(
       'monsterTruckCustomization',
       JSON.stringify({
