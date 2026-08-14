@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import playhouseNav from '../assets/playhouse/playhouseNav-mechanic-fit.png'
 import mechanicNav from '../assets/mechanic/mechanicNav.png'
-import racetrackNav from '../assets/racetrackNav.png'
+import racetrackNav from '../assets/practiceLap/racetrackNav.png'
 import dinohuntNav from '../assets/dinohuntNav.png'
 import storyTimeNav from '../assets/storyTimeNav.png'
 import type { AvatarOutfit } from './Avatar'

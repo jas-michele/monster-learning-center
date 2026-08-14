@@ -10,7 +10,7 @@ import redCompleteTruck from "../../assets/mechanic/redTruck.png";
 import blueCompleteTruck from "../../assets/mechanic/blueTruck.png";
 import greenCompleteTruck from "../../assets/mechanic/greenTruck.png";
 import purpleCompleteTruck from "../../assets/mechanic/purpleTruck.png";
-import lapAssets from "../../assets/lapassets.png";
+import lapAssets from "../../assets/practiceLap/lapassets.png";
 import raceAvatar from "../../assets/avatars/race.png";
 import {
     playCrowdCheer,

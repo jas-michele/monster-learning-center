@@ -200,40 +200,37 @@ export function playCrowdCheer() {
   if (!context) return;
 
   const now = context.currentTime;
-  const cheerNoise = context.createBufferSource();
-  const cheerFilter = context.createBiquadFilter();
-  const cheerGain = context.createGain();
+  const voiceFilter = context.createBiquadFilter();
+  const masterGain = context.createGain();
 
-  cheerNoise.buffer = makeNoiseBuffer(context, 2.7);
-  cheerFilter.type = "bandpass";
-  cheerFilter.frequency.setValueAtTime(920, now);
-  cheerFilter.Q.setValueAtTime(0.75, now);
-  cheerGain.gain.setValueAtTime(0.0001, now);
-  cheerGain.gain.exponentialRampToValueAtTime(0.12, now + 0.18);
-  cheerGain.gain.setValueAtTime(0.12, now + 1.35);
-  cheerGain.gain.exponentialRampToValueAtTime(0.0001, now + 2.7);
+  voiceFilter.type = "bandpass";
+  voiceFilter.frequency.setValueAtTime(1450, now);
+  voiceFilter.Q.setValueAtTime(0.9, now);
+  masterGain.gain.setValueAtTime(0.0001, now);
+  masterGain.gain.exponentialRampToValueAtTime(0.16, now + 0.05);
+  masterGain.gain.setValueAtTime(0.14, now + 0.55);
+  masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
 
-  cheerNoise.connect(cheerFilter);
-  cheerFilter.connect(cheerGain);
-  cheerGain.connect(context.destination);
-  cheerNoise.start(now);
-  cheerNoise.stop(now + 2.75);
+  voiceFilter.connect(masterGain);
+  masterGain.connect(context.destination);
 
-  [360, 460, 560, 670, 780].forEach((frequency, index) => {
+  [420, 500, 595, 710].forEach((frequency, index) => {
     const voice = context.createOscillator();
     const voiceGain = context.createGain();
-    const startTime = now + index * 0.055;
+    const startTime = now + index * 0.035;
 
     voice.type = "triangle";
     voice.frequency.setValueAtTime(frequency, startTime);
-    voice.frequency.linearRampToValueAtTime(frequency * 1.18, startTime + 0.42);
+    voice.frequency.linearRampToValueAtTime(frequency * 0.82, startTime + 0.08);
+    voice.frequency.linearRampToValueAtTime(frequency * 1.42, startTime + 0.62);
     voiceGain.gain.setValueAtTime(0.0001, startTime);
-    voiceGain.gain.exponentialRampToValueAtTime(0.025, startTime + 0.08);
-    voiceGain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.8);
+    voiceGain.gain.exponentialRampToValueAtTime(0.045, startTime + 0.035);
+    voiceGain.gain.setValueAtTime(0.035, startTime + 0.32);
+    voiceGain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.02);
 
     voice.connect(voiceGain);
-    voiceGain.connect(context.destination);
+    voiceGain.connect(voiceFilter);
     voice.start(startTime);
-    voice.stop(startTime + 0.85);
+    voice.stop(startTime + 1.06);
   });
 }
