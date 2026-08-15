@@ -1,4 +1,4 @@
-import practiceTrack from"../assets/practiceLap.png"
+import practiceTrack from "../assets/practiceLap/practiceLap.png";
 
 export default function PracticeTrack() {
     return (
