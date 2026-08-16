@@ -1,0 +1,428 @@
+.explore-dino__bg {
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.explore-dino__design-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: auto;
+  width: 1440px;
+  height: 700px;
+  overflow: hidden;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+.explore-dino__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.explore-dino__trex {
+  width: min(74%, 68rem);
+  max-height: 68%;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0.28rem 0.5rem rgba(0, 0, 0, 0.5))
+    drop-shadow(0 0 0.62rem rgba(255, 215, 105, 0.18));
+  transform: translateY(4%);
+  animation: explore-dino-trex-rumble 1900ms ease-in-out 280ms both;
+  user-select: none;
+}
+
+.explore-dino__roar {
+  position: absolute;
+  left: 68%;
+  top: 36%;
+  z-index: 3;
+  width: 9rem;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.explore-dino__roar span {
+  position: absolute;
+  inset: 24%;
+  border: 0.16rem solid rgba(255, 232, 130, 0.72);
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow:
+    0 0 0.42rem rgba(255, 194, 57, 0.42),
+    inset 0 0 0.4rem rgba(255, 255, 255, 0.18);
+  animation: explore-dino-roar-pulse 820ms ease-out both;
+}
+
+.explore-dino__roar span:nth-child(1) {
+  animation-delay: 720ms;
+}
+
+.explore-dino__roar span:nth-child(2) {
+  animation-delay: 900ms;
+}
+
+.explore-dino__roar span:nth-child(3) {
+  animation-delay: 1080ms;
+}
+
+.explore-dino__info-panel {
+  position: absolute;
+  left: 2.2%;
+  top: 50%;
+  z-index: 1;
+  width: min(22%, 19rem);
+  min-height: 16rem;
+  box-sizing: border-box;
+  padding: 1rem 1.05rem;
+  border: 0.1rem solid rgba(135, 232, 58, 0.78);
+  border-radius: 0.72rem;
+  background:
+    linear-gradient(180deg, rgba(10, 38, 33, 0.9), rgba(6, 21, 19, 0.86)),
+    rgba(7, 25, 22, 0.82);
+  color: #f5ffe7;
+  box-shadow:
+    inset 0 0.08rem 0 rgba(255, 255, 255, 0.16),
+    0 0.18rem 0.46rem rgba(0, 0, 0, 0.34),
+    0 0 0.56rem rgba(135, 232, 58, 0.22);
+  text-shadow: 0 0.08rem 0.1rem rgba(0, 0, 0, 0.58);
+  transform: translateY(-50%);
+}
+
+.explore-dino__info-panel h1 {
+  margin: 0 0 0.22rem;
+  color: #ffe989;
+  font-size: 1.32rem;
+  font-weight: 1000;
+  line-height: 1.05;
+}
+
+.explore-dino__info-panel p {
+  margin: 0 0 0.82rem;
+  color: #fff3b7;
+  font-size: 0.82rem;
+  font-weight: 900;
+  line-height: 1.18;
+}
+
+.explore-dino__info-panel ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.58rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.explore-dino__info-panel li {
+  position: relative;
+  padding-left: 1rem;
+  font-size: 0.86rem;
+  font-weight: 850;
+  line-height: 1.22;
+}
+
+.explore-dino__info-panel li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.42em;
+  width: 0.38rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #9be048;
+  box-shadow: 0 0 0.3rem rgba(155, 224, 72, 0.52);
+}
+
+.explore-dino__avatar {
+  position: absolute;
+  right: -0.8%;
+  bottom: -27%;
+  z-index: 5;
+  width: min(27%, 24rem);
+  height: 92%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.explore-dino__foreground-bush {
+  position: absolute;
+  right: -5.4%;
+  bottom: -3%;
+  z-index: 6;
+  width: min(36%, 32rem);
+  max-height: 62%;
+  object-fit: contain;
+  object-position: right bottom;
+  filter: drop-shadow(0 0.2rem 0.28rem rgba(0, 0, 0, 0.24));
+  pointer-events: none;
+  user-select: none;
+}
+
+.explore-dino__avatar-image {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 0.62rem 0.72rem rgba(0, 0, 0, 0.38));
+  animation: explore-dino-jax-rise 1480ms cubic-bezier(0.18, 0.86, 0.28, 1.04) 2150ms both;
+  user-select: none;
+}
+
+.explore-dino__fact-buttons {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.74rem;
+  width: min(64%, 58rem);
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.explore-dino__fact-button {
+  width: 100%;
+  aspect-ratio: 3.16;
+  padding: 0;
+  border: 0;
+  border-radius: 0.7rem;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  cursor: pointer;
+  filter:
+    drop-shadow(0 0.16rem 0.22rem rgba(0, 0, 0, 0.38))
+    drop-shadow(0 0 0.16rem rgba(255, 242, 143, 0.16));
+  transition:
+    filter 160ms ease,
+    transform 160ms ease;
+}
+
+.explore-dino__fact-button--facts {
+  background-position: 0 0;
+}
+
+.explore-dino__fact-button--habitat {
+  background-position: 100% 0;
+}
+
+.explore-dino__fact-button--diet {
+  background-position: 0 100%;
+}
+
+.explore-dino__fact-button--size {
+  background-position: 100% 100%;
+}
+
+.explore-dino__fact-button:hover,
+.explore-dino__fact-button:focus-visible {
+  filter:
+    brightness(1.08)
+    drop-shadow(0 0.18rem 0.26rem rgba(0, 0, 0, 0.42))
+    drop-shadow(0 0 0.34rem rgba(255, 242, 143, 0.34));
+  transform: translateY(-0.08rem);
+}
+
+.explore-dino__fact-button:focus-visible {
+  outline: 0.18rem solid rgba(255, 255, 255, 0.96);
+  outline-offset: 0.08rem;
+}
+
+@keyframes explore-dino-trex-rumble {
+  0%,
+  100% {
+    transform: translateY(4%);
+  }
+
+  16% {
+    transform: translate(-0.36rem, 4.4%) rotate(-0.6deg);
+  }
+
+  28% {
+    transform: translate(0.42rem, 3.5%) rotate(0.5deg);
+  }
+
+  40% {
+    transform: translate(-0.3rem, 4.2%) rotate(-0.45deg);
+  }
+
+  52% {
+    transform: translate(0.24rem, 3.8%) rotate(0.3deg);
+  }
+
+  68% {
+    transform: translateY(3.2%) scale(1.012);
+  }
+}
+
+@keyframes explore-dino-roar-pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.34);
+  }
+
+  24% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+@keyframes explore-dino-jax-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(42%) scale(0.985);
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  74% {
+    opacity: 1;
+    transform: translateY(-1.5%) scale(1.005);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.explore-dino__nav {
+  position: absolute;
+  left: 1.55%;
+  bottom: 7.2%;
+  z-index: 10;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.explore-dino__nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(2rem, 4.3vw, 3rem);
+  aspect-ratio: 1;
+  border: 0.08rem solid rgba(255, 255, 255, 0.24);
+  border-radius: 50%;
+  background: rgba(10, 14, 16, 0.32);
+  color: rgba(228, 232, 232, 0.74);
+  text-decoration: none;
+  box-shadow:
+    inset 0 0.08rem 0 rgba(255, 255, 255, 0.1),
+    0 0.18rem 0.4rem rgba(0, 0, 0, 0.22);
+}
+
+.explore-dino__nav-button svg {
+  width: 52%;
+  height: 52%;
+  display: block;
+  filter: drop-shadow(0 0.08rem 0.08rem rgba(0, 0, 0, 0.42));
+}
+
+.explore-dino__nav-button--back svg {
+  transform: scaleX(-1);
+}
+
+.explore-dino__nav-button:hover {
+  transform: translateY(-0.08rem);
+}
+
+.explore-dino__nav-button:focus-visible {
+  outline: 0.22rem solid rgba(255, 255, 255, 0.95);
+  outline-offset: 0.12rem;
+}
+
+@media (min-width: 1440px) {
+  .explore-dino__trex {
+    width: 68rem;
+  }
+
+  .explore-dino__nav {
+    left: 22.32px;
+  }
+
+  .explore-dino__info-panel {
+    left: 31.68px;
+    width: 19rem;
+  }
+
+  .explore-dino__avatar {
+    right: -11.52px;
+  }
+
+  .explore-dino__foreground-bush {
+    right: -77.76px;
+    width: 32rem;
+  }
+
+  .explore-dino__fact-buttons {
+    bottom: 56px;
+  }
+}
+
+@media (max-width: 720px) {
+  .explore-dino__trex {
+    width: 88%;
+    max-height: 58%;
+    transform: translateY(8%);
+  }
+
+  .explore-dino__avatar {
+    right: -9%;
+    bottom: -31%;
+    width: 36%;
+  }
+
+  .explore-dino__foreground-bush {
+    right: -13%;
+    bottom: -4%;
+    width: 48%;
+  }
+
+  .explore-dino__fact-buttons {
+    left: 52%;
+    bottom: 13%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.42rem;
+    width: min(58%, 22rem);
+  }
+
+  .explore-dino__info-panel {
+    left: 4%;
+    top: 50%;
+    width: min(42%, 15rem);
+    min-height: 10rem;
+    padding: 0.72rem 0.78rem;
+  }
+
+  .explore-dino__info-panel h1 {
+    font-size: 1rem;
+  }
+
+  .explore-dino__info-panel p,
+  .explore-dino__info-panel li {
+    font-size: 0.68rem;
+  }
+
+  .explore-dino__info-panel ul {
+    gap: 0.34rem;
+  }
+}

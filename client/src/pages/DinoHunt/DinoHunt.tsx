@@ -1,19 +1,19 @@
 import '../Home/Home.css'
 import './DinoHunt.css'
-import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { type CSSProperties, useCallback, useEffect, useRef, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { FaBookOpen, FaRedo, FaSignOutAlt } from 'react-icons/fa'
-import dinoBg from '../../assets/dinoBG.png'
-import jaxDinoHunt from '../../assets/JaxDinoHunt.png'
-import trexWhole from '../../assets/dino/trex-whole.png'
-import trexSkull from '../../assets/dino/trex-skull.png'
-import trexFoot from '../../assets/dino/trex-foot.png'
-import trexLeg from '../../assets/dino/trex-leg.png'
-import trexTail from '../../assets/dino/trex-tail.png'
-import trexDragSkull from '../../assets/dino/trexdd-skull.png'
-import trexDragFoot from '../../assets/dino/trexdd-foot.png'
-import trexDragLeg from '../../assets/dino/trexdd-leg.png'
-import trexDragTail from '../../assets/dino/trexdd-tail.png'
+import dinoBg from '../../assets/dinohunt/scene/background.png'
+import jaxDinoHunt from '../../assets/dinohunt/scene/jax.png'
+import trexWhole from '../../assets/dinohunt/trex/whole.png'
+import trexSkull from '../../assets/dinohunt/trex/buttons/skull.png'
+import trexFoot from '../../assets/dinohunt/trex/buttons/foot.png'
+import trexLeg from '../../assets/dinohunt/trex/buttons/leg.png'
+import trexTail from '../../assets/dinohunt/trex/buttons/tail.png'
+import trexDragSkull from '../../assets/dinohunt/trex/drag/skull.png'
+import trexDragFoot from '../../assets/dinohunt/trex/drag/foot.png'
+import trexDragLeg from '../../assets/dinohunt/trex/drag/leg.png'
+import trexDragTail from '../../assets/dinohunt/trex/drag/tail.png'
 
 const dinosaurOptions = ['T-Rex', 'Stegosaurus', 'Triceratops']
 const buildOptions = [
@@ -37,11 +37,22 @@ const completedPartPlacements: Record<string, { x: number; y: number; widthVw: n
   tail: { x: 30.8, y: 53.1, widthVw: 18, maxRem: 16 },
 }
 
+const dinoDesignWidth = 1440
+const dinoDesignHeight = 700
+const partStagingPoint = { x: 36, y: 43 }
+
 type BuildPart = typeof buildOptions[number]
 type DraggingPart = BuildPart & { x: number; y: number; isDragging: boolean }
 
+const getScenePositionStyle = (x: number, y: number): CSSProperties => ({
+  '--dino-x': `${x}%`,
+  '--dino-y': `${y}%`,
+} as CSSProperties)
+
 export default function DinoHunt() {
+  const navigate = useNavigate()
   const sceneRef = useRef<HTMLDivElement | null>(null)
+  const [stageLayout, setStageLayout] = useState({ left: 0, top: 0, scale: 1 })
   const [selectedDinosaur, setSelectedDinosaur] = useState<string | null>(null)
   const [selectedParts, setSelectedParts] = useState<string[]>([])
   const [draggingPart, setDraggingPart] = useState<DraggingPart | null>(null)
@@ -50,18 +61,21 @@ export default function DinoHunt() {
   const canResetDino = selectedParts.length > 0
   const canSaveDino = selectedParts.length === buildOptions.length
 
-  const getScenePoint = (clientX: number, clientY: number) => {
+  const getScenePoint = useCallback((clientX: number, clientY: number) => {
     const sceneBounds = sceneRef.current?.getBoundingClientRect()
 
     if (!sceneBounds) {
       return { x: 50, y: 50 }
     }
 
+    const logicalX = (clientX - sceneBounds.left) / stageLayout.scale
+    const logicalY = (clientY - sceneBounds.top) / stageLayout.scale
+
     return {
-      x: ((clientX - sceneBounds.left) / sceneBounds.width) * 100,
-      y: ((clientY - sceneBounds.top) / sceneBounds.height) * 100,
+      x: (logicalX / dinoDesignWidth) * 100,
+      y: (logicalY / dinoDesignHeight) * 100,
     }
-  }
+  }, [stageLayout.scale])
 
   const showBuildPart = (part: BuildPart) => {
     if (selectedParts.includes(part.id)) {
@@ -69,7 +83,7 @@ export default function DinoHunt() {
       return
     }
 
-    setDraggingPart({ ...part, x: 36, y: 43, isDragging: false })
+    setDraggingPart({ ...part, ...partStagingPoint, isDragging: false })
     setBuildMessage(`Great! Now drag the ${part.label.toLowerCase()} into its glowing spot.`)
   }
 
@@ -87,8 +101,27 @@ export default function DinoHunt() {
   }
 
   const saveDino = () => {
-    setBuildMessage("Amazing build, Derrick! Your T-Rex is ready for dinosaur facts.")
+    navigate('/explore-dino')
   }
+
+  useEffect(() => {
+    const updateStageLayout = () => {
+      const scale = Math.min(window.innerWidth / dinoDesignWidth, window.innerHeight / dinoDesignHeight)
+      const scaledWidth = dinoDesignWidth * scale
+      const scaledHeight = dinoDesignHeight * scale
+
+      setStageLayout({
+        left: (window.innerWidth - scaledWidth) / 2,
+        top: (window.innerHeight - scaledHeight) / 2,
+        scale,
+      })
+    }
+
+    updateStageLayout()
+    window.addEventListener('resize', updateStageLayout)
+
+    return () => window.removeEventListener('resize', updateStageLayout)
+  }, [])
 
   useEffect(() => {
     if (!draggingPart?.isDragging) return
@@ -110,11 +143,11 @@ export default function DinoHunt() {
           currentParts.includes(draggingPart.id) ? currentParts : [...currentParts, draggingPart.id]
         ))
         setBuildMessage(`You found the right spot for the ${draggingPart.label.toLowerCase()}!`)
+        setDraggingPart(null)
       } else {
         setBuildMessage(`Almost! Try moving the ${draggingPart.label.toLowerCase()} closer to its glowing spot.`)
+        setDraggingPart({ ...draggingPart, ...partStagingPoint, isDragging: false })
       }
-
-      setDraggingPart(null)
     }
 
     window.addEventListener('pointermove', moveDraggingPart)
@@ -124,19 +157,24 @@ export default function DinoHunt() {
       window.removeEventListener('pointermove', moveDraggingPart)
       window.removeEventListener('pointerup', finishDraggingPart)
     }
-  }, [draggingPart])
+  }, [draggingPart, getScenePoint])
+
+  const canvasStyle: CSSProperties = {
+    transform: `translate(${stageLayout.left}px, ${stageLayout.top}px) scale(${stageLayout.scale})`,
+  }
 
   return (
     <div className="home" role="main" aria-label="Dino hunt">
       <div className="home__scene-frame">
         <div className="home__scene">
-          <div className="home__bg" style={{ backgroundImage: `url(${dinoBg})` }} aria-hidden />
-          <Link className="dino-hunt__exit" to="/home" aria-label="Go back to the playhouse">
-            <FaSignOutAlt aria-hidden />
-          </Link>
           <div className="dino-hunt__stage">
-            {isTrexSelected ? (
-              <div className="dino-hunt__trex-scene" aria-label="Build a T-Rex" ref={sceneRef}>
+            <div className="dino-hunt__canvas" style={canvasStyle} ref={sceneRef}>
+              <div className="home__bg" style={{ backgroundImage: `url(${dinoBg})` }} aria-hidden />
+              <Link className="dino-hunt__exit" to="/home" aria-label="Go back to the playhouse">
+                <FaSignOutAlt aria-hidden />
+              </Link>
+              {isTrexSelected ? (
+                <div className="dino-hunt__trex-scene" aria-label="Build a T-Rex">
                 <div className="dino-hunt__message dino-hunt__message--build" aria-live="polite">
                   <span className="dino-hunt__message-prompt">
                     {buildMessage}
@@ -151,9 +189,11 @@ export default function DinoHunt() {
                         alt=""
                         className={`dino-hunt__completed-part dino-hunt__completed-part--${option.id}`}
                         style={{
-                          left: `${completedPartPlacements[option.id].x}%`,
-                          top: `${completedPartPlacements[option.id].y}%`,
-                          width: `min(${completedPartPlacements[option.id].widthVw}vw, ${completedPartPlacements[option.id].maxRem}rem)`,
+                          ...getScenePositionStyle(
+                            completedPartPlacements[option.id].x,
+                            completedPartPlacements[option.id].y,
+                          ),
+                          width: `min(${completedPartPlacements[option.id].widthVw}%, ${completedPartPlacements[option.id].maxRem}rem)`,
                         }}
                         draggable={false}
                         key={option.id}
@@ -165,10 +205,7 @@ export default function DinoHunt() {
                   {buildOptions.map((option) => (
                     <span
                       className={`dino-hunt__drop-target${draggingPart?.id === option.id ? ' dino-hunt__drop-target--active' : ''}${selectedParts.includes(option.id) ? ' dino-hunt__drop-target--complete' : ''}`}
-                      style={{
-                        left: `${dropTargets[option.id].x}%`,
-                        top: `${dropTargets[option.id].y}%`,
-                      }}
+                      style={getScenePositionStyle(dropTargets[option.id].x, dropTargets[option.id].y)}
                       key={option.id}
                     />
                   ))}
@@ -192,10 +229,7 @@ export default function DinoHunt() {
                 {draggingPart && (
                   <div
                     className={`dino-hunt__dragging-part dino-hunt__dragging-part--${draggingPart.id}${draggingPart.isDragging ? ' dino-hunt__dragging-part--active' : ''}`}
-                    style={{
-                      left: `${draggingPart.x}%`,
-                      top: `${draggingPart.y}%`,
-                    }}
+                    style={getScenePositionStyle(draggingPart.x, draggingPart.y)}
                     onPointerDown={(event) => {
                       event.preventDefault()
                       startDraggingPart(event.clientX, event.clientY)
@@ -212,37 +246,38 @@ export default function DinoHunt() {
                   </button>
                   <button type="button" className="dino-hunt__save" disabled={!canSaveDino} onClick={saveDino}>
                     <FaBookOpen aria-hidden />
-                    Save &amp; Explore Dino Facts
+                    Save &amp; Explore
                   </button>
                 </div>
-              </div>
-            ) : (
-              <div className="dino-hunt__message" aria-live="polite">
-                <span className="dino-hunt__message-prompt">
-                  Derrick, which dinosaur would you like to build?
+                </div>
+              ) : (
+                <div className="dino-hunt__message" aria-live="polite">
+                  <span className="dino-hunt__message-prompt">
+                    Derrick, which dinosaur would you like to build?
+                  </span>
+                  <span className="dino-hunt__message-options">
+                    {dinosaurOptions.map((dinosaur) => (
+                      <button
+                        type="button"
+                        className="dino-hunt__option"
+                        onClick={() => setSelectedDinosaur(dinosaur)}
+                        key={dinosaur}
+                      >
+                        {dinosaur}
+                      </button>
+                    ))}
                 </span>
-                <span className="dino-hunt__message-options">
-                  {dinosaurOptions.map((dinosaur) => (
-                    <button
-                      type="button"
-                      className="dino-hunt__option"
-                      onClick={() => setSelectedDinosaur(dinosaur)}
-                      key={dinosaur}
-                    >
-                      {dinosaur}
-                    </button>
-                  ))}
-                </span>
-              </div>
-            )}
-            <div className="dino-hunt__avatar" aria-hidden>
-              <img
-                src={jaxDinoHunt}
-                alt=""
-                className="dino-hunt__avatar-image"
-                draggable={false}
-              />
+                </div>
+              )}
             </div>
+          </div>
+          <div className="dino-hunt__avatar" aria-hidden>
+            <img
+              src={jaxDinoHunt}
+              alt=""
+              className="dino-hunt__avatar-image"
+              draggable={false}
+            />
           </div>
         </div>
       </div>
