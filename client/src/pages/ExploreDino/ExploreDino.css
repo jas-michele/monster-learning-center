@@ -15,6 +15,18 @@
   pointer-events: none;
 }
 
+.explore-dino__breakout-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 12;
+  width: 1440px;
+  height: 700px;
+  overflow: visible;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
 .explore-dino__stage {
   position: absolute;
   inset: 0;
@@ -154,7 +166,7 @@
 .explore-dino__foreground-bush {
   position: absolute;
   right: -5.4%;
-  bottom: -3%;
+  bottom: -10%;
   z-index: 6;
   width: min(36%, 32rem);
   max-height: 62%;
@@ -370,6 +382,7 @@
 
   .explore-dino__foreground-bush {
     right: -77.76px;
+    bottom: -70px;
     width: 32rem;
   }
 
@@ -393,7 +406,7 @@
 
   .explore-dino__foreground-bush {
     right: -13%;
-    bottom: -4%;
+    bottom: -11%;
     width: 48%;
   }
 

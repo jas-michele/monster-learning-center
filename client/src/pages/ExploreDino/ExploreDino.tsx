@@ -3,11 +3,11 @@ import './ExploreDino.css'
 import { type CSSProperties, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FaSignOutAlt } from 'react-icons/fa'
-import exploreDinoBg from '../../assets/ExploreDinoBG.png'
-import dinoFactsButtons from '../../assets/DinoFactsButtons.png'
-import bodiedTrex from '../../assets/dinohunt/source-sheets/trex-bodied.png'
+import exploreDinoBg from '../../assets/dinohunt/explore/background.png'
+import dinoFactsButtons from '../../assets/dinohunt/explore/fact-buttons.png'
+import bodiedTrex from '../../assets/dinohunt/explore/trex-bodied.png'
 import safariAvatar from '../../assets/avatars/safari.png'
-import bushOverlay from '../../assets/Bushoverlay_files/adb1b66d-4cdd-44e0-b7dc-d51c190f86d1.png'
+import bushOverlay from '../../assets/dinohunt/explore/bush-overlay.png'
 
 const factButtons = [
   { id: 'facts', label: 'Facts' },
@@ -177,7 +177,20 @@ export default function ExploreDino() {
                 <span />
               </div>
             </section>
-            <div className="explore-dino__avatar" aria-hidden>
+            <div className="explore-dino__fact-buttons" aria-label="Dinosaur fact topics">
+              {factButtons.map((button) => (
+                <button
+                  type="button"
+                  className={`explore-dino__fact-button explore-dino__fact-button--${button.id}`}
+                  aria-label={`Explore ${button.label}`}
+                  style={{ backgroundImage: `url(${dinoFactsButtons})` }}
+                  key={button.id}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="explore-dino__breakout-layer" style={canvasStyle} aria-hidden>
+            <div className="explore-dino__avatar">
               <img
                 src={safariAvatar}
                 alt=""
@@ -191,17 +204,6 @@ export default function ExploreDino() {
               alt=""
               aria-hidden
             />
-            <div className="explore-dino__fact-buttons" aria-label="Dinosaur fact topics">
-              {factButtons.map((button) => (
-                <button
-                  type="button"
-                  className={`explore-dino__fact-button explore-dino__fact-button--${button.id}`}
-                  aria-label={`Explore ${button.label}`}
-                  style={{ backgroundImage: `url(${dinoFactsButtons})` }}
-                  key={button.id}
-                />
-              ))}
-            </div>
           </div>
         </div>
       </div>

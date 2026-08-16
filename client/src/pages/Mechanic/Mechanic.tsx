@@ -14,10 +14,13 @@ import { startEngineRev } from '../../utils/engineAudio'
 
 
 const paintOptions = colorOptions.filter((color) => ['red', 'blue', 'green', 'purple'].includes(color.value))
+const mechanicDesignWidth = 1440
+const mechanicDesignHeight = 700
 
 export default function Mechanic() {
   const navigate = useNavigate()
   const [customization, setCustomization] = useState<TruckCustomization>(defaultTruckCustomization)
+  const [stageLayout, setStageLayout] = useState({ left: 0, top: 0, scale: 1 })
   const [guideMessage, setGuideMessage] = useState("");
   const [question, setQuestion] = useState<Question | null>(null);
   const [conversationState, setConversationState] = useState<ConversationState | null>(null);
@@ -46,8 +49,27 @@ export default function Mechanic() {
   }
 
   useEffect(() => {
-    loadConversation();
+    void Promise.resolve().then(() => loadConversation());
   }, []);
+
+  useEffect(() => {
+    const updateStageLayout = () => {
+      const scale = Math.min(window.innerWidth / mechanicDesignWidth, window.innerHeight / mechanicDesignHeight)
+      const scaledWidth = mechanicDesignWidth * scale
+      const scaledHeight = mechanicDesignHeight * scale
+
+      setStageLayout({
+        left: (window.innerWidth - scaledWidth) / 2,
+        top: (window.innerHeight - scaledHeight) / 2,
+        scale,
+      })
+    }
+
+    updateStageLayout()
+    window.addEventListener('resize', updateStageLayout)
+
+    return () => window.removeEventListener('resize', updateStageLayout)
+  }, [])
 
 
   async function handleAnswer(answer: string) {
@@ -161,48 +183,64 @@ export default function Mechanic() {
     });
   }
 
+  const canvasStyle: CSSProperties = {
+    transform: `translate(${stageLayout.left}px, ${stageLayout.top}px) scale(${stageLayout.scale})`,
+  }
+
   return (
     <div className="home" role="main" aria-label="Mechanic shop">
       <div className="home__scene-frame">
         <div className="home__scene">
-          <div className="home__bg mechanic__bg" style={{ backgroundImage: `url(${garageBg})` }} aria-hidden />
-          <div className="mechanic-shop">
-            <Link className="mechanic-exit" to="/home" aria-label="Go back to the playhouse">
-              <FaSignOutAlt aria-hidden />
-            </Link>
-            <CustomizationPanel
-              onReset={resetTruck}
-              onSaveAndRace={() => saveAndRace(customization)}
-              canReset={canReset}
-              canSave={isTruckComplete}
-            />
-            <TruckPreview
-              bodyColor={customization.bodyColor}
-              isComplete={isTruckComplete}
-              installedTires={installedTires}
-            />
-            {isTruckComplete && (
-              <div className="paint-picker" aria-label="Choose a truck paint color">
-                {paintOptions.map((color) => (
-                  <button
-                    type="button"
-                    className="paint-picker__choice"
-                    style={{ '--paint-color': color.hex } as CSSProperties}
-                    onClick={() => choosePaint(color.value)}
-                    key={color.value}
-                    aria-label={`Choose ${color.label} paint`}
-                  >
-                    <span aria-hidden />
-                    {color.label}
-                  </button>
-                ))}
-              </div>
-            )}
+          <div className="mechanic__design-frame" style={canvasStyle}>
+            <div className="home__bg mechanic__bg" style={{ backgroundImage: `url(${garageBg})` }} aria-hidden />
+            <div className="mechanic-shop">
+              <Link className="mechanic-exit" to="/home" aria-label="Go back to the playhouse">
+                <FaSignOutAlt aria-hidden />
+              </Link>
+              <CustomizationPanel
+                onReset={resetTruck}
+                onSaveAndRace={() => saveAndRace(customization)}
+                canReset={canReset}
+                canSave={isTruckComplete}
+              />
+              <TruckPreview
+                bodyColor={customization.bodyColor}
+                isComplete={isTruckComplete}
+                installedTires={installedTires}
+              />
+              {isTruckComplete && (
+                <div className="paint-picker" aria-label="Choose a truck paint color">
+                  {paintOptions.map((color) => (
+                    <button
+                      type="button"
+                      className="paint-picker__choice"
+                      style={{ '--paint-color': color.hex } as CSSProperties}
+                      onClick={() => choosePaint(color.value)}
+                      key={color.value}
+                      aria-label={`Choose ${color.label} paint`}
+                    >
+                      <span aria-hidden />
+                      {color.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <MechanicAvatar
+                message={guideMessage}
+                question={question}
+                loading={loadingQuestion}
+                onSubmit={handleAnswer}
+                showAvatar={false}
+              />
+            </div>
+          </div>
+          <div className="mechanic__breakout-layer" style={canvasStyle} aria-hidden>
             <MechanicAvatar
               message={guideMessage}
-              question={question}
-              loading={loadingQuestion}
+              question={null}
+              loading={false}
               onSubmit={handleAnswer}
+              showMessage={false}
             />
           </div>
         </div>

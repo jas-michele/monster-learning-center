@@ -1,3 +1,27 @@
+.mechanic__design-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: auto;
+  width: 1440px;
+  height: 700px;
+  overflow: hidden;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+.mechanic__breakout-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 12;
+  width: 1440px;
+  height: 700px;
+  overflow: visible;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
 .mechanic-shop {
   position: absolute;
   inset: 0;
@@ -8,6 +32,7 @@
   column-gap: clamp(0.4rem, 0.9vw, 0.8rem);
   row-gap: clamp(0.55rem, 1.15vw, 0.95rem);
   padding: clamp(4.9rem, 13.6%, 6.8rem) clamp(0.72rem, 1.8vw, 1.45rem) clamp(0.68rem, 1.6vw, 0.92rem);
+  pointer-events: auto;
 }
 
 .mechanic-guide {

@@ -12,6 +12,8 @@ type MechanicAvatarProps = {
 
   onMessageClick?: () => void
   messageActionLabel?: string
+  showMessage?: boolean
+  showAvatar?: boolean
 }
 
 export default function MechanicAvatar({
@@ -21,6 +23,8 @@ export default function MechanicAvatar({
   onSubmit,
   onMessageClick,
   messageActionLabel,
+  showMessage = true,
+  showAvatar = true,
 }: MechanicAvatarProps) {
   const [typewriterState, setTypewriterState] = useState({ message, visibleLength: 0 })
 
@@ -52,37 +56,41 @@ export default function MechanicAvatar({
 
   return (
     <aside className="mechanic-guide" aria-label="Jax the mechanic">
-      {onMessageClick ? (
-        <button
-          type="button"
-          key={message}
-          className="mechanic-guide__message mechanic-guide__message--action"
-          onClick={onMessageClick}
-          aria-label={messageActionLabel}
-          aria-live="polite"
-        >
-          {messageContent}
-        </button>
-      ) : (
-        <div
-          key={message}
-          className="mechanic-guide__message"
-          aria-live="polite"
-        >
-          {messageContent}
+      {showMessage && (
+        onMessageClick ? (
+          <button
+            type="button"
+            key={message}
+            className="mechanic-guide__message mechanic-guide__message--action"
+            onClick={onMessageClick}
+            aria-label={messageActionLabel}
+            aria-live="polite"
+          >
+            {messageContent}
+          </button>
+        ) : (
+          <div
+            key={message}
+            className="mechanic-guide__message"
+            aria-live="polite"
+          >
+            {messageContent}
 
-          {question && (
-            <QuestionCard
-              question={question}
-              loading={loading}
-              onSubmit={onSubmit}
-            />
-          )}
+            {question && (
+              <QuestionCard
+                question={question}
+                loading={loading}
+                onSubmit={onSubmit}
+              />
+            )}
+          </div>
+        )
+      )}
+      {showAvatar && (
+        <div className="mechanic-guide__avatar" aria-hidden>
+          <img src={jaxAvatar} alt="" className="mechanic-guide__avatar-image" draggable={false} />
         </div>
       )}
-      <div className="mechanic-guide__avatar" aria-hidden>
-        <img src={jaxAvatar} alt="" className="mechanic-guide__avatar-image" draggable={false} />
-      </div>
     </aside>
   )
 }
