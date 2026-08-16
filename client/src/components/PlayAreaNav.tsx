@@ -51,8 +51,9 @@ export default function PlayAreaNav({ mechanicAsHome = false, onPreview, onReset
         </Link>
       )}
 
-      {navItems.slice(1).map((item) => (
-        item.key === 'race' ? (
+      {navItems.slice(1).map((item) => {
+        if (item.key === 'race') {
+          return (
           <Link
             key={item.key}
             className="home__nav-hotspot home__nav-hotspot--race"
@@ -63,10 +64,27 @@ export default function PlayAreaNav({ mechanicAsHome = false, onPreview, onReset
           >
             <img src={item.image} alt="" className="home__nav-image" aria-hidden />
           </Link>
-        ) : (
+          )
+        }
+
+        if (item.key === 'safari') {
+          return (
+            <Link
+              key={item.key}
+              className="home__nav-hotspot home__nav-hotspot--dino"
+              aria-label={item.label}
+              to="/dinohunt"
+              {...previewProps(item.key)}
+            >
+              <img src={item.image} alt="" className="home__nav-image" aria-hidden />
+            </Link>
+          )
+        }
+
+        return (
           <button
             key={item.key}
-            className={`home__nav-hotspot home__nav-hotspot--${item.key === 'safari' ? 'dino' : item.key}`}
+            className={`home__nav-hotspot home__nav-hotspot--${item.key}`}
             aria-label={item.label}
             type="button"
             {...previewProps(item.key)}
@@ -74,7 +92,7 @@ export default function PlayAreaNav({ mechanicAsHome = false, onPreview, onReset
             <img src={item.image} alt="" className="home__nav-image" aria-hidden />
           </button>
         )
-      ))}
+      })}
     </nav>
   )
 }

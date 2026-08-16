@@ -188,6 +188,12 @@
   pointer-events: none;
 }
 
+@media (min-width: 1440px) {
+  .mechanic-guide__avatar {
+    right: -259.2px;
+  }
+}
+
 .mechanic-guide__avatar-image {
   width: 100%;
   height: 100%;

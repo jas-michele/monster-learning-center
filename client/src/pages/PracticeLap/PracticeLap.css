@@ -279,7 +279,7 @@
 
 .practice-truck-driver {
     position: absolute;
-    left: 49%;
+    left: 39%;
     top: -34%;
     z-index: 1;
     width: 44%;
@@ -296,7 +296,7 @@
     height: 136%;
     object-fit: contain;
     object-position: center top;
-    transform: translateY(1%);
+    transform: translateY(1%) scaleX(-1);
     filter: drop-shadow(0 0.12rem 0.08rem rgba(0, 0, 0, 0.25));
 }
 

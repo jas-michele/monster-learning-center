@@ -1,0 +1,449 @@
+.dino-hunt__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.dino-hunt__avatar {
+  position: absolute;
+  right: -12%;
+  bottom: -45%;
+  width: min(53%, 41rem);
+  height: 108%;
+  pointer-events: none;
+}
+
+.dino-hunt__avatar-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 0.62rem 0.72rem rgba(0, 0, 0, 0.38));
+  user-select: none;
+}
+
+.dino-hunt__message {
+  position: absolute;
+  right: 3%;
+  bottom: 63%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.34rem, 0.62vw, 0.48rem);
+  justify-content: flex-start;
+  align-items: stretch;
+  width: fit-content;
+  min-width: clamp(7rem, 8.7vw, 9rem);
+  max-width: min(18.7rem, 22.7%);
+  min-height: clamp(3.4rem, 8vh, 5.4rem);
+  padding: clamp(0.62rem, 0.9vw, 0.82rem) clamp(0.78rem, 1vw, 0.92rem);
+  box-sizing: border-box;
+  border: 0.09rem solid rgba(86, 69, 50, 0.24);
+  border-radius: 1.25rem;
+  background: linear-gradient(180deg, rgba(255, 248, 231, 0.98), rgba(245, 229, 200, 0.97));
+  color: #1c1713;
+  font-size: clamp(0.56rem, 0.78vw, 0.78rem);
+  font-weight: 900;
+  line-height: 1.3;
+  text-align: center;
+  box-shadow:
+    inset 0 0.08rem 0 rgba(255, 255, 255, 0.85),
+    inset 0 -0.08rem 0 rgba(155, 108, 54, 0.12),
+    0 0.22rem 0.55rem rgba(0, 0, 0, 0.24),
+    0 0.02rem 0 0.08rem rgba(255, 255, 255, 0.2);
+  pointer-events: auto;
+}
+
+.dino-hunt__message-prompt,
+.dino-hunt__message-options {
+  position: relative;
+  z-index: 1;
+}
+
+.dino-hunt__message-options {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.18rem, 0.36vw, 0.28rem);
+  font-size: clamp(0.62rem, 0.86vw, 0.86rem);
+  line-height: 1.18;
+}
+
+.dino-hunt__option {
+  width: 100%;
+  padding: clamp(0.34rem, 0.62vw, 0.5rem) clamp(0.54rem, 0.9vw, 0.72rem);
+  border: 0.08rem solid rgba(110, 91, 55, 0.28);
+  border-radius: 0.62rem;
+  background: rgba(255, 255, 255, 0.6);
+  color: #1c1713;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: inset 0 0.06rem 0 rgba(255, 255, 255, 0.76);
+}
+
+.dino-hunt__option:hover,
+.dino-hunt__option:focus-visible {
+  background: rgba(255, 255, 255, 0.9);
+  outline: 0.14rem solid rgba(123, 190, 29, 0.72);
+  outline-offset: 0.08rem;
+}
+
+.dino-hunt__message::before {
+  content: "";
+  position: absolute;
+  left: 33%;
+  bottom: -0.78rem;
+  z-index: 2;
+  width: 0;
+  height: 0;
+  border-left: 0.58rem solid transparent;
+  border-right: 0.58rem solid transparent;
+  border-top: 0.88rem solid rgba(245, 229, 200, 0.98);
+  filter: drop-shadow(0.1rem 0.14rem 0.12rem rgba(0, 0, 0, 0.18));
+  transform: rotate(-24deg);
+  transform-origin: center top;
+}
+
+.dino-hunt__message::after {
+  content: "";
+  position: absolute;
+  left: calc(33% - 0.1rem);
+  bottom: -0.96rem;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  border-left: 0.68rem solid transparent;
+  border-right: 0.68rem solid transparent;
+  border-top: 1.04rem solid rgba(86, 69, 50, 0.24);
+  transform: rotate(-24deg);
+  transform-origin: center top;
+}
+
+.dino-hunt__trex-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 6% 12% 8%;
+  pointer-events: auto;
+}
+
+.dino-hunt__trex {
+  position: absolute;
+  left: 49%;
+  top: 52%;
+  width: min(58vw, 52rem);
+  max-height: 60vh;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0.24rem 0.52rem rgba(0, 0, 0, 0.42));
+  user-select: none;
+}
+
+.dino-hunt__drop-targets {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.dino-hunt__completed-parts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.dino-hunt__completed-part {
+  position: absolute;
+  z-index: 2;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0 0.26rem rgba(255, 226, 85, 0.52))
+    drop-shadow(0 0.08rem 0.12rem rgba(0, 0, 0, 0.42));
+  transform: translate(-50%, -50%);
+  user-select: none;
+}
+
+.dino-hunt__completed-part--skull {
+  left: 69.5%;
+  top: 36.5%;
+  width: min(11.6vw, 10.4rem);
+}
+
+.dino-hunt__completed-part--foot {
+  left: 62.8%;
+  top: 53.8%;
+  width: min(12.6vw, 7rem);
+}
+
+.dino-hunt__completed-part--leg {
+  left: 54%;
+  top: 67.7%;
+  width: min(13.4vw, 8rem);
+}
+
+.dino-hunt__completed-part--tail {
+  left: 30.8%;
+  top: 53.1%;
+  width: min(18vw, 16rem);
+}
+
+.dino-hunt__drop-target {
+  position: absolute;
+  width: clamp(1.2rem, 2.2vw, 2rem);
+  aspect-ratio: 1;
+  border: 0.12rem solid rgba(255, 255, 255, 0);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition:
+    opacity 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.dino-hunt__drop-target--active {
+  border-color: rgba(255, 239, 107, 0.92);
+  box-shadow:
+    0 0 0 0.18rem rgba(89, 196, 255, 0.34),
+    0 0 1rem rgba(89, 196, 255, 0.75);
+  opacity: 1;
+}
+
+.dino-hunt__drop-target--complete {
+  border-color: rgba(119, 236, 134, 0.8);
+  box-shadow: 0 0 0.7rem rgba(119, 236, 134, 0.62);
+  opacity: 0.7;
+}
+
+.dino-hunt__build-options {
+  position: absolute;
+  left: 5.8%;
+  top: 18%;
+  bottom: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.48rem, 1vw, 0.8rem);
+  width: clamp(6.8rem, 11.5vw, 9.8rem);
+  transform: none;
+}
+
+.dino-hunt__build-option {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.45;
+  overflow: hidden;
+  padding: 0;
+  border: 0.1rem solid rgba(196, 242, 71, 0.72);
+  border-radius: 0.7rem;
+  background: rgba(18, 54, 12, 0.66);
+  box-shadow:
+    inset 0 0 1.2rem rgba(16, 35, 6, 0.45),
+    0 0.16rem 0.4rem rgba(0, 0, 0, 0.36);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.dino-hunt__build-option img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 0.08rem 0.18rem rgba(0, 0, 0, 0.54));
+  user-select: none;
+}
+
+.dino-hunt__build-option span {
+  position: absolute;
+  left: 0.4rem;
+  bottom: 0.34rem;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: clamp(0.58rem, 0.8vw, 0.74rem);
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 0.08rem 0.08rem rgba(0, 0, 0, 0.72);
+}
+
+.dino-hunt__build-option:hover,
+.dino-hunt__build-option:focus-visible {
+  filter: brightness(1.08);
+  outline: 0.16rem solid rgba(255, 255, 255, 0.86);
+  outline-offset: 0.08rem;
+}
+
+.dino-hunt__build-option--active {
+  border-color: rgba(255, 214, 76, 0.92);
+  cursor: default;
+  box-shadow:
+    0 0 0 0.1rem rgba(255, 214, 76, 0.58),
+    inset 0 0 1.2rem rgba(255, 214, 76, 0.18),
+    0 0.16rem 0.4rem rgba(0, 0, 0, 0.36);
+}
+
+.dino-hunt__dragging-part {
+  position: absolute;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(7rem, 13vw, 12rem);
+  cursor: grab;
+  pointer-events: auto;
+  touch-action: none;
+  transform: translate(-50%, -50%);
+}
+
+.dino-hunt__dragging-part--active {
+  cursor: grabbing;
+}
+
+.dino-hunt__dragging-part img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0 0.45rem rgba(89, 196, 255, 0.58))
+    drop-shadow(0 0.18rem 0.32rem rgba(0, 0, 0, 0.56));
+  user-select: none;
+}
+
+.dino-hunt__dragging-part--skull {
+  width: clamp(8rem, 15vw, 13rem);
+}
+
+.dino-hunt__dragging-part--foot {
+  width: clamp(5rem, 8vw, 7rem);
+}
+
+.dino-hunt__dragging-part--leg {
+  width: clamp(5.8rem, 9vw, 8rem);
+}
+
+.dino-hunt__dragging-part--tail {
+  width: clamp(9rem, 18vw, 16rem);
+}
+
+.dino-hunt__message--build {
+  right: 1.5%;
+  bottom: 66%;
+  width: clamp(8.8rem, 12vw, 12.5rem);
+  max-width: none;
+}
+
+.dino-hunt__actions {
+  position: absolute;
+  left: 50%;
+  bottom: 5.2%;
+  z-index: 7;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.42rem, 0.78vw, 0.62rem);
+  width: min(36%, 27rem);
+  min-width: 0;
+  transform: translateX(-50%);
+}
+
+.dino-hunt__reset,
+.dino-hunt__save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: clamp(2.44rem, 5.5vh, 3.05rem);
+  min-width: 4rem;
+  width: 100%;
+  border: 0.1rem solid rgba(255, 214, 76, 0.68);
+  border-radius: 0.72rem;
+  background:
+    linear-gradient(180deg, rgba(255, 214, 76, 0.18), rgba(0, 0, 0, 0.08)),
+    rgba(78, 46, 11, 0.74);
+  color: #fff7d6;
+  cursor: pointer;
+  font-size: clamp(0.64rem, 0.86vw, 0.82rem);
+  font-weight: 1000;
+  line-height: 1.05;
+  text-transform: uppercase;
+  text-shadow: 0 0.1rem 0 rgba(0, 0, 0, 0.65);
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+.dino-hunt__reset svg,
+.dino-hunt__save svg {
+  flex: 0 0 auto;
+}
+
+.dino-hunt__save {
+  border-color: rgba(119, 236, 134, 0.72);
+  background:
+    linear-gradient(180deg, rgba(120, 236, 134, 0.22), rgba(0, 0, 0, 0.08)),
+    rgba(19, 97, 42, 0.82);
+  color: #f6ffe8;
+}
+
+.dino-hunt__reset:disabled,
+.dino-hunt__save:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+  filter: grayscale(0.85);
+}
+
+.dino-hunt__reset:not(:disabled):hover,
+.dino-hunt__save:not(:disabled):hover {
+  transform: translateY(-0.08rem);
+}
+
+.dino-hunt__reset:focus-visible,
+.dino-hunt__save:focus-visible {
+  outline: 0.22rem solid rgba(255, 255, 255, 0.95);
+  outline-offset: 0.12rem;
+}
+
+.dino-hunt__exit {
+  position: absolute;
+  left: 1.55%;
+  bottom: 2%;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(2rem, 4.3vw, 3rem);
+  aspect-ratio: 1;
+  border: 0.08rem solid rgba(255, 255, 255, 0.24);
+  border-radius: 50%;
+  background: rgba(10, 14, 16, 0.32);
+  color: rgba(228, 232, 232, 0.74);
+  text-decoration: none;
+  box-shadow:
+    inset 0 0.08rem 0 rgba(255, 255, 255, 0.1),
+    0 0.18rem 0.4rem rgba(0, 0, 0, 0.22);
+}
+
+.dino-hunt__exit svg {
+  width: 52%;
+  height: 52%;
+  display: block;
+  filter: drop-shadow(0 0.08rem 0.08rem rgba(0, 0, 0, 0.42));
+  transform: scaleX(-1);
+}
+
+.dino-hunt__exit:hover {
+  transform: translateY(-0.08rem);
+}
+
+@media (min-width: 1440px) {
+  .dino-hunt__message {
+    right: 43.2px;
+  }
+
+  .dino-hunt__message--build {
+    right: 21.6px;
+  }
+
+  .dino-hunt__avatar {
+    right: -172.8px;
+  }
+}

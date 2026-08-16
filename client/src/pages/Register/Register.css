@@ -37,7 +37,7 @@ input {
 .register-scene {
     position: absolute;
     inset: 0;
-    background: url("../../assets/register-scene-bg.png") center / cover no-repeat;
+    background: url("../../assets/register/register-scene-bg.png") center / cover no-repeat;
 }
 
 .register-card {
@@ -51,7 +51,7 @@ input {
     border: 1px solid rgba(255, 255, 255, 0.85);
     border-radius: 24px;
     overflow: hidden;
-    background: url("../../assets/formBG.png") center / 100% 100% no-repeat;
+    background: url("../../assets/register/formBG.png") center / 100% 100% no-repeat;
     box-shadow: 0 24px 60px rgba(37, 71, 38, 0.22);
     transform: translateY(-50%);
 }
