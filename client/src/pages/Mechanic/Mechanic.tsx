@@ -1,6 +1,6 @@
 import '../Home/Home.css'
 import './Mechanic.css'
-import { type CSSProperties, useEffect, useState } from 'react'
+import { type CSSProperties, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FaSignOutAlt } from 'react-icons/fa'
 import garageBg from '../../assets/mechanic/garagBG.png'
@@ -12,6 +12,8 @@ import { startConversation, respondConversation } from '../../services/conversat
 import type { ConversationState, Question, RespondConversationResponse } from '../../types/conversation'
 import { startEngineRev } from '../../utils/engineAudio'
 import { speak } from "../../services/voice";
+import speechRecognitionService from "../../services/speechRecognition";
+import { normalizeSpeech } from "../../utils/normalizeSpeech";
 
 
 const paintOptions = colorOptions.filter((color) => ['red', 'blue', 'green', 'purple'].includes(color.value))
@@ -24,6 +26,8 @@ export default function Mechanic() {
   const [conversationState, setConversationState] = useState<ConversationState | null>(null);
   const [loadingQuestion, setLoadingQuestion] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [started, setStarted] = useState(false);
 
   const [installedTires, setInstalledTires] = useState({
     frontLeft: false,
@@ -44,6 +48,12 @@ export default function Mechanic() {
     setGuideMessage(message);
   }
 
+  async function startBuilding() {
+    if (started) return;
+
+    setStarted(true);
+    await loadConversation();
+  }
 
   async function loadConversation() {
 
@@ -59,38 +69,47 @@ export default function Mechanic() {
 
       await playDialogue(
         response.greeting,
-        response.firstQuestion
+        response.firstQuestion,
+        response.conversationState
       );
     } catch (error) {
       console.error(error);
     }
   }
 
-  useEffect(() => {
-    loadConversation();
-  }, []);
 
-
-  async function handleAnswer(answer: string) {
-    if (!conversationState) return;
+  async function handleAnswerForQuestion(
+    answer: string,
+    questionToAnswer: Question,
+    stateToUse: ConversationState
+  ) {
+    if (loadingQuestion) return;
 
     try {
       setLoadingQuestion(true);
 
-      if (!question) return;
-
       const response = await respondConversation(
         answer,
-        question,
-        conversationState
+        questionToAnswer,
+        stateToUse
       );
 
-    await handleResponse(response);
+      await handleResponse(response);
     } catch (error) {
       console.error(error);
     } finally {
       setLoadingQuestion(false);
     }
+  }
+
+  async function handleAnswer(answer: string) {
+    if (!question || !conversationState) return;
+
+    await handleAnswerForQuestion(
+      answer,
+      question,
+      conversationState
+    );
   }
 
   const isTruckComplete = installedTires.rearLeft;
@@ -137,35 +156,36 @@ export default function Mechanic() {
     )
     navigate('/practice-lap')
   }
- async function handleResponse(response: RespondConversationResponse) {
-  if (response.correct) {
-    if (
-      installedTires.frontLeft &&
-      installedTires.frontRight &&
-      installedTires.rearRight &&
-      !installedTires.rearLeft
-    ) {
-      setCustomization((currentCustomization) => ({
-        ...currentCustomization,
-        bodyColor: "black",
-        roofLights: "four-light",
-      }));
+  async function handleResponse(response: RespondConversationResponse) {
+    if (response.correct) {
+      if (
+        installedTires.frontLeft &&
+        installedTires.frontRight &&
+        installedTires.rearRight &&
+        !installedTires.rearLeft
+      ) {
+        setCustomization((currentCustomization) => ({
+          ...currentCustomization,
+          bodyColor: "black",
+          roofLights: "four-light",
+        }));
+      }
+
+      installNextTire();
     }
 
-    installNextTire();
+    updateDialogue(
+      response.message,
+      response.nextQuestion,
+      response.conversationState
+    );
+
+    await playDialogue(
+      response.message,
+      response.nextQuestion,
+      response.conversationState
+    );
   }
-
-  updateDialogue(
-    response.message,
-    response.nextQuestion,
-    response.conversationState
-  );
-
-  await playDialogue(
-    response.message,
-    response.nextQuestion
-  );
-}
 
 
   function installNextTire() {
@@ -191,28 +211,29 @@ export default function Mechanic() {
     });
   }
 
-function buildQuestionText(question: Question) {
-  switch (question.category) {
-    case "letters":
-      return "What letter is this?";
+  function buildQuestionText(question: Question) {
+    switch (question.category) {
+      case "letters":
+        return "What letter is this?";
 
-    case "numbers":
-      return "What number is this?";
+      case "numbers":
+        return "What number is this?";
 
-    case "colors":
-      return "What color is this?";
+      case "colors":
+        return "What color is this?";
 
-    case "shapes":
-      return "What shape is this?";
+      case "shapes":
+        return "What shape is this?";
 
-    default:
-      return "";
+      default:
+        return "";
+    }
   }
-}
 
   async function playDialogue(
     message: string,
-    nextQuestion: Question | null
+    nextQuestion: Question | null,
+    nextConversationState: ConversationState
   ) {
     try {
       setIsSpeaking(true);
@@ -222,8 +243,26 @@ function buildQuestionText(question: Question) {
       if (nextQuestion) {
         await speak(buildQuestionText(nextQuestion));
       }
+
+      setIsSpeaking(false);
+
+      if (nextQuestion) {
+        const transcript =
+          await speechRecognitionService.startListening(setIsListening);
+
+        const normalizedAnswer = normalizeSpeech(
+          transcript,
+          nextQuestion.category
+        );
+
+        await handleAnswerForQuestion(
+          normalizedAnswer,
+          nextQuestion,
+          nextConversationState
+        );
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Mechanic voice/listening error:", err);
     } finally {
       setIsSpeaking(false);
     }
@@ -237,6 +276,16 @@ function buildQuestionText(question: Question) {
         <div className="home__scene">
           <div className="home__bg mechanic__bg" style={{ backgroundImage: `url(${garageBg})` }} aria-hidden />
           <div className="mechanic-shop">
+
+            {!started && (
+              <button
+                type="button"
+                className="mechanic-start"
+                onClick={startBuilding}
+              >
+                BUILD!
+              </button>
+            )}
             <Link className="mechanic-exit" to="/home" aria-label="Go back to the playhouse">
               <FaSignOutAlt aria-hidden />
             </Link>

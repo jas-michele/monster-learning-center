@@ -1016,3 +1016,21 @@
     transform: translateY(-2px) scale(1.01);
   }
 }
+
+.mechanic-start {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  z-index: 100;
+
+  padding: 20px 50px;
+  border: none;
+  border-radius: 20px;
+
+  font-size: 2rem;
+  font-weight: 900;
+
+  cursor: pointer;
+}

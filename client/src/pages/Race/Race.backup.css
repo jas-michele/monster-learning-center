@@ -1,0 +1,375 @@
+.race-truck {
+  position: relative;
+  z-index: 2;
+  width: min(48%, 38rem);
+  aspect-ratio: 1382 / 1044;
+  filter: drop-shadow(0 0.75rem 0.85rem rgba(0, 0, 0, 0.42));
+}
+
+.race-truck--grayed {
+  filter:
+    grayscale(1)
+    saturate(0)
+    brightness(0.78)
+    contrast(0.92)
+    drop-shadow(0 0.75rem 0.85rem rgba(0, 0, 0, 0.42));
+}
+
+.race-truck img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.race-truck__body-image {
+  z-index: 1;
+}
+
+.race-truck__decal {
+  position: absolute;
+  z-index: 3;
+  color: #fff;
+  font-weight: 900;
+  text-shadow: 0 0.12rem 0.16rem rgba(0, 0, 0, 0.75);
+  pointer-events: none;
+}
+
+.race-truck__decal--flames {
+  left: 23%;
+  top: 42%;
+  font-size: clamp(1.2rem, 2.9vw, 2.55rem);
+  filter: drop-shadow(0 0.08rem 0.08rem rgba(0, 0, 0, 0.6));
+}
+
+.race-truck__decal--claw-marks {
+  left: 30%;
+  top: 44%;
+  color: #f2f2ef;
+  font-size: clamp(1.28rem, 2.8vw, 2.42rem);
+  letter-spacing: -0.32em;
+  transform: rotate(-20deg);
+}
+
+.race-truck__decal--skull {
+  left: 31%;
+  top: 42%;
+  font-size: clamp(1.22rem, 2.85vw, 2.48rem);
+}
+
+.race-truck__lights {
+  position: absolute;
+  left: 51%;
+  top: 9.5%;
+  z-index: 4;
+  display: flex;
+  gap: 0.18rem;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.race-truck__lights span {
+  width: clamp(0.54rem, 1.25vw, 1.06rem);
+  aspect-ratio: 1;
+  border: 0.1rem solid #1d1d1d;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 34%, #fff5ac, #ffb51d 58%, #4d2b00);
+  box-shadow: 0 0 0.28rem rgba(255, 198, 49, 0.75);
+}
+
+@media (max-width: 920px) {
+  .race-truck {
+    width: 52%;
+  }
+}
+
+/* =========================
+   RACE EXPERIENCE
+   ========================= */
+
+.race-countdown {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  z-index: 100;
+  transform: translate(-50%, -50%);
+  font-size: 150px;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+/* Controls the truck's position around the track */
+.race-runner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 22;
+  transform: translate(50vw, 88vh);
+  pointer-events: none;
+}
+
+.race-runner--revving {
+  animation: raceTruckRev 180ms ease-in-out infinite;
+}
+
+.race-runner--driving {
+  animation: racePath 9s linear forwards;
+}
+
+
+/* Child driver */
+.race-driver {
+  position: absolute;
+  left: 49%;
+  top: -34%;
+  z-index: 1;
+  width: 44%;
+  height: 82%;
+  overflow: hidden;
+  transform: translate(-50%, 0) rotate(-1deg);
+  transform-origin: center bottom;
+  pointer-events: none;
+}
+
+.race-driver img {
+  display: block;
+  width: 100%;
+  height: 136%;
+  object-fit: contain;
+  object-position: center top;
+  transform: translateY(1%);
+  filter: drop-shadow(0 0.12rem 0.08rem rgba(0, 0, 0, 0.25));
+}
+
+.race-runner--driving .race-driver {
+  animation: raceDriverRide 9s ease-in-out forwards;
+}
+
+
+/* Engine smoke */
+.race-smoke {
+  position: absolute;
+  left: -6%;
+  top: 66%;
+  z-index: 3;
+  width: 68%;
+  height: 42%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.race-smoke span {
+  position: absolute;
+  left: 36%;
+  bottom: 14%;
+  width: clamp(1.65rem, 2.85vw, 3.25rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 35% 35%,
+      rgba(255, 255, 255, 0.98),
+      rgba(219, 226, 229, 0.86) 54%,
+      rgba(128, 128, 128, 0) 76%
+    );
+  filter: blur(0.09rem);
+  transform: translate(-50%, 0) scale(0.42);
+}
+
+.race-runner--revving .race-smoke {
+  opacity: 1;
+}
+
+.race-runner--revving .race-smoke span {
+  animation: raceTruckSmoke 0.98s ease-out infinite;
+}
+
+.race-runner--revving .race-smoke span:nth-child(2) {
+  animation-delay: 0.24s;
+}
+
+.race-runner--revving .race-smoke span:nth-child(3) {
+  animation-delay: 0.48s;
+}
+
+.race-runner--revving .race-smoke span:nth-child(4) {
+  animation-delay: 0.72s;
+}
+
+
+/* Driving animation */
+.race-runner--driving .race-truck {
+  animation: raceDepth 9s ease-in-out forwards;
+}
+
+.race-runner--driving .race-smoke {
+  display: none;
+}
+
+.race-runner--driving .race-truck__body-image {
+  animation: raceTruckTerrain 9s ease-in-out forwards;
+}
+
+
+/* =========================
+   KEYFRAMES
+   ========================= */
+
+@keyframes raceTruckSmoke {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.26);
+  }
+
+  18% {
+    opacity: 0.86;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% - 4.6rem), -1.85rem) scale(1.48);
+  }
+}
+
+@keyframes raceTruckRev {
+  0%,
+  100% {
+    transform: translate(50vw, 88vh) rotate(0deg);
+  }
+
+  25% {
+    transform:
+      translate(calc(50vw - 0.18rem), calc(88vh + 0.08rem))
+      rotate(-0.35deg);
+  }
+
+  50% {
+    transform:
+      translate(calc(50vw + 0.14rem), calc(88vh - 0.08rem))
+      rotate(0.3deg);
+  }
+
+  75% {
+    transform:
+      translate(calc(50vw - 0.08rem), calc(88vh + 0.06rem))
+      rotate(-0.2deg);
+  }
+}
+
+@keyframes racePath {
+  0% {
+    transform: translate(50vw, 88vh);
+    z-index: 22;
+  }
+
+  10% {
+    transform: translate(68vw, 84vh);
+  }
+
+  20% {
+    transform: translate(88vw, 74vh);
+  }
+
+  32% {
+    transform: translate(86vw, 61vh);
+    z-index: 18;
+  }
+
+  45% {
+    transform: translate(62vw, 52vh);
+    z-index: 18;
+  }
+
+  58% {
+    transform: translate(34vw, 52vh);
+    z-index: 18;
+  }
+
+  72% {
+    transform: translate(15vw, 61vh);
+    z-index: 18;
+  }
+
+  84% {
+    transform: translate(12vw, 73vh);
+    z-index: 22;
+  }
+
+  94% {
+    transform: translate(30vw, 82vh);
+  }
+
+  100% {
+    transform: translate(50vw, 88vh);
+    z-index: 22;
+  }
+}
+
+@keyframes raceDepth {
+  0%,
+  100% {
+    transform: translate(-50%, -100%) scale(1);
+  }
+
+  20%,
+  84% {
+    transform: translate(-50%, -100%) scale(0.88);
+  }
+
+  45%,
+  58% {
+    transform: translate(-50%, -100%) scale(0.62);
+  }
+
+  94% {
+    transform: translate(-50%, -100%) scale(0.94);
+  }
+}
+
+@keyframes raceTruckTerrain {
+  0%,
+  14%,
+  24%,
+  80%,
+  87%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  18% {
+    transform: translateY(-4.4vh) rotate(-5deg);
+  }
+
+  21% {
+    transform: translateY(-2.3vh) rotate(4deg);
+  }
+
+  84% {
+    transform: translateY(-1.1vh) rotate(-1deg) scaleY(0.95);
+  }
+}
+
+@keyframes raceDriverRide {
+  0%,
+  14%,
+  24%,
+  80%,
+  87%,
+  100% {
+    transform: translate(-50%, 0) rotate(-1deg);
+  }
+
+  18% {
+    transform: translate(-50%, -4.4vh) rotate(-5deg);
+  }
+
+  21% {
+    transform: translate(-50%, -2.3vh) rotate(4deg);
+  }
+
+  84% {
+    transform: translate(-50%, -1.1vh) rotate(-1deg) scaleY(0.95);
+  }
+}

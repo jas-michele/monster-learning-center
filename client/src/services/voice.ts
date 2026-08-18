@@ -2,6 +2,21 @@ let currentAudio: HTMLAudioElement | null = null;
 
 let speechQueue: Promise<void> = Promise.resolve();
 
+export function unlockAudio() {
+  const audio = new Audio();
+
+  audio.muted = true;
+
+  audio.play()
+    .then(() => {
+      audio.pause();
+      audio.currentTime = 0;
+    })
+    .catch((error) => {
+      console.warn("Audio unlock failed:", error);
+    });
+}
+
 export function speak(text: string): Promise<void> {
   speechQueue = speechQueue.then(async () => {
     const response = await fetch("http://localhost:5001/api/voice", {

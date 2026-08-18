@@ -10,6 +10,7 @@ import greenCompleteTruck from "../../assets/mechanic/greenTruck.png";
 import purpleCompleteTruck from "../../assets/mechanic/purpleTruck.png";
 
 import Countdown from "../../components/Countdown/Countdown";
+import { stopEngineRev } from "../../utils/engineAudio";
 
 export default function PracticeLap() {
 
@@ -57,6 +58,19 @@ export default function PracticeLap() {
 
         return () => clearInterval(timer);
     }, []);
+
+    useEffect(() => {
+        if (!driving) return;
+
+        const engineStopTimer = window.setTimeout(() => {
+            stopEngineRev();
+        }, 9000);
+
+        return () => {
+            window.clearTimeout(engineStopTimer);
+            stopEngineRev();
+        };
+    }, [driving]);
 
 
     return (
