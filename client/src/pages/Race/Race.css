@@ -1,89 +1,821 @@
-.race-truck {
-  position: absolute;
-  left: 50%;
-  bottom: 9%;
-  z-index: 2;
-  width: min(48%, 38rem);
-  aspect-ratio: 1382 / 1044;
-  transform: translateX(-50%);
-  filter: drop-shadow(0 0.75rem 0.85rem rgba(0, 0, 0, 0.42));
+.practice-lap {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: #6ec5ff;
 }
 
-.race-truck--grayed {
-  filter:
-    grayscale(1)
-    saturate(0)
-    brightness(0.78)
-    contrast(0.92)
-    drop-shadow(0 0.75rem 0.85rem rgba(0, 0, 0, 0.42));
+.track {
+    position: absolute;
+    inset: 0;
 }
 
-.race-truck img {
+.track__sky {
+    height: 55%;
+    background: linear-gradient(
+        to bottom,
+        #6ec5ff,
+        #bfe8ff
+    );
+}
+
+.track__grandstands {
+    height: 15%;
+    background: #666;
+}
+
+.track__dirt {
+    height: 30%;
+    background: #8b5a2b;
+}
+
+.practice-track {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
-.race-truck__body-image {
-  z-index: 1;
+.practice-lap-nav {
+    position: absolute;
+    bottom: 2%;
+    z-index: 120;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(2rem, 4.3vw, 3rem);
+    aspect-ratio: 1;
+    border: 0.08rem solid rgba(255, 255, 255, 0.24);
+    border-radius: 50%;
+    background: rgba(10, 14, 16, 0.32);
+    color: rgba(228, 232, 232, 0.74);
+    text-decoration: none;
+    box-shadow:
+        inset 0 0.08rem 0 rgba(255, 255, 255, 0.1),
+        0 0.18rem 0.4rem rgba(0, 0, 0, 0.22);
 }
 
-.race-truck__decal {
-  position: absolute;
-  z-index: 3;
-  color: #fff;
-  font-weight: 900;
-  text-shadow: 0 0.12rem 0.16rem rgba(0, 0, 0, 0.75);
-  pointer-events: none;
-}
-
-.race-truck__decal--flames {
-  left: 23%;
-  top: 42%;
-  font-size: clamp(1.2rem, 2.9vw, 2.55rem);
-  filter: drop-shadow(0 0.08rem 0.08rem rgba(0, 0, 0, 0.6));
-}
-
-.race-truck__decal--claw-marks {
-  left: 30%;
-  top: 44%;
-  color: #f2f2ef;
-  font-size: clamp(1.28rem, 2.8vw, 2.42rem);
-  letter-spacing: -0.32em;
-  transform: rotate(-20deg);
-}
-
-.race-truck__decal--skull {
-  left: 31%;
-  top: 42%;
-  font-size: clamp(1.22rem, 2.85vw, 2.48rem);
-}
-
-.race-truck__lights {
-  position: absolute;
-  left: 51%;
-  top: 9.5%;
-  z-index: 4;
-  display: flex;
-  gap: 0.18rem;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
-.race-truck__lights span {
-  width: clamp(0.54rem, 1.25vw, 1.06rem);
-  aspect-ratio: 1;
-  border: 0.1rem solid #1d1d1d;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 34%, #fff5ac, #ffb51d 58%, #4d2b00);
-  box-shadow: 0 0 0.28rem rgba(255, 198, 49, 0.75);
-}
-
-@media (max-width: 920px) {
-  .race-truck {
-    bottom: 10%;
+.practice-lap-nav svg {
     width: 52%;
+    height: 52%;
+    display: block;
+    filter: drop-shadow(0 0.08rem 0.08rem rgba(0, 0, 0, 0.42));
+}
+
+.practice-lap-nav--mechanic {
+    left: 1.55%;
+}
+
+.practice-lap-nav--mechanic svg {
+    transform: scaleX(-1);
+}
+
+.practice-lap-nav--playhouse {
+    right: 1.55%;
+}
+
+.practice-lap-nav:hover {
+    transform: translateY(-0.08rem);
+}
+
+.practice-lap-nav:focus-visible {
+    outline: 0.2rem solid rgba(255, 255, 255, 0.95);
+    outline-offset: 0.12rem;
+}
+
+.countdown {
+
+    position: absolute;
+
+    top: 40%;
+
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    font-size: 150px;
+
+    font-weight: 900;
+
+    color: white;
+
+    text-shadow:
+        0 6px 20px rgba(0,0,0,.45);
+
+    z-index: 100;
+}
+
+.practice-lap-sign--hide {
+    animation: hideSign 0.6s ease forwards;
+}
+
+.practice-lap-effects {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.practice-lap-obstacle,
+.practice-lap-finished {
+    position: absolute;
+    background-image: var(--lap-assets);
+    background-repeat: no-repeat;
+    background-size: 200% 200%;
+    filter: drop-shadow(0 0.55rem 0.42rem rgba(43, 24, 8, 0.28));
+}
+
+.practice-lap-obstacle--mound {
+    left: 79%;
+    top: 76%;
+    width: clamp(15rem, 34.5vw, 37.5rem);
+    aspect-ratio: 3 / 2;
+    background-position: 0 0;
+    transform: translate(-50%, -50%) scale(0.82);
+    opacity: 1;
+}
+
+.practice-lap-obstacle--puddle {
+    left: 14%;
+    top: 73%;
+    width: clamp(13.5rem, 28.5vw, 30rem);
+    aspect-ratio: 3 / 2;
+    background-position: 100% 0;
+    transform: translate(-50%, -50%) scale(0.8);
+    filter: drop-shadow(0 0.5rem 0.32rem rgba(8, 44, 68, 0.22));
+    opacity: 1;
+}
+
+.practice-lap-splash {
+    position: absolute;
+    left: 14%;
+    top: 70.5%;
+    width: clamp(7.5rem, 16.5vw, 16.5rem);
+    aspect-ratio: 1.8;
+    border-radius: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35);
+    background:
+        radial-gradient(circle at 48% 72%, rgba(255, 255, 255, 0.82) 0 7%, transparent 8%),
+        radial-gradient(circle at 30% 62%, rgba(110, 205, 255, 0.9) 0 7%, transparent 8%),
+        radial-gradient(circle at 68% 56%, rgba(65, 174, 232, 0.86) 0 8%, transparent 9%),
+        radial-gradient(ellipse at 50% 82%, rgba(34, 133, 194, 0.62), rgba(34, 133, 194, 0) 64%);
+    filter: blur(0.02rem) drop-shadow(0 0.35rem 0.32rem rgba(16, 70, 102, 0.22));
+}
+
+.practice-lap-effects--active .practice-lap-splash {
+    animation: practiceLapSplash 9s linear forwards;
+}
+
+.practice-lap-finished {
+    left: 50%;
+    top: 47%;
+    z-index: 40;
+    width: clamp(13rem, 25vw, 28rem);
+    aspect-ratio: 3 / 2;
+    background-position: 100% 100%;
+    filter:
+        drop-shadow(0 0.7rem 0.65rem rgba(31, 16, 4, 0.32))
+        drop-shadow(0 0 1.4rem rgba(255, 225, 77, 0.28));
+    transform: translate(-50%, -50%) scale(0.62) rotate(-3deg);
+}
+
+.practice-lap-effects--active .practice-lap-finished {
+    animation: practiceLapFinished 9s ease-out forwards;
+}
+
+.practice-lap-confetti {
+    position: absolute;
+    inset: 0;
+    z-index: 38;
+    overflow: hidden;
+}
+
+.practice-lap-confetti span {
+    position: absolute;
+    left: calc(18% + (var(--confetti-index) * 2.5%));
+    top: -8%;
+    width: clamp(0.28rem, 0.7vw, 0.52rem);
+    height: clamp(0.5rem, 1.1vw, 0.9rem);
+    border-radius: 0.12rem;
+    background: hsl(calc(var(--confetti-index) * 43), 88%, 56%);
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+}
+
+.practice-lap-effects--active .practice-lap-confetti span {
+    animation: practiceLapConfetti 9s ease-in forwards;
+}
+
+.practice-lap-confetti span:nth-child(1) { --confetti-index: 1; }
+.practice-lap-confetti span:nth-child(2) { --confetti-index: 2; }
+.practice-lap-confetti span:nth-child(3) { --confetti-index: 3; }
+.practice-lap-confetti span:nth-child(4) { --confetti-index: 4; }
+.practice-lap-confetti span:nth-child(5) { --confetti-index: 5; }
+.practice-lap-confetti span:nth-child(6) { --confetti-index: 6; }
+.practice-lap-confetti span:nth-child(7) { --confetti-index: 7; }
+.practice-lap-confetti span:nth-child(8) { --confetti-index: 8; }
+.practice-lap-confetti span:nth-child(9) { --confetti-index: 9; }
+.practice-lap-confetti span:nth-child(10) { --confetti-index: 10; }
+.practice-lap-confetti span:nth-child(11) { --confetti-index: 11; }
+.practice-lap-confetti span:nth-child(12) { --confetti-index: 12; }
+.practice-lap-confetti span:nth-child(13) { --confetti-index: 13; }
+.practice-lap-confetti span:nth-child(14) { --confetti-index: 14; }
+.practice-lap-confetti span:nth-child(15) { --confetti-index: 15; }
+.practice-lap-confetti span:nth-child(16) { --confetti-index: 16; }
+.practice-lap-confetti span:nth-child(17) { --confetti-index: 17; }
+.practice-lap-confetti span:nth-child(18) { --confetti-index: 18; }
+.practice-lap-confetti span:nth-child(19) { --confetti-index: 19; }
+.practice-lap-confetti span:nth-child(20) { --confetti-index: 20; }
+.practice-lap-confetti span:nth-child(21) { --confetti-index: 21; }
+.practice-lap-confetti span:nth-child(22) { --confetti-index: 22; }
+.practice-lap-confetti span:nth-child(23) { --confetti-index: 23; }
+.practice-lap-confetti span:nth-child(24) { --confetti-index: 24; }
+.practice-lap-confetti span:nth-child(25) { --confetti-index: 25; }
+.practice-lap-confetti span:nth-child(26) { --confetti-index: 26; }
+.practice-lap-confetti span:nth-child(27) { --confetti-index: 27; }
+.practice-lap-confetti span:nth-child(28) { --confetti-index: 28; }
+
+@keyframes hideSign {
+    to {
+        opacity: 0;
+        transform: translateY(-120px);
+    }
+}
+
+.practice-truck-runner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 22;
+    transform: translate(50vw, 88vh);
+    pointer-events: none;
+}
+
+.practice-truck-runner--driving {
+    animation: practiceLapPath 9s linear forwards;
+}
+
+.practice-truck-runner--revving {
+    animation: practiceTruckRev 180ms ease-in-out infinite;
+}
+
+.practice-truck-stack {
+    position: relative;
+    width: clamp(232.5px, 22.8vw, 427.5px);
+    transform: translate(-50%, -100%) scale(1);
+    transform-origin: center bottom;
+}
+
+.practice-truck {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    filter: drop-shadow(0 0.7rem 0.75rem rgba(0, 0, 0, 0.35));
+}
+
+.practice-truck-driver {
+    position: absolute;
+    left: 49%;
+    top: -34%;
+    z-index: 1;
+    width: 44%;
+    height: 82%;
+    overflow: hidden;
+    transform: translate(-50%, 0) rotate(-1deg);
+    transform-origin: center bottom;
+    pointer-events: none;
+}
+
+.practice-truck-driver img {
+    display: block;
+    width: 100%;
+    height: 136%;
+    object-fit: contain;
+    object-position: center top;
+    transform: translateY(1%);
+    filter: drop-shadow(0 0.12rem 0.08rem rgba(0, 0, 0, 0.25));
+}
+
+.practice-truck-runner--driving .practice-truck-driver {
+    animation: practiceDriverRide 9s ease-in-out forwards;
+}
+
+.practice-truck-smoke {
+    position: absolute;
+    left: -6%;
+    top: 66%;
+    z-index: 3;
+    width: 68%;
+    height: 42%;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.practice-truck-smoke::before {
+    content: "";
+    position: absolute;
+    left: 38%;
+    bottom: 16%;
+    width: clamp(2.1rem, 3.8vw, 4.4rem);
+    aspect-ratio: 1.55;
+    border-radius: 999px;
+    background:
+        radial-gradient(circle at 35% 48%, rgba(255, 255, 255, 0.78), rgba(214, 221, 224, 0.48) 54%, rgba(148, 148, 148, 0) 76%);
+    filter: blur(0.12rem);
+    transform: translate(-50%, 0);
+}
+
+.practice-truck-smoke span {
+    position: absolute;
+    left: 36%;
+    bottom: 14%;
+    width: clamp(1.65rem, 2.85vw, 3.25rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.98), rgba(219, 226, 229, 0.86) 54%, rgba(128, 128, 128, 0) 76%);
+    filter: blur(0.09rem);
+    transform: translate(-50%, 0) scale(0.42);
+}
+
+.practice-truck-runner--revving .practice-truck-smoke {
+    opacity: 1;
+}
+
+.practice-truck-runner--revving .practice-truck-smoke span {
+    animation: practiceTruckSmoke 0.98s ease-out infinite;
+}
+
+.practice-truck-runner--revving .practice-truck-smoke span:nth-child(2) {
+    animation-delay: 0.24s;
+}
+
+.practice-truck-runner--revving .practice-truck-smoke span:nth-child(3) {
+    animation-delay: 0.48s;
+}
+
+.practice-truck-runner--revving .practice-truck-smoke span:nth-child(4) {
+    animation-delay: 0.72s;
+}
+
+.practice-truck-runner--driving .practice-truck-stack {
+    animation: practiceLapDepth 9s ease-in-out forwards;
+}
+
+.practice-truck-runner--driving .practice-truck-smoke {
+    display: none;
+}
+
+.practice-truck-runner--driving .practice-truck {
+    animation: practiceTruckTerrain 9s ease-in-out forwards;
+}
+
+@keyframes practiceTruckSmoke {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.26);
   }
+
+  18% {
+    opacity: 0.86;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% - 4.6rem), -1.85rem) scale(1.48);
+  }
+}
+
+@keyframes practiceTruckRev {
+  0%,
+  100% {
+    transform: translate(50vw, 88vh) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(calc(50vw - 0.18rem), calc(88vh + 0.08rem)) rotate(-0.35deg);
+  }
+
+  50% {
+    transform: translate(calc(50vw + 0.14rem), calc(88vh - 0.08rem)) rotate(0.3deg);
+  }
+
+  75% {
+    transform: translate(calc(50vw - 0.08rem), calc(88vh + 0.06rem)) rotate(-0.2deg);
+  }
+}
+
+@keyframes practiceLapPath {
+  0% {
+    transform: translate(50vw, 88vh);
+    z-index: 22;
+  }
+
+  10% {
+    transform: translate(68vw, 84vh);
+    z-index: 22;
+  }
+
+  20% {
+    transform: translate(88vw, 74vh);
+    z-index: 22;
+  }
+
+  32% {
+    transform: translate(86vw, 61vh);
+    z-index: 18;
+  }
+
+  45% {
+    transform: translate(62vw, 52vh);
+    z-index: 18;
+  }
+
+  58% {
+    transform: translate(34vw, 52vh);
+    z-index: 18;
+  }
+
+  72% {
+    transform: translate(15vw, 61vh);
+    z-index: 18;
+  }
+
+  84% {
+    transform: translate(12vw, 73vh);
+    z-index: 22;
+  }
+
+  94% {
+    transform: translate(30vw, 82vh);
+    z-index: 22;
+  }
+
+  100% {
+    transform: translate(50vw, 88vh);
+    z-index: 22;
+  }
+}
+
+@keyframes practiceLapDepth {
+  0%,
+  100% {
+    transform: translate(-50%, -100%) scale(1);
+  }
+
+  20%,
+  84% {
+    transform: translate(-50%, -100%) scale(0.88);
+  }
+
+  45%,
+  58% {
+    transform: translate(-50%, -100%) scale(0.62);
+  }
+
+  94% {
+    transform: translate(-50%, -100%) scale(0.94);
+  }
+}
+
+@keyframes practiceTruckTerrain {
+  0%,
+  14%,
+  24%,
+  80%,
+  87%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  18% {
+    transform: translateY(-4.4vh) rotate(-5deg);
+  }
+
+  21% {
+    transform: translateY(-2.3vh) rotate(4deg);
+  }
+
+  84% {
+    transform: translateY(-1.1vh) rotate(-1deg) scaleY(0.95);
+  }
+}
+
+@keyframes practiceDriverRide {
+  0%,
+  14%,
+  24%,
+  80%,
+  87%,
+  100% {
+    transform: translate(-50%, 0) rotate(-1deg);
+  }
+
+  18% {
+    transform: translate(-50%, -4.4vh) rotate(-5deg);
+  }
+
+  21% {
+    transform: translate(-50%, -2.3vh) rotate(4deg);
+  }
+
+  84% {
+    transform: translate(-50%, -1.1vh) rotate(-1deg) scaleY(0.95);
+  }
+}
+
+@keyframes practiceLapSplash {
+  0%,
+  81% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35);
+  }
+
+  84% {
+    opacity: 0.95;
+    transform: translate(-50%, -68%) scale(1);
+  }
+
+  89% {
+    opacity: 0;
+    transform: translate(-50%, -92%) scale(1.24);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -92%) scale(1.24);
+  }
+}
+
+@keyframes practiceLapFinished {
+  0%,
+  87% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.62) rotate(-3deg);
+  }
+
+  92% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08) rotate(2deg);
+  }
+
+  96%,
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes practiceLapConfetti {
+  0%,
+  88% {
+    opacity: 0;
+    transform: translateY(42vh) rotate(0deg) scale(0.65);
+  }
+
+  91% {
+    opacity: 1;
+    transform: translateY(14vh) rotate(calc(var(--confetti-index) * 18deg)) scale(1);
+  }
+
+  94% {
+    opacity: 1;
+    transform: translateY(20vh) rotate(calc(var(--confetti-index) * 26deg)) scale(1);
+  }
+
+  100% {
+    opacity: 0.92;
+    transform: translateY(86vh) rotate(calc(var(--confetti-index) * 42deg)) scale(0.92);
+  }
+}
+
+/* Race overrides old Practice Lap global styles */
+
+.race-page .practice-truck {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    transform: none;
+    transform-origin: initial;
+    filter: drop-shadow(0 0.7rem 0.75rem rgba(0, 0, 0, 0.35));
+}
+
+.race-page .practice-truck-stack {
+    position: relative;
+    width: clamp(232.5px, 22.8vw, 427.5px);
+    transform: translate(-50%, -100%) scale(1);
+    transform-origin: center bottom;
+}
+
+.race-page .practice-truck-driver {
+    position: absolute;
+    left: 49%;
+    top: -34%;
+    z-index: 1;
+    width: 44%;
+    height: 82%;
+    overflow: hidden;
+    transform: translate(-50%, 0) rotate(-1deg);
+    transform-origin: center bottom;
+    pointer-events: none;
+}
+
+.race-page .practice-truck-driver img {
+    display: block;
+    width: 100%;
+    height: 136%;
+    object-fit: contain;
+    object-position: center top;
+    transform: translateY(1%);
+}
+
+.race-page .practice-truck-runner--driving .practice-truck-stack {
+    animation: practiceLapDepth 9s ease-in-out forwards;
+}
+
+.race-page .practice-truck-runner--driving .practice-truck {
+    animation: practiceTruckTerrain 9s ease-in-out forwards;
+}
+
+/* =========================
+   RACE LEARNING EXPERIENCE
+   ========================= */
+
+.race-page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Holds the light + question over the track */
+.race-learning {
+  position: absolute;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+}
+
+
+/* =========================
+   STARTING LIGHT
+   ========================= */
+
+.race-start-light {
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  z-index: 82;
+
+  width: clamp(300px, 35vw, 560px);
+
+  transform: translateX(-50%);
+}
+
+.race-start-light img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+
+/* =========================
+   QUESTION
+   ========================= */
+
+.race-question {
+  position: absolute;
+  left: 86%;
+  top: 30%;
+  z-index: 90;
+
+  transform: translate(-50%, -50%);
+
+  min-width: 260px;
+  padding: 18px 30px;
+
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.95);
+
+  text-align: center;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+
+  pointer-events: auto;
+}
+
+.race-question__prompt {
+  margin: 0 0 8px;
+
+  font-size: clamp(20px, 2vw, 30px);
+  font-weight: 800;
+}
+
+.race-question__value {
+  font-size: clamp(60px, 7vw, 100px);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.race-question__color {
+  width: 90px;
+  height: 90px;
+
+  margin: 12px auto;
+
+  border: 4px solid white;
+  border-radius: 18px;
+
+  box-shadow: 0 0 0 3px #222;
+}
+
+.race-question__mic {
+  margin-top: 12px;
+
+  width: 64px;
+  height: 64px;
+
+  border: none;
+  border-radius: 50%;
+
+  font-size: 30px;
+
+  cursor: pointer;
+}
+
+.race-start-light__bulb {
+  position: absolute;
+  top: 12%;
+
+  width: 18%;
+  aspect-ratio: 1;
+
+  border-radius: 50%;
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+.race-start-light__bulb--red {
+  left: 25%;
+}
+
+.race-start-light__bulb--yellow {
+  left: 41%;
+}
+
+.race-start-light__bulb--green {
+  left: 57%;
+}
+
+.race-start-light__bulb--active {
+  opacity: 1;
+}
+
+.race-start-light__bulb--red.race-start-light__bulb--active {
+  background: radial-gradient(
+    circle,
+    #ffffff 0%,
+    #ff7777 15%,
+    #ff1e1e 45%,
+    #b00000 75%
+  );
+
+  box-shadow:
+    0 0 20px #ff1e1e,
+    0 0 45px rgba(255, 0, 0, 0.85);
+}
+
+.race-start-light__bulb--yellow.race-start-light__bulb--active {
+  background: radial-gradient(
+    circle,
+    #ffffff 0%,
+    #fff59b 15%,
+    #ffd21e 45%,
+    #c68a00 75%
+  );
+
+  box-shadow:
+    0 0 20px #ffd21e,
+    0 0 45px rgba(255, 210, 30, 0.85);
+}
+
+.race-start-light__bulb--green.race-start-light__bulb--active {
+  background: radial-gradient(
+    circle,
+    #ffffff 0%,
+    #8cff9b 15%,
+    #20db42 45%,
+    #087b1b 75%
+  );
+
+  box-shadow:
+    0 0 20px #20db42,
+    0 0 45px rgba(32, 219, 66, 0.85);
 }
