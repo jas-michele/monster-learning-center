@@ -8,18 +8,19 @@ import Avatar, { type AvatarOutfit } from '../../components/Avatar'
 import { getHomeData } from '../../services/homeService'
 import { useNavigate } from 'react-router-dom'
 import PlayAreaNav from '../../components/PlayAreaNav'
+import { FaSignOutAlt } from 'react-icons/fa'
 
 const Home: React.FC = () => {
   const [outfit, setOutfit] = useState<AvatarOutfit>('casual');
-  const [homeData, setHomeData] = useState<any>(null);
   const isStorytime = outfit === 'storytime'
   const navigate = useNavigate();
 
-  const hoverAvatar = (avatarOutfit: AvatarOutfit) => () => {
-    setOutfit(avatarOutfit);
-  };
-
   const resetAvatar = () => setOutfit('casual')
+
+  const logoutFromPlayhouse = () => {
+    localStorage.removeItem('token')
+    navigate('/')
+  }
 
   useEffect(() => {
     async function loadHome() {
@@ -31,8 +32,6 @@ const Home: React.FC = () => {
         const data = await getHomeData(token);
 
         console.log(data);
-
-        setHomeData(data);
       } catch (error) {
         console.error(error);
       }
@@ -47,6 +46,18 @@ const Home: React.FC = () => {
       <div className="home__scene-frame">
         <div className="home__scene">
           <div className="home__bg home__bg--playhouse" style={{ backgroundImage: `url(${bg})` }} aria-hidden />
+
+          <button
+            type="button"
+            className="home__logout-sign"
+            onClick={logoutFromPlayhouse}
+            aria-label="Log out of the playhouse"
+          >
+            <span className="home__logout-board">
+              <FaSignOutAlt aria-hidden />
+              <span>Exit</span>
+            </span>
+          </button>
 
           <div className="home__top-actions" aria-label="Playhouse tools">
             <button type="button" className="home__top-action home__top-action--achievements" aria-label="Achievements">

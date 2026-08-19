@@ -36,6 +36,87 @@
   background-position: center 34%;
 }
 
+.home__logout-sign {
+  position: absolute;
+  left: 69%;
+  top: 51.5%;
+  z-index: 18;
+  width: min(9.2%, 7.6rem);
+  min-width: 5.2rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transform: translateX(-50%) rotate(-2deg);
+  transform-origin: center top;
+  filter: drop-shadow(0 0.22rem 0.22rem rgba(0, 0, 0, 0.32));
+}
+
+.home__logout-board {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.34rem;
+  min-height: 2.35rem;
+  padding: 0.34rem 0.58rem;
+  border: 0.1rem solid rgba(91, 49, 21, 0.86);
+  border-radius: 0.36rem;
+  background:
+    linear-gradient(180deg, rgba(255, 206, 106, 0.34), rgba(93, 46, 18, 0.08)),
+    linear-gradient(90deg, #8c4d22, #c77c31 44%, #91501f);
+  color: #fff3c3;
+  font-size: clamp(0.7rem, 1.1vw, 0.92rem);
+  font-weight: 1000;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  text-shadow:
+    0 0.08rem 0 rgba(68, 32, 11, 0.92),
+    0 0 0.22rem rgba(48, 20, 5, 0.42);
+  box-shadow:
+    inset 0 0.08rem 0 rgba(255, 240, 180, 0.52),
+    inset 0 -0.16rem 0 rgba(84, 39, 15, 0.26);
+}
+
+.home__logout-board::before,
+.home__logout-board::after {
+  content: "";
+  position: absolute;
+  top: 0.36rem;
+  width: 0.34rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffe09a 0 24%, #6c3514 28% 100%);
+  box-shadow: inset 0 0.04rem 0.04rem rgba(0, 0, 0, 0.28);
+}
+
+.home__logout-board::before {
+  left: 0.48rem;
+}
+
+.home__logout-board::after {
+  right: 0.48rem;
+}
+
+.home__logout-board svg {
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+  transform: scaleX(-1);
+  filter: drop-shadow(0 0.06rem 0.04rem rgba(67, 31, 8, 0.7));
+}
+
+.home__logout-sign:hover {
+  transform: translateX(-50%) rotate(1.5deg) translateY(-0.06rem);
+}
+
+.home__logout-sign:focus-visible {
+  outline: 0.22rem solid rgba(255, 255, 255, 0.94);
+  outline-offset: 0.14rem;
+  border-radius: 0.5rem;
+}
+
 .mechanic__bg {
   background-position: center;
   background-size: 100% 100%;
@@ -93,8 +174,8 @@
 
   left: 3.5%;
   right: 3.5%;
-  bottom: 0.5%;
-  height: 16.8%;
+  bottom: max(1.1rem, 2.2%);
+  height: 15.8%;
 
   display: flex;
   align-items: center;
@@ -137,7 +218,7 @@
 }
 
 .home__nav-hotspot--storytime .home__nav-image {
-  transform: translateX(-9%) translateY(2.2%);
+  transform: translateX(-4%) translateY(-2.6%);
 }
 
 .home__nav-hotspot--playhouse .home__nav-image {

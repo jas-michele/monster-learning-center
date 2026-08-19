@@ -82,15 +82,15 @@ export default function PlayAreaNav({ mechanicAsHome = false, onPreview, onReset
         }
 
         return (
-          <button
+          <Link
             key={item.key}
             className={`home__nav-hotspot home__nav-hotspot--${item.key}`}
             aria-label={item.label}
-            type="button"
+            to="/storytime"
             {...previewProps(item.key)}
           >
             <img src={item.image} alt="" className="home__nav-image" aria-hidden />
-          </button>
+          </Link>
         )
       })}
     </nav>
