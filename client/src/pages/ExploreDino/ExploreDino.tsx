@@ -1,11 +1,13 @@
 import '../Home/Home.css'
 import './ExploreDino.css'
 import { type CSSProperties, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { FaSignOutAlt } from 'react-icons/fa'
 import exploreDinoBg from '../../assets/dinohunt/explore/background.png'
 import dinoFactsButtons from '../../assets/dinohunt/explore/fact-buttons.png'
 import bodiedTrex from '../../assets/dinohunt/explore/trex-bodied.png'
+import bodiedSteg from '../../assets/dinohunt/explore/steg-bodied-transparent.png'
+import bodiedTriceratop from '../../assets/dinohunt/explore/TriceratopBodied.png'
 import safariAvatar from '../../assets/avatars/safari.png'
 import bushOverlay from '../../assets/dinohunt/explore/bush-overlay.png'
 
@@ -16,14 +18,52 @@ const factButtons = [
   { id: 'size', label: 'Size' },
 ]
 
-const currentDinosaur = {
-  name: 'Tyrannosaurus Rex',
-  pronunciation: 'tie-ran-uh-sawr-us rex',
-  funFacts: [
-    'Its name means tyrant lizard king.',
-    'Its teeth could grow about as long as bananas.',
-    'It had a powerful sense of smell.',
-  ],
+type DinosaurId = 'trex' | 'stegosaurus' | 'triceratop'
+type LocationState = {
+  dinosaur?: DinosaurId
+}
+type ExploreDinosaur = {
+  name: string
+  pronunciation: string
+  image: string
+  imageAlt: string
+  funFacts: string[]
+}
+
+const exploreDinosaurs: Record<DinosaurId, ExploreDinosaur> = {
+  trex: {
+    name: 'Tyrannosaurus Rex',
+    pronunciation: 'tie-ran-uh-sawr-us rex',
+    image: bodiedTrex,
+    imageAlt: 'Completed Tyrannosaurus Rex',
+    funFacts: [
+      'Its name means tyrant lizard king.',
+      'Its teeth could grow about as long as bananas.',
+      'It had a powerful sense of smell.',
+    ],
+  },
+  stegosaurus: {
+    name: 'Stegosaurus',
+    pronunciation: 'steg-uh-sawr-us',
+    image: bodiedSteg,
+    imageAlt: 'Completed Stegosaurus',
+    funFacts: [
+      'Its name means roof lizard.',
+      'It had big plates along its back.',
+      'Its spiky tail helped keep it safe.',
+    ],
+  },
+  triceratop: {
+    name: 'Triceratops',
+    pronunciation: 'try-ser-uh-tops',
+    image: bodiedTriceratop,
+    imageAlt: 'Completed Triceratops',
+    funFacts: [
+      'Its name means three-horned face.',
+      'It had a big bony frill behind its head.',
+      'It used a beak to chomp plants.',
+    ],
+  },
 }
 
 const exploreDesignWidth = 1440
@@ -108,7 +148,12 @@ const playSyntheticRoar = () => {
 }
 
 export default function ExploreDino() {
+  const location = useLocation()
   const [stageLayout, setStageLayout] = useState({ left: 0, top: 0, scale: 1 })
+  const routeDinosaur = (location.state as LocationState | null)?.dinosaur
+  const savedDinosaur = window.localStorage.getItem('dinohunt:lastSavedDinosaur') as DinosaurId | null
+  const currentDinosaurId = routeDinosaur ?? savedDinosaur ?? 'trex'
+  const currentDinosaur = exploreDinosaurs[currentDinosaurId] ?? exploreDinosaurs.trex
 
   useEffect(() => {
     const stopRoar = playSyntheticRoar()
@@ -144,7 +189,7 @@ export default function ExploreDino() {
   return (
     <div className="home" role="main" aria-label="Explore dinosaur facts">
       <div className="home__scene-frame">
-        <div className="home__scene">
+        <div className={`home__scene explore-dino explore-dino--${currentDinosaurId}`}>
           <div className="explore-dino__design-frame" style={canvasStyle}>
             <div className="home__bg explore-dino__bg" style={{ backgroundImage: `url(${exploreDinoBg})` }} aria-hidden />
             <nav className="explore-dino__nav" aria-label="Explore dinosaur navigation">
@@ -164,11 +209,11 @@ export default function ExploreDino() {
                 ))}
               </ul>
             </aside>
-            <section className="explore-dino__stage" aria-label="Completed T-Rex">
+            <section className="explore-dino__stage" aria-label={`Completed ${currentDinosaur.name}`}>
               <img
-                src={bodiedTrex}
-                alt="Completed Tyrannosaurus Rex"
-                className="explore-dino__trex"
+                src={currentDinosaur.image}
+                alt={currentDinosaur.imageAlt}
+                className="explore-dino__dinosaur"
                 draggable={false}
               />
               <div className="explore-dino__roar" aria-hidden>

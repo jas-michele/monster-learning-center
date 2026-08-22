@@ -3,7 +3,7 @@ import playhouseNav from '../assets/playhouse/playhouseNav-mechanic-fit.png'
 import mechanicNav from '../assets/mechanic/mechanicNav.png'
 import racetrackNav from '../assets/practiceLap/racetrackNav.png'
 import dinohuntNav from '../assets/dinohunt/scene/nav.png'
-import storyTimeNav from '../assets/storyTimeNav.png'
+import storyTimeNav from '../assets/storytime/nav.png'
 import type { AvatarOutfit } from './Avatar'
 import { startEngineRev } from '../utils/engineAudio'
 

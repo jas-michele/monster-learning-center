@@ -1,6 +1,6 @@
-import derrickHoldingBook from '../assets/storytime-derrick-holding-book.png'
-import derrickSmallDinoStory from '../assets/derrick-small-dino-story.png'
-import derrickNextReadingAdventure from '../assets/derrick-next-reading-adventure.png'
+import derrickHoldingBook from '../assets/storytime/derrick-holding-book.png'
+import derrickSmallDinoStory from '../assets/storytime/derrick-small-dino-story.png'
+import derrickNextReadingAdventure from '../assets/storytime/derrick-next-reading-adventure.png'
 
 export type StorySpread = {
   id: string | number

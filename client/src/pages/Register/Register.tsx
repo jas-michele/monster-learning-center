@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 import { loginUser, registerUser } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import "./Register.css";
 
 type AuthMode = "register" | "login";
+const registerDesignWidth = 1440;
+const registerDesignHeight = 700;
 
 const Register = () => {
+    const [stageLayout, setStageLayout] = useState({ left: 0, top: 0, scale: 1 });
     const [authMode, setAuthMode] = useState<AuthMode>("register");
     const [formData, setFormData] = useState({
         firstName: "",
@@ -19,6 +22,25 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const isLogin = authMode === "login";
+
+    useEffect(() => {
+        const updateStageLayout = () => {
+            const scale = Math.min(window.innerWidth / registerDesignWidth, window.innerHeight / registerDesignHeight);
+            const scaledWidth = registerDesignWidth * scale;
+            const scaledHeight = registerDesignHeight * scale;
+
+            setStageLayout({
+                left: (window.innerWidth - scaledWidth) / 2,
+                top: (window.innerHeight - scaledHeight) / 2,
+                scale,
+            });
+        };
+
+        updateStageLayout();
+        window.addEventListener("resize", updateStageLayout);
+
+        return () => window.removeEventListener("resize", updateStageLayout);
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -62,10 +84,13 @@ const Register = () => {
         setError("");
     };
 
+    const canvasStyle: CSSProperties = {
+        transform: `translate(${stageLayout.left}px, ${stageLayout.top}px) scale(${stageLayout.scale})`,
+    };
 
     return (
         <div className="register-page">
-            <div className="register-scene-frame">
+            <div className="register-scene-frame" style={canvasStyle}>
                 <div className="register-scene" />
 
                 <main className={`register-card ${isLogin ? "login-card" : ""}`} aria-label={isLogin ? "Login" : "Create an account"}>

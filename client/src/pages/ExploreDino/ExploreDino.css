@@ -37,7 +37,7 @@
   pointer-events: none;
 }
 
-.explore-dino__trex {
+.explore-dino__dinosaur {
   width: min(74%, 68rem);
   max-height: 68%;
   object-fit: contain;
@@ -251,6 +251,26 @@
   outline-offset: 0.08rem;
 }
 
+.explore-dino--triceratop .explore-dino__info-panel {
+  right: 2.2%;
+  left: auto;
+}
+
+.explore-dino--triceratop .explore-dino__avatar {
+  right: auto;
+  left: -0.8%;
+  transform: scaleX(-1);
+  transform-origin: center bottom;
+}
+
+.explore-dino--triceratop .explore-dino__foreground-bush {
+  right: auto;
+  left: -5.4%;
+  object-position: left bottom;
+  transform: scaleX(-1);
+  transform-origin: center bottom;
+}
+
 @keyframes explore-dino-trex-rumble {
   0%,
   100% {
@@ -317,7 +337,7 @@
 
 .explore-dino__nav {
   position: absolute;
-  left: 1.55%;
+  right: 1.55%;
   bottom: 7.2%;
   z-index: 10;
   display: flex;
@@ -363,12 +383,12 @@
 }
 
 @media (min-width: 1440px) {
-  .explore-dino__trex {
+  .explore-dino__dinosaur {
     width: 68rem;
   }
 
   .explore-dino__nav {
-    left: 22.32px;
+    right: 22.32px;
   }
 
   .explore-dino__info-panel {
@@ -376,8 +396,18 @@
     width: 19rem;
   }
 
+  .explore-dino--triceratop .explore-dino__info-panel {
+    right: 31.68px;
+    left: auto;
+  }
+
   .explore-dino__avatar {
     right: -11.52px;
+  }
+
+  .explore-dino--triceratop .explore-dino__avatar {
+    right: auto;
+    left: -11.52px;
   }
 
   .explore-dino__foreground-bush {
@@ -386,13 +416,18 @@
     width: 32rem;
   }
 
+  .explore-dino--triceratop .explore-dino__foreground-bush {
+    right: auto;
+    left: -77.76px;
+  }
+
   .explore-dino__fact-buttons {
     bottom: 56px;
   }
 }
 
 @media (max-width: 720px) {
-  .explore-dino__trex {
+  .explore-dino__dinosaur {
     width: 88%;
     max-height: 58%;
     transform: translateY(8%);
@@ -404,10 +439,20 @@
     width: 36%;
   }
 
+  .explore-dino--triceratop .explore-dino__avatar {
+    right: auto;
+    left: -9%;
+  }
+
   .explore-dino__foreground-bush {
     right: -13%;
     bottom: -11%;
     width: 48%;
+  }
+
+  .explore-dino--triceratop .explore-dino__foreground-bush {
+    right: auto;
+    left: -13%;
   }
 
   .explore-dino__fact-buttons {
@@ -424,6 +469,11 @@
     width: min(42%, 15rem);
     min-height: 10rem;
     padding: 0.72rem 0.78rem;
+  }
+
+  .explore-dino--triceratop .explore-dino__info-panel {
+    right: 4%;
+    left: auto;
   }
 
   .explore-dino__info-panel h1 {

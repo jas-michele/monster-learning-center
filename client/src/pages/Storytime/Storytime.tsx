@@ -1,12 +1,14 @@
 import '../Home/Home.css'
 import './Storytime.css'
 import { type CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import storyTimeBg from '../../assets/storytime-bg-storytime-centered.png'
-import openBook from '../../assets/open-book-base.png'
-import nextButton from '../../assets/9e5dcad0-9969-4a79-821f-fe4d4c8d71b2.png'
-import readToMeButton from '../../assets/ac5a0249-86d6-4992-a7e2-f47d5bd83745.png'
-import pauseButton from '../../assets/c7b0ad12-9a62-46b9-a267-4c1f39007bfe.png'
-import previousButton from '../../assets/d22f277d-dcf5-4f43-ad1d-433a8b1c687c.png'
+import { Link } from 'react-router-dom'
+import { FaSignOutAlt } from 'react-icons/fa'
+import storyTimeBg from '../../assets/storytime/background.png'
+import openBook from '../../assets/storytime/open-book-base.png'
+import nextButton from '../../assets/storytime/button-next.png'
+import readToMeButton from '../../assets/storytime/button-read-to-me.png'
+import pauseButton from '../../assets/storytime/button-pause.png'
+import previousButton from '../../assets/storytime/button-previous.png'
 import { getStorytimeStory, type GeneratedStory, type StorySpread } from '../../services/storytimeService'
 
 type TurnDirection = 'forward' | 'backward'
@@ -279,6 +281,9 @@ export default function Storytime() {
             <div className="home__bg storytime__bg" style={{ backgroundImage: `url(${storyTimeBg})` }} aria-hidden />
 
             <div className="storytime__stage">
+            <Link className="storytime__exit" to="/home" aria-label="Go back to the playhouse">
+              <FaSignOutAlt aria-hidden />
+            </Link>
             <div
               className={`storytime__book${isTurning ? ` storytime__book--turning storytime__book--turning-${direction}` : ''}`}
               aria-live="polite"
@@ -291,6 +296,18 @@ export default function Storytime() {
               <div className={`storytime__page storytime__page--right storytime__page--${displayRightSpread.imagePresentation ?? 'cover'}`}>
                 <StoryIllustration spread={displayRightSpread} />
               </div>
+
+              {isTurning && direction === 'forward' && (
+                <div className="storytime__page storytime__page--left storytime__page-preview storytime__page-preview--forward">
+                  <StoryPageText title={title} spread={targetSpread} />
+                </div>
+              )}
+
+              {isTurning && direction === 'backward' && (
+                <div className={`storytime__page storytime__page--right storytime__page--${targetSpread.imagePresentation ?? 'cover'} storytime__page-preview storytime__page-preview--backward`}>
+                  <StoryIllustration spread={targetSpread} />
+                </div>
+              )}
 
               {statusMessage && (
                 <div className={`storytime__status${error ? ' storytime__status--error' : ''}`}>
