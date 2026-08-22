@@ -2,7 +2,8 @@ import "./PracticeLap.css";
 import { useEffect, useState } from "react";
 import PracticeTrack from "../../components/PracticeTrack";
 import type { TruckColor } from "../Mechanic/truckCustomization";
-
+import { Link } from "react-router-dom";
+import { FaSignOutAlt } from "react-icons/fa";
 import completeTruck from "../../assets/mechanic/blackTruck.png";
 import redCompleteTruck from "../../assets/mechanic/redTruck.png";
 import blueCompleteTruck from "../../assets/mechanic/blueTruck.png";
@@ -75,6 +76,15 @@ export default function PracticeLap() {
 
     return (
         <main className="practice-lap">
+
+            <Link
+                className="practice-lap__exit"
+                to="/home"
+                aria-label="Go back to the playhouse"
+            >
+                <FaSignOutAlt aria-hidden />
+            </Link>
+
             <PracticeTrack />
 
             <Countdown value={countdown} />

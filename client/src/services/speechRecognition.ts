@@ -1,5 +1,6 @@
 class SpeechRecognitionService {
   private recognition: any = null;
+  private isListening = false;
 
   constructor() {
     const SpeechRecognition =
@@ -28,32 +29,54 @@ class SpeechRecognitionService {
         return;
       }
 
+      // Prevent recognition.start() from being called twice
+      if (this.isListening) {
+        console.log("Speech recognition is already listening.");
+        reject(new Error("Speech recognition is already listening."));
+        return;
+      }
+
+      this.isListening = true;
       onListeningChange?.(true);
 
       this.recognition.onresult = (event: any) => {
-        onListeningChange?.(false);
-
         const transcript = event.results[0][0].transcript.trim();
+
+        this.isListening = false;
+        onListeningChange?.(false);
 
         resolve(transcript);
       };
 
       this.recognition.onerror = (event: any) => {
+        this.isListening = false;
         onListeningChange?.(false);
 
         reject(event.error);
       };
 
       this.recognition.onend = () => {
+        this.isListening = false;
         onListeningChange?.(false);
       };
 
-      this.recognition.start();
+      try {
+        this.recognition.start();
+      } catch (error) {
+        this.isListening = false;
+        onListeningChange?.(false);
+        reject(error);
+      }
     });
   }
 
   stopListening() {
-    this.recognition?.stop();
+    if (!this.recognition || !this.isListening) {
+      return;
+    }
+
+    this.recognition.stop();
+    this.isListening = false;
   }
 }
 

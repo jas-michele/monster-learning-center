@@ -1,3 +1,27 @@
+.mechanic__design-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: auto;
+  width: 1440px;
+  height: 700px;
+  overflow: hidden;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+.mechanic__breakout-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 12;
+  width: 1440px;
+  height: 700px;
+  overflow: visible;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
 .mechanic-shop {
   position: absolute;
   inset: 0;
@@ -8,6 +32,7 @@
   column-gap: clamp(0.4rem, 0.9vw, 0.8rem);
   row-gap: clamp(0.55rem, 1.15vw, 0.95rem);
   padding: clamp(4.9rem, 13.6%, 6.8rem) clamp(0.72rem, 1.8vw, 1.45rem) clamp(0.68rem, 1.6vw, 0.92rem);
+  pointer-events: auto;
 }
 
 .mechanic-guide {
@@ -186,6 +211,12 @@
   width: min(53%, 41rem);
   height: 108%;
   pointer-events: none;
+}
+
+@media (min-width: 1440px) {
+  .mechanic-guide__avatar {
+    right: -259.2px;
+  }
 }
 
 .mechanic-guide__avatar-image {
@@ -1001,36 +1032,4 @@
 
 .truck-preview__body--complete {
   animation: truck-complete-pop 620ms ease-out;
-}
-
-.mechanic-guide__avatar--speaking .mechanic-guide__avatar-image {
-  animation: jaxTalk 0.18s infinite alternate;
-}
-
-@keyframes jaxTalk {
-  from {
-    transform: translateY(0) scale(1);
-  }
-
-  to {
-    transform: translateY(-2px) scale(1.01);
-  }
-}
-
-.mechanic-start {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-
-  z-index: 100;
-
-  padding: 20px 50px;
-  border: none;
-  border-radius: 20px;
-
-  font-size: 2rem;
-  font-weight: 900;
-
-  cursor: pointer;
 }

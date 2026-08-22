@@ -1,6 +1,6 @@
 import '../Home/Home.css'
 import './Mechanic.css'
-import { type CSSProperties, useState } from 'react'
+import { type CSSProperties, useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FaSignOutAlt } from 'react-icons/fa'
 import garageBg from '../../assets/mechanic/garagBG.png'
@@ -18,9 +18,17 @@ import { normalizeSpeech } from "../../utils/normalizeSpeech";
 
 const paintOptions = colorOptions.filter((color) => ['red', 'blue', 'green', 'purple'].includes(color.value))
 
+const mechanicDesignWidth = 1440
+const mechanicDesignHeight = 700
+
 export default function Mechanic() {
   const navigate = useNavigate()
   const [customization, setCustomization] = useState<TruckCustomization>(defaultTruckCustomization)
+  const [stageLayout, setStageLayout] = useState({
+  left: 0,
+  top: 0,
+  scale: 1,
+})
   const [guideMessage, setGuideMessage] = useState("");
   const [question, setQuestion] = useState<Question | null>(null);
   const [conversationState, setConversationState] = useState<ConversationState | null>(null);
@@ -76,6 +84,27 @@ export default function Mechanic() {
       console.error(error);
     }
   }
+
+
+
+  useEffect(() => {
+    const updateStageLayout = () => {
+      const scale = Math.min(window.innerWidth / mechanicDesignWidth, window.innerHeight / mechanicDesignHeight)
+      const scaledWidth = mechanicDesignWidth * scale
+      const scaledHeight = mechanicDesignHeight * scale
+
+      setStageLayout({
+        left: (window.innerWidth - scaledWidth) / 2,
+        top: (window.innerHeight - scaledHeight) / 2,
+        scale,
+      })
+    }
+
+    updateStageLayout()
+    window.addEventListener('resize', updateStageLayout)
+
+    return () => window.removeEventListener('resize', updateStageLayout)
+  }, [])
 
 
   async function handleAnswerForQuestion(
@@ -268,14 +297,26 @@ export default function Mechanic() {
     }
   }
 
+  const canvasStyle: CSSProperties = {
+  transform: `translate(${stageLayout.left}px, ${stageLayout.top}px) scale(${stageLayout.scale})`,
+};
 
 
   return (
     <div className="home" role="main" aria-label="Mechanic shop">
       <div className="home__scene-frame">
-        <div className="home__scene">
-          <div className="home__bg mechanic__bg" style={{ backgroundImage: `url(${garageBg})` }} aria-hidden />
-          <div className="mechanic-shop">
+       <div className="home__scene">
+  <div
+    className="mechanic__design-frame"
+    style={canvasStyle}
+  >
+    <div
+      className="home__bg mechanic__bg"
+      style={{ backgroundImage: `url(${garageBg})` }}
+      aria-hidden
+    />
+
+    <div className="mechanic-shop">
 
             {!started && (
               <button
@@ -327,6 +368,7 @@ export default function Mechanic() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }
