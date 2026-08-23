@@ -8,6 +8,8 @@ import dinoFactsButtons from '../../assets/dinohunt/explore/fact-buttons.png'
 import bodiedTrex from '../../assets/dinohunt/explore/trex-bodied.png'
 import safariAvatar from '../../assets/avatars/safari.png'
 import bushOverlay from '../../assets/dinohunt/explore/bush-overlay.png'
+import { getDinoFact, type DinoTopic } from '../../services/dinoApi'
+import { speak } from '../../services/voice'
 
 const factButtons = [
   { id: 'facts', label: 'Facts' },
@@ -110,6 +112,9 @@ const playSyntheticRoar = () => {
 export default function ExploreDino() {
   const [stageLayout, setStageLayout] = useState({ left: 0, top: 0, scale: 1 })
 
+  const [dinoMessage, setDinoMessage] = useState("")
+  const [loadingFact, setLoadingFact] = useState(false)
+
   useEffect(() => {
     const stopRoar = playSyntheticRoar()
 
@@ -136,6 +141,27 @@ export default function ExploreDino() {
 
     return () => window.removeEventListener('resize', updateStageLayout)
   }, [])
+
+  async function handleFactClick(topic: DinoTopic) {
+    if (loadingFact) return;
+
+    try {
+      setLoadingFact(true);
+
+      const response = await getDinoFact(
+        currentDinosaur.name,
+        topic
+      );
+
+      setDinoMessage(response.message);
+
+      await speak(response.message);
+    } catch (error) {
+      console.error("Dino AI error:", error);
+    } finally {
+      setLoadingFact(false);
+    }
+  }
 
   const canvasStyle: CSSProperties = {
     transform: `translate(${stageLayout.left}px, ${stageLayout.top}px) scale(${stageLayout.scale})`,
@@ -185,6 +211,8 @@ export default function ExploreDino() {
                   aria-label={`Explore ${button.label}`}
                   style={{ backgroundImage: `url(${dinoFactsButtons})` }}
                   key={button.id}
+                  disabled={loadingFact}
+                  onClick={() => handleFactClick(button.id as DinoTopic)}
                 />
               ))}
             </div>
