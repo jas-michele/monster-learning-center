@@ -10,19 +10,19 @@ import trexSkull from '../../assets/dinohunt/trex/buttons/skull.png'
 import trexFoot from '../../assets/dinohunt/trex/buttons/foot.png'
 import trexLeg from '../../assets/dinohunt/trex/buttons/leg.png'
 import trexTail from '../../assets/dinohunt/trex/buttons/tail.png'
-import trexDragSkull from '../../assets/dinohunt/trex/drag/skull.png'
-import trexDragFoot from '../../assets/dinohunt/trex/drag/foot.png'
-import trexDragLeg from '../../assets/dinohunt/trex/drag/leg.png'
-import trexDragTail from '../../assets/dinohunt/trex/drag/tail.png'
+import trexDragSkull from '../../assets/dinohunt/trex/drag-matched/skull.png'
+import trexDragFoot from '../../assets/dinohunt/trex/drag-matched/foot.png'
+import trexDragLeg from '../../assets/dinohunt/trex/drag-matched/leg.png'
+import trexDragTail from '../../assets/dinohunt/trex/drag-matched/tail.png'
 import stegosaurusBuildDrop from '../../assets/dinohunt/stegosaurus/build-drop.png'
 import stegosaurusSkull from '../../assets/dinohunt/stegosaurus/buttons/skull.png'
 import stegosaurusPlate from '../../assets/dinohunt/stegosaurus/buttons/plate.png'
 import stegosaurusLeg from '../../assets/dinohunt/stegosaurus/buttons/leg.png'
 import stegosaurusTail from '../../assets/dinohunt/stegosaurus/buttons/tail.png'
-import stegosaurusDragSkull from '../../assets/dinohunt/stegosaurus/drag/skull.png'
-import stegosaurusDragPlate from '../../assets/dinohunt/stegosaurus/drag/plate.png'
-import stegosaurusDragLeg from '../../assets/dinohunt/stegosaurus/drag/leg.png'
-import stegosaurusDragTail from '../../assets/dinohunt/stegosaurus/drag/tail.png'
+import stegosaurusDragSkull from '../../assets/dinohunt/stegosaurus/drag-matched/skull.png'
+import stegosaurusDragPlate from '../../assets/dinohunt/stegosaurus/drag-matched/plate.png'
+import stegosaurusDragLeg from '../../assets/dinohunt/stegosaurus/drag-matched/leg.png'
+import stegosaurusDragTail from '../../assets/dinohunt/stegosaurus/drag-matched/tail.png'
 import triceratopBuildDrop from '../../assets/dinohunt/triceratop/build-drop-wide.png'
 import triceratopFrill from '../../assets/dinohunt/triceratop/buttons/frill.png'
 import triceratopLeg from '../../assets/dinohunt/triceratop/buttons/leg.png'
@@ -86,17 +86,23 @@ const dinosaurConfigs: Record<DinosaurId, DinosaurConfig> = {
     wholeAlt: 'T-Rex skeleton',
     buildOptions: trexBuildOptions,
     stagingPoint: { x: 36, y: 43 },
+    stagingPartPlacements: {
+      skull: { x: 36, y: 43, widthVw: 12.6, maxRem: 11.4, rotationDeg: 9 },
+      foot: { x: 36, y: 43, widthVw: 13.2, maxRem: 7.6, rotationDeg: -12 },
+      leg: { x: 36, y: 43, widthVw: 14.6, maxRem: 9.2, rotationDeg: 0 },
+      tail: { x: 36, y: 43, widthVw: 18, maxRem: 16, rotationDeg: 0 },
+    },
     dropTargets: {
-      skull: { x: 69.5, y: 36.5 },
-      foot: { x: 62.8, y: 53.8 },
-      leg: { x: 54.0, y: 67.7 },
-      tail: { x: 30.8, y: 53.1 },
+      skull: { x: 70, y: 37.8 },
+      foot: { x: 62.5, y: 53.7 },
+      leg: { x: 53.7, y: 66.8 },
+      tail: { x: 31.5, y: 53.4 },
     },
     completedPartPlacements: {
-      skull: { x: 69.5, y: 36.5, widthVw: 11.6, maxRem: 10.4 },
-      foot: { x: 62.8, y: 53.8, widthVw: 12.6, maxRem: 7 },
-      leg: { x: 54.0, y: 67.7, widthVw: 13.4, maxRem: 8 },
-      tail: { x: 30.8, y: 53.1, widthVw: 18, maxRem: 16 },
+      skull: { x: 70, y: 37.8, widthVw: 12.6, maxRem: 11.4, rotationDeg: 9 },
+      foot: { x: 62.5, y: 53.7, widthVw: 13.2, maxRem: 7.6, rotationDeg: -12 },
+      leg: { x: 53.7, y: 66.8, widthVw: 14.6, maxRem: 9.2, rotationDeg: 0 },
+      tail: { x: 31.5, y: 53.4, widthVw: 18, maxRem: 16, rotationDeg: 0 },
     },
     initialMessage: "Great choice, Derrick! Pick a T-Rex piece and let's build it together.",
     resetMessage: "Let's try that T-Rex again. Pick a piece to start building.",
@@ -108,17 +114,23 @@ const dinosaurConfigs: Record<DinosaurId, DinosaurConfig> = {
     wholeAlt: 'Stegosaurus skeleton',
     buildOptions: stegosaurusBuildOptions,
     stagingPoint: { x: 30, y: 27 },
+    stagingPartPlacements: {
+      skull: { x: 30, y: 27, widthVw: 11.2, maxRem: 9.6, rotationDeg: 0 },
+      plate: { x: 30, y: 27, widthVw: 7.1, maxRem: 6.4, rotationDeg: 0 },
+      leg: { x: 30, y: 27, widthVw: 9.9, maxRem: 8.2, rotationDeg: 0 },
+      tail: { x: 30, y: 27, widthVw: 10.4, maxRem: 9.3, rotationDeg: 0 },
+    },
     dropTargets: {
-      skull: { x: 71.5, y: 62.5 },
-      plate: { x: 47.7, y: 36.7 },
-      leg: { x: 59.4, y: 68.5 },
-      tail: { x: 26.5, y: 60.7 },
+      skull: { x: 70.6, y: 64.6 },
+      plate: { x: 48.1, y: 37.3 },
+      leg: { x: 58.7, y: 67.4 },
+      tail: { x: 27.3, y: 60 },
     },
     completedPartPlacements: {
-      skull: { x: 71.5, y: 62.5, widthVw: 11.2, maxRem: 9.6 },
-      plate: { x: 47.7, y: 36.7, widthVw: 7.1, maxRem: 6.4 },
-      leg: { x: 59.4, y: 68.5, widthVw: 9.9, maxRem: 8.2 },
-      tail: { x: 26.5, y: 60.7, widthVw: 10.4, maxRem: 9.3 },
+      skull: { x: 70.6, y: 64.6, widthVw: 9.2, maxRem: 7.6, rotationDeg: 10 },
+      plate: { x: 48.1, y: 37.3, widthVw: 7.1, maxRem: 6.4, rotationDeg: 0 },
+      leg: { x: 58.7, y: 67.4, widthVw: 9.5, maxRem: 7.8, rotationDeg: 0 },
+      tail: { x: 27.3, y: 60, widthVw: 10.4, maxRem: 9.3, rotationDeg: 5 },
     },
     initialMessage: "Great choice, Derrick! Pick a Stegosaurus piece and let's build it together.",
     resetMessage: "Let's try that Stegosaurus again. Pick a piece to start building.",
@@ -129,23 +141,23 @@ const dinosaurConfigs: Record<DinosaurId, DinosaurConfig> = {
     wholeImage: triceratopBuildDrop,
     wholeAlt: 'Triceratops skeleton',
     buildOptions: triceratopBuildOptions,
-    stagingPoint: { x: 50, y: 72 },
+    stagingPoint: { x: 30, y: 27 },
     stagingPartPlacements: {
-      frill: { x: 50, y: 72, widthVw: 9.8, maxRem: 8.9, rotationDeg: 0 },
-      leg: { x: 50, y: 72, widthVw: 9.9, maxRem: 8.9, rotationDeg: 0 },
-      hip: { x: 50, y: 72, widthVw: 11, maxRem: 9.8, rotationDeg: 0 },
-      tail: { x: 50, y: 72, widthVw: 14.7, maxRem: 12.9, rotationDeg: 0 },
+      frill: { x: 30, y: 27, widthVw: 10.6, maxRem: 9.7, rotationDeg: 0 },
+      leg: { x: 30, y: 27, widthVw: 10.1, maxRem: 9.1, rotationDeg: 0 },
+      hip: { x: 30, y: 27, widthVw: 11.4, maxRem: 10.2, rotationDeg: 22 },
+      tail: { x: 30, y: 27, widthVw: 15.5, maxRem: 13.7, rotationDeg: 8 },
     },
     dropTargets: {
-      frill: { x: 34.6, y: 41.1 },
-      leg: { x: 40.5, y: 69 },
-      hip: { x: 53.5, y: 45.6 },
+      frill: { x: 34.7, y: 41.3 },
+      leg: { x: 40.1, y: 66.2 },
+      hip: { x: 53.8, y: 45.9 },
       tail: { x: 67.8, y: 55.5 },
     },
     completedPartPlacements: {
-      frill: { x: 34.6, y: 41.1, widthVw: 9.8, maxRem: 8.9, rotationDeg: 0 },
-      leg: { x: 40.5, y: 69, widthVw: 11.1, maxRem: 10.1, rotationDeg: 0 },
-      hip: { x: 53.5, y: 45.6, widthVw: 11.4, maxRem: 10.2, rotationDeg: 18 },
+      frill: { x: 34.7, y: 41.3, widthVw: 10.6, maxRem: 9.7, rotationDeg: 0 },
+      leg: { x: 40.1, y: 66.2, widthVw: 10.1, maxRem: 9.1, rotationDeg: 0 },
+      hip: { x: 53.8, y: 45.9, widthVw: 11.4, maxRem: 10.2, rotationDeg: 22 },
       tail: { x: 67.8, y: 55.5, widthVw: 15.5, maxRem: 13.7, rotationDeg: 8 },
     },
     initialMessage: "Great choice, Derrick! Pick a Triceratops piece and let's build it together.",
@@ -310,9 +322,9 @@ export default function DinoHunt() {
   }
 
   const getDraggingPartStyle = (part: DraggingPart) => {
-    if (selectedDinosaur === 'stegosaurus' || selectedDinosaur === 'triceratop') {
-      const placement = getCompletedPlacementForPart(part.id)
+    const placement = getCompletedPlacementForPart(part.id)
 
+    if (placement) {
       return {
         ...getScenePositionStyle(part.x, part.y),
         width: `min(${part.widthVw ?? placement.widthVw}%, ${part.maxRem ?? placement.maxRem}rem)`,
