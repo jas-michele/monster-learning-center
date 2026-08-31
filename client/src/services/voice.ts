@@ -1,4 +1,5 @@
 let currentAudio: HTMLAudioElement | null = null;
+let currentAudioUrl: string | null = null;
 
 let speechQueue: Promise<void> = Promise.resolve();
 
@@ -7,7 +8,8 @@ export function unlockAudio() {
 
   audio.muted = true;
 
-  audio.play()
+  audio
+    .play()
     .then(() => {
       audio.pause();
       audio.currentTime = 0;
@@ -34,6 +36,7 @@ export function speak(text: string): Promise<void> {
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
 
+    currentAudioUrl = url;
     currentAudio = new Audio(url);
 
     await new Promise<void>((resolve, reject) => {
@@ -44,13 +47,19 @@ export function speak(text: string): Promise<void> {
 
       currentAudio.onended = () => {
         URL.revokeObjectURL(url);
+
         currentAudio = null;
+        currentAudioUrl = null;
+
         resolve();
       };
 
       currentAudio.onerror = () => {
         URL.revokeObjectURL(url);
+
         currentAudio = null;
+        currentAudioUrl = null;
+
         reject(new Error("Audio playback failed"));
       };
 
@@ -59,4 +68,19 @@ export function speak(text: string): Promise<void> {
   });
 
   return speechQueue;
+}
+
+export function stopSpeaking() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+
+  if (currentAudioUrl) {
+    URL.revokeObjectURL(currentAudioUrl);
+    currentAudioUrl = null;
+  }
+
+  speechQueue = Promise.resolve();
 }

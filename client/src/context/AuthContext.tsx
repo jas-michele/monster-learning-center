@@ -1,7 +1,7 @@
-import React, { Children, createContext, useContext, useEffect, useState} from "react";
+import React, { createContext, useContext, useEffect, useState} from "react";
 import type { ReactNode } from "react";
 import { getCurrentUser } from "../services/authService";
-import { data } from "react-router-dom";
+
 
 interface User {
     id: number;

@@ -34,7 +34,7 @@ export default function Mechanic() {
   const [conversationState, setConversationState] = useState<ConversationState | null>(null);
   const [loadingQuestion, setLoadingQuestion] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [isListening, setIsListening] = useState(false);
+  const [, setIsListening] = useState(false);
   const [started, setStarted] = useState(false);
 
   const [installedTires, setInstalledTires] = useState({
@@ -84,7 +84,6 @@ export default function Mechanic() {
       console.error(error);
     }
   }
-
 
 
   useEffect(() => {

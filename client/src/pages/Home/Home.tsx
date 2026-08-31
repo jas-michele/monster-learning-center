@@ -6,18 +6,11 @@ import settingsIcon from '../../assets/playhouse/home-icon-settings.png'
 import bg from '../../assets/playhouse/playhouseBG-centered-rug.png'
 import Avatar, { type AvatarOutfit } from '../../components/Avatar'
 import { getHomeData } from '../../services/homeService'
-import { useNavigate } from 'react-router-dom'
 import PlayAreaNav from '../../components/PlayAreaNav'
 
 const Home: React.FC = () => {
   const [outfit, setOutfit] = useState<AvatarOutfit>('casual');
-  const [homeData, setHomeData] = useState<any>(null);
   const isStorytime = outfit === 'storytime'
-  const navigate = useNavigate();
-
-  const hoverAvatar = (avatarOutfit: AvatarOutfit) => () => {
-    setOutfit(avatarOutfit);
-  };
 
   const resetAvatar = () => setOutfit('casual')
 
@@ -31,8 +24,6 @@ const Home: React.FC = () => {
         const data = await getHomeData(token);
 
         console.log(data);
-
-        setHomeData(data);
       } catch (error) {
         console.error(error);
       }
